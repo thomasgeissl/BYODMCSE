@@ -1,17 +1,32 @@
-import { useState } from 'react';
-import Button from '@mui/material/Button';
-import TextField from '@mui/material/TextField';
+import { useState } from "react";
+import Button from "@mui/material/Button";
+import TextField from "@mui/material/TextField";
+import styled from "@emotion/styled";
+import { useNavigate } from "react-router-dom";
+const Container = styled.div``;
+
 function Login() {
-	const [orchestraId, setOrchestraId] = useState("")
-	const onEnterClicked = (event) => {
-		console.log("on enter clicked")
-	}
+  const navigate = useNavigate();
+  const [roomId, setRoomId] = useState("");
+  const onEnterClicked = (event) => {
+    console.log("on enter clicked");
+    navigate(`/rooms/${roomId}`, { replace: true });
+  };
   return (
-    <div>
-	    <TextField label="room id" variant="outlined" value={orchestraId} />
-	    <Button variant="outlined" onClick={onEnterClicked}>enter</Button>
-    </div>
-  )
+    <Container>
+      enter room id
+      <TextField
+        label="room id"
+        variant="outlined"
+        value={roomId}
+        size="small"
+	onChange={(event)=>setRoomId(event.target.value)}
+      />
+      <Button variant="outlined" onClick={onEnterClicked}>
+        enter
+      </Button>
+    </Container>
+  );
 }
 
-export default Login
+export default Login;
