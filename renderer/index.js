@@ -65,6 +65,9 @@ core.on("load", function () {
           } else if (payload.status === 128) {
             orchestra.noteOff(payload.channel, payload.note);
           }
+          else if(payload.status === 176){
+            console.log("got cc, TODO: pass to instruments and effects parameters")
+          }
           break;
         }
         case "test/noteOn": {
