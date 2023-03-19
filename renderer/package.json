@@ -2,12 +2,16 @@
   "name": "renderer",
   "private": true,
   "version": "0.0.0",
+  "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "node-dev": "nodemon --exec '/Users/thomasgeissl_1/.elementary/bin/elementary -i 0 -o 4' index.js"
   },
   "dependencies": {
+    "@elemaudio/core": "^1.0.8",
+    "@elemaudio/node-renderer": "^1.0.5",
     "@emotion/react": "^11.9.0",
     "@emotion/styled": "^11.8.1",
     "@mui/material": "^5.7.0",
@@ -15,6 +19,9 @@
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
     "react-router-dom": "^6.3.0",
+    "tonal": "^4.14.0",
+    "uuid": "^9.0.0",
+    "webmidi": "^3.1.5",
     "zustand": "*"
   },
   "devDependencies": {
