@@ -12,6 +12,7 @@
   "dependencies": {
     "@elemaudio/core": "^1.0.8",
     "@elemaudio/node-renderer": "^1.0.5",
+    "@elemaudio/web-renderer": "^1.0.16",
     "@emotion/react": "^11.9.0",
     "@emotion/styled": "^11.8.1",
     "@mui/material": "^5.7.0",

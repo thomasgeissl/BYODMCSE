@@ -3,12 +3,10 @@ import { default as core } from "@elemaudio/node-renderer";
 import { WebMidi } from "webmidi";
 import mqtt from "mqtt";
 
-import Sampler from "./src/instruments/Sampler.js";
-import Synth from "./src/instruments/Synth.js";
-import grainTrain from "./src/instruments/grain.js";
+import Orchestra from "./src/audio/Orchestra.js";
+
 
 const client = mqtt.connect("mqtt://localhost:1883");
-
 
 WebMidi.enable()
   .then(onEnabled)
@@ -27,26 +25,15 @@ function onEnabled() {
 }
 
 // TODO: get sessionPrefix from command line arguments
-const sessionPrefix = ""
+const sessionPrefix = "";
 
 // TODO: get orchestra config from cms
 const config = {
   1: "synth",
   2: "sampler",
+  3: "noise",
 };
-const orchestra = {};
-Object.entries(config).forEach(([key, value]) => {
-  switch (value) {
-    case "synth": {
-      orchestra[key] = { instrument: new Synth() };
-      break;
-    }
-    case "sampler": {
-      orchestra[key] = { instrument: new Sampler() };
-      break;
-    }
-  }
-});
+const orchestra = new Orchestra(config);
 
 client.on("connect", function () {
   client.subscribe("test/noteOn", function (err) {
@@ -71,38 +58,28 @@ core.on("load", function () {
     // message is Buffer
     try {
       const payload = JSON.parse(message.toString());
-      console.log(orchestra[payload.channel]);
       switch (topic) {
         case `${sessionPrefix}ofMIDI2MQTT`: {
           if (payload.status === 144) {
-            orchestra[payload.channel].instrument.noteOn(
-              payload.note,
-              payload.velocity
-            );
+            orchestra.noteOn(payload.channel, payload.note, payload.velocity);
           } else if (payload.status === 128) {
-            orchestra[payload.channel].instrument.noteOff(payload.note);
+            orchestra.noteOff(payload.channel, payload.note);
           }
           break;
         }
         case "test/noteOn": {
-          orchestra[payload.channel].instrument.noteOn(
-            payload.note,
-            payload.velocity
-          );
+          orchestra.noteOn(payload.channel, payload.note, payload.velocity);
           break;
         }
         case "test/noteOff": {
-          orchestra[payload.channel].instrument.noteOff(payload.note);
+          orchestra.noteOff(payload.channel, payload.note);
           break;
         }
       }
     } catch (error) {
       console.log("error", error);
     }
-    const signals = Object.values(orchestra).map((instrument) => {
-      return instrument.instrument.render();
-    });
-    const mainOut = el.add(...signals);
+    const mainOut = orchestra.render();
     core.render(mainOut, mainOut);
   });
   // core.on("midi", function (e) {

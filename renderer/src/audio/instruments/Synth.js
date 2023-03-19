@@ -1,7 +1,7 @@
 import { el } from "@elemaudio/core";
-import { default as core } from "@elemaudio/node-renderer";
-import { dirname, resolve } from "path";
-import { fileURLToPath } from "url";
+// import { default as core } from "@elemaudio/node-renderer";
+// import { dirname, resolve } from "path";
+// import { fileURLToPath } from "url";
 import { Interval, Note, Scale, Midi } from "tonal";
 import { v4 } from "uuid";
 
@@ -26,13 +26,13 @@ class Synth {
   voice = (voice) => {
     const gate = el.const({
       key: `gate-${voice.key}`,
-      value: 0.8 * voice.gate,
+      value: voice.gate,
     });
     const env = el.env(4.0, 1.0, 0.4, 2.0, gate);
     const frequency = Midi.midiToFreq(voice.note);
     return el.mul(
-    //   env,
-      gate,
+      env,
+      // gate,
       el.cycle(
         el.const({
           key: `frequency-${voice.key}`,
