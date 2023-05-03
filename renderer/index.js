@@ -1,4 +1,3 @@
-import { el } from "@elemaudio/core";
 import { default as core } from "@elemaudio/node-renderer";
 import { WebMidi } from "webmidi";
 import mqtt from "mqtt";
@@ -14,14 +13,14 @@ WebMidi.enable()
 
 function onEnabled() {
   // Inputs
-  WebMidi.inputs.forEach((input) =>
-    console.log(input.manufacturer, input.name)
-  );
+  // WebMidi.inputs.forEach((input) =>
+  //   console.log(input.manufacturer, input.name)
+  // );
 
   // Outputs
-  WebMidi.outputs.forEach((output) =>
-    console.log(output.manufacturer, output.name)
-  );
+  // WebMidi.outputs.forEach((output) =>
+  //   console.log(output.manufacturer, output.name)
+  // );
 }
 
 // TODO: get sessionPrefix from command line arguments
@@ -30,8 +29,9 @@ const sessionPrefix = "";
 // TODO: get orchestra config from cms
 const config = {
   1: "synth",
-  2: "sampler",
-  3: "noise",
+  2: "noise",
+  3: "sampler",
+  // 3: "noise",
 };
 const orchestra = new Orchestra(config);
 
@@ -47,17 +47,23 @@ client.on("connect", function () {
     }
   });
   client.subscribe(`${sessionPrefix}ofMIDI2MQTT`, function (err) {
+    console.log("connected to broker")
     if (err) {
-      console.log(err);
+      console.log("error", err);
     }
   });
 });
+client.on("error", function (error) {
+  console.log("error", error);
+
+})
 
 core.on("load", function () {
   client.on("message", function (topic, message) {
     // message is Buffer
     try {
       const payload = JSON.parse(message.toString());
+    console.log("got message", topic, payload)
       switch (topic) {
         case `${sessionPrefix}ofMIDI2MQTT`: {
           if (payload.status === 144) {

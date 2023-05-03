@@ -3,6 +3,7 @@ import { el } from "@elemaudio/core";
 import Synth from "./instruments/Synth.js";
 import Sampler from "./instruments/Sampler.js";
 import Noise from "./instruments/Noise.js";
+import TapeNoise from "./instruments/TapeNoise.js";
 
 class Orchestra {
   constructor(config) {
@@ -19,6 +20,10 @@ class Orchestra {
           }
           case "noise": {
             this.instruments[key] = { instrument: new Noise() };
+            break;
+          }
+          case "tape_noise": {
+            this.instruments[key] = { instrument: new TapeNoise() };
             break;
           }
         }

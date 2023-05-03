@@ -40,9 +40,12 @@ function Room() {
   useEffect(() => {
     const config = {
       1: "synth",
+      2: "tape_noise",
       // 2: "sampler",
     };
-    setOrchestra(new Orchestra(config));
+    const orchestra = new Orchestra(config)
+    console.log(orchestra)
+    setOrchestra(orchestra);
   }, []);
 
   useEffect(
