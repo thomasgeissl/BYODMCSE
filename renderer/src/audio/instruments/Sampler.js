@@ -1,8 +1,4 @@
 import { el } from "@elemaudio/core";
-import { default as core } from "@elemaudio/node-renderer";
-import { dirname, resolve } from "path";
-import { fileURLToPath } from "url";
-import { Interval, Note, Scale } from "tonal";
 import { v4 } from "uuid";
 import Lowpass from "../effects/Lowpass.js";
 import Highpass from "../effects/Highpass.js";

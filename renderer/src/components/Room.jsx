@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import styled from "@emotion/styled";
 import * as mqtt from "mqtt/dist/mqtt.min";
 import WebRenderer from "@elemaudio/web-renderer";
+import { el } from "@elemaudio/core";
 import Orchestra from "../audio/Orchestra";
 
 const ctx = new AudioContext();
@@ -18,22 +19,22 @@ function Room() {
   // const topic = `rooms/${roomId}/#`;
   const topic = `ofMIDI2MQTT`;
   const [orchestra, setOrchestra] = useState(null);
+  const [inited, setInited] = useState(false);
+  const init = async () => {
+    if (ctx.state !== "running") {
+      await ctx.resume();
+    }
+    let node = await core.initialize(ctx, {
+      numberOfInputs: 0,
+      numberOfOutputs: 1,
+      outputChannelCount: [2],
+    });
+
+    node.connect(ctx.destination);
+  };
 
   useEffect(() => {
-    const init = async () => {
-      if (ctx.state !== 'running') {
-        await ctx.resume();
-      }
-      let node = await core.initialize(ctx, {
-        numberOfInputs: 0,
-        numberOfOutputs: 1,
-        outputChannelCount: [2],
-      });
-    
-      node.connect(ctx.destination);
-    };
-
-    init();
+    // init();
   });
 
   useEffect(() => {
@@ -46,6 +47,10 @@ function Room() {
 
   useEffect(
     () => {
+      if(!inited){
+        return
+      }
+      
       mqttClient = mqtt.connect("ws://localhost:9001");
       mqttClient.on("connect", function () {
         mqttClient.subscribe(topic, function (err) {
@@ -76,35 +81,50 @@ function Room() {
               }
               break;
             }
-            case "test/noteOn": {
-              orchestra?.noteOn(
-                payload.channel,
-                payload.note,
-                payload.velocity
-              );
-              break;
-            }
-            case "test/noteOff": {
-              orchestra?.noteOff(payload.channel, payload.note);
-              break;
-            }
+            // case "test/noteOn": {
+            //   orchestra?.noteOn(
+            //     payload.channel,
+            //     payload.note,
+            //     payload.velocity
+            //   );
+            //   break;
+            // }
+            // case "test/noteOff": {
+            //   orchestra?.noteOff(payload.channel, payload.note);
+            //   break;
+            // }
           }
         } catch (error) {
           console.log("error", error);
         }
-        if (orchestra) {
+        if (orchestra && inited) {
           const mainOut = orchestra?.render();
-          core.render(mainOut, mainOut);
+            core?.render(mainOut, mainOut);
+            // core?.render(el.cycle(440), el.cycle(440))
         }
       });
-      console.log("subscribe to topic", topic);
+      console.log("subscribed to topic", topic);
     },
-    [],
+    [orchestra, inited],
     () => {
       mqttClient.unsubscribe(topic);
     }
   );
-  return <Container>room {roomId}</Container>;
+  return (
+    <Container>
+      room {roomId}
+      {!inited && (
+        <button
+          onClick={() => {
+            init();
+            setInited(true);
+          }}
+        >
+          start audio context
+        </button>
+      )}
+    </Container>
+  );
 }
 
 export default Room;

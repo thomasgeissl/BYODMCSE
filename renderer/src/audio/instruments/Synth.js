@@ -18,8 +18,8 @@ class Synth {
       { gate: 0.0, note: 0, key: `synth-v6-${v4()}` },
       { gate: 0.0, note: 0, key: `synth-v7-${v4()}` },
       { gate: 0.0, note: 0, key: `synth-v8-${v4()}` },
-    //   { gate: 0.0, note: 0, key: `synth-v9-${v4()}` },
-    //   { gate: 0.0, note: 0, key: `synth-v10-${v4()}` },
+      //   { gate: 0.0, note: 0, key: `synth-v9-${v4()}` },
+      //   { gate: 0.0, note: 0, key: `synth-v10-${v4()}` },
     ];
   }
   nextVoice = 0;
@@ -28,7 +28,7 @@ class Synth {
       key: `gate-${voice.key}`,
       value: voice.gate,
     });
-    const env = el.env(4.0, 1.0, 0.4, 2.0, gate);
+    const env = el.adsr(1.0, 1.0, 1.0, 2.0, gate);
     const frequency = Midi.midiToFreq(voice.note);
     return el.mul(
       env,
@@ -42,8 +42,14 @@ class Synth {
     );
   };
   noteOn(note, velocity) {
-    this.voices[this.nextVoice].gate = 1.0;
-    this.voices[this.nextVoice].note = note;
+    const voiceIndex = this.voices.findIndex((v) => v.note === note);
+    if (voiceIndex >= 0) {
+      this.voices[voiceIndex].gate = 1.0;
+      this.voices[voiceIndex].note = note;
+    } else {
+      this.voices[this.nextVoice].gate = 1.0;
+      this.voices[this.nextVoice].note = note;
+    }
 
     this.nextVoice++;
     this.nextVoice = this.nextVoice % this.voices.length;
@@ -52,7 +58,7 @@ class Synth {
     const voice = this.voices.find((v) => v.note === note);
     if (voice) {
       voice.gate = 0;
-      voice.note = -1;
+      // voice.note = -1;
     }
   }
   render() {

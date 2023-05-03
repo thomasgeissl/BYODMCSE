@@ -37,6 +37,7 @@ class Orchestra {
       return instrument.instrument.render();
     });
     const out = el.add(...signals);
+            // core?.render(el.cycle(440), el.cycle(440))
     return out
   }
 }
