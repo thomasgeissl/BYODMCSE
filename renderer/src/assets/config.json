@@ -1,0 +1,7 @@
+{
+    "orchestra":{
+        "1": "synth",
+        "2": "tape_noise",
+        "3": "sampler"
+    }
+}

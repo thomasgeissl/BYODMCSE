@@ -36,7 +36,7 @@ class TapeNoise {
       0.7,
       env,
       el.allpass(
-        el.mul(20000, el.latch(el.train(2), el.abs(el.noise()))),
+        el.mul(10000, el.latch(el.train(2), el.abs(el.noise()))),
         noiseAmount,
         noiseSignal
       )

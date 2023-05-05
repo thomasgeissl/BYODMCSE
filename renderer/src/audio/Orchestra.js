@@ -31,6 +31,7 @@ class Orchestra {
 
     //   create and fill virtual file system
   }
+
   noteOn(channel, note, velocity){
     this.instruments[channel].instrument.noteOn(note, velocity);
   }

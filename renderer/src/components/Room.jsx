@@ -5,9 +5,49 @@ import * as mqtt from "mqtt/dist/mqtt.min";
 import WebRenderer from "@elemaudio/web-renderer";
 import { el } from "@elemaudio/core";
 import Orchestra from "../audio/Orchestra";
+import Button from "@mui/material/Button";
+
+const config = {
+  orchestra:{
+  1: "synth",
+  2: "tape_noise",
+  3: "sampler",
+  },
+  files:{
+    "/samples/number_0.wav": "https://ia800407.us.archive.org/9/items/999WavFiles/0.mp3",
+    "/samples/number_1.wav": "https://ia800407.us.archive.org/9/items/999WavFiles/1.mp3",
+    "/samples/number_2.wav": "https://ia800407.us.archive.org/9/items/999WavFiles/2.mp3",
+    "/samples/number_3.wav": "https://ia800407.us.archive.org/9/items/999WavFiles/3.mp3",
+    "/samples/number_4.wav": "https://ia800407.us.archive.org/9/items/999WavFiles/4.mp3",
+    "/samples/number_5.wav": "https://ia800407.us.archive.org/9/items/999WavFiles/5.mp3",
+    "/samples/number_6.wav": "https://ia800407.us.archive.org/9/items/999WavFiles/6.mp3",
+    "/samples/number_7.wav": "https://ia800407.us.archive.org/9/items/999WavFiles/7.mp3",
+    "/samples/number_8.wav": "https://ia800407.us.archive.org/9/items/999WavFiles/8.mp3",
+    "/samples/number_9.wav": "https://ia800407.us.archive.org/9/items/999WavFiles/9.mp3",
+    "/samples/number_10.wav": "https://ia800407.us.archive.org/9/items/999WavFiles/10.mp3",
+  }
+};
 
 const ctx = new AudioContext();
 let core = new WebRenderer();
+
+const loadSample = async (path) =>{
+    const res = await fetch(path)
+    const sampleBuffer = await ctx.decodeAudioData(await res.arrayBuffer());
+    return sampleBuffer.getChannelData(0);
+}
+
+core.on("load", async () => {
+  const files = {};
+  
+  const entries = Object.entries(config.files)
+  for(let i = 0; i < entries.length; i++) {
+    const [key, path] = entries[i]
+    files[key] = await loadSample(path)
+  }
+  
+  core.updateVirtualFileSystem(files);
+});
 
 const Container = styled.div``;
 
@@ -34,26 +74,24 @@ function Room() {
   };
 
   useEffect(() => {
-    // init();
-  });
+    if (!inited) {
+      return;
+    }
+  }, [inited]);
 
   useEffect(() => {
-    const config = {
-      1: "synth",
-      2: "tape_noise",
-      // 2: "sampler",
-    };
-    const orchestra = new Orchestra(config)
-    console.log(orchestra)
+
+    const orchestra = new Orchestra(config.orchestra);
+    console.log(orchestra);
     setOrchestra(orchestra);
   }, []);
 
   useEffect(
     () => {
-      if(!inited){
-        return
+      if (!inited) {
+        return;
       }
-      
+
       mqttClient = mqtt.connect("ws://localhost:9001");
       mqttClient.on("connect", function () {
         mqttClient.subscribe(topic, function (err) {
@@ -102,8 +140,8 @@ function Room() {
         }
         if (orchestra && inited) {
           const mainOut = orchestra?.render();
-            core?.render(mainOut, mainOut);
-            // core?.render(el.cycle(440), el.cycle(440))
+          core?.render(mainOut, mainOut);
+          // core?.render(el.cycle(440), el.cycle(440))
         }
       });
       console.log("subscribed to topic", topic);
@@ -115,16 +153,17 @@ function Room() {
   );
   return (
     <Container>
-      room {roomId}
+      {/* room {roomId} */}
       {!inited && (
-        <button
+        <Button
           onClick={() => {
             init();
             setInited(true);
           }}
+          variant={"outlined"}
         >
           start audio context
-        </button>
+        </Button>
       )}
     </Container>
   );

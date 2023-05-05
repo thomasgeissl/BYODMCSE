@@ -14,9 +14,34 @@ class Sampler {
     this.voices = {
       60: {
         gate: 0.0,
-        path: "/Users/thomasgeissl_1/projects/pdl/laser/assets/135472__kvgarlic__summeropenfielddusk.wav",
+        path: "/samples/number_0.wav",
         key: `sampler-v1-${v4()}`,
       },
+      61: {
+        gate: 0.0,
+        path: "/samples/number_1.wav",
+        key: `sampler-v1-${v4()}`,
+      },
+      62: {
+        gate: 0.0,
+        path: "/samples/number_2.wav",
+        key: `sampler-v1-${v4()}`,
+      },
+      63: {
+        gate: 0.0,
+        path: "/samples/number_3.wav",
+        key: `sampler-v1-${v4()}`,
+      },
+      64: {
+        gate: 0.0,
+        path: "/samples/number_4.wav",
+        key: `sampler-v1-${v4()}`,
+      },
+      65: {
+        gate: 0.0,
+        path: "/samples/number_5.wav",
+        key: `sampler-v1-${v4()}`,
+      }
     };
   }
 
