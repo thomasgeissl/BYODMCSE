@@ -33,6 +33,7 @@ class Orchestra {
   }
 
   noteOn(channel, note, velocity){
+    console.log("note on")
     this.instruments[channel].instrument.noteOn(note, velocity);
   }
   noteOff(channel, note){
