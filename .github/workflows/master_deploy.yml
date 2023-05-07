@@ -29,15 +29,15 @@ jobs:
           cmd: build
           dir: renderer
       
-      - name: deployment
-        uses: peaceiris/actions-gh-pages@v3
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: renderer/dist
+      # - name: deployment
+      #   uses: peaceiris/actions-gh-pages@v3
+      #   with:
+      #     github_token: ${{ secrets.GITHUB_TOKEN }}
+      #     publish_dir: renderer/dist
 
-      # - name: Deploy 🚀
-      # uses: JamesIves/github-pages-deploy-action@4.0.0
-      # with:
-      #   token: ${{ secrets.ACCESS_TOKEN }}
-      #   branch: gh-pages # The branch the action should deploy to.
-      #   folder: renderer/dist # The folder the action should deploy.
+      - name: Deploy 🚀
+      uses: JamesIves/github-pages-deploy-action@4.0.0
+      with:
+        token: ${{ secrets.ACCESS_TOKEN }}
+        branch: gh-pages # The branch the action should deploy to.
+        folder: renderer/dist # The folder the action should deploy.
