@@ -22,7 +22,7 @@ function App() {
     <BrowserRouter>
       <ThemeProvider theme={theme}>
       <Container>
-        <Routes>
+        <Routes basename='/BYODMCSE'>
           <Route path="/" element={<Login></Login>}></Route>
           <Route path="/rooms" element={<Rooms></Rooms>}></Route>
           <Route path="/rooms/:roomId" element={<Lobby />} />
