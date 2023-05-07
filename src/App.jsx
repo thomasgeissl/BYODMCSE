@@ -19,23 +19,25 @@ const Container = styled.div`
 
 function App() {
   return (
-    <BrowserRouter>
+    <BrowserRouter
+      basename={import.meta.env.MODE === "development" ? "/" : `/BYODMCSE`}
+    >
       <ThemeProvider theme={theme}>
-      <Container>
-        <Routes>
-          <Route path="/" element={<Login></Login>}></Route>
-          <Route path="/rooms" element={<Rooms></Rooms>}></Route>
-          <Route path="/rooms/:roomId" element={<Lobby />} />
-          <Route
-            path="*"
-            element={
-              <main style={{ padding: "1rem" }}>
-                <p>There's nothing here!</p>
-              </main>
-            }
-          />
-        </Routes>
-      </Container>
+        <Container>
+          <Routes>
+            <Route path="/" element={<Login></Login>}></Route>
+            <Route path="/rooms" element={<Rooms></Rooms>}></Route>
+            <Route path="/rooms/:roomId" element={<Lobby />} />
+            <Route
+              path="*"
+              element={
+                <main style={{ padding: "1rem" }}>
+                  <p>There's nothing here!</p>
+                </main>
+              }
+            />
+          </Routes>
+        </Container>
       </ThemeProvider>
     </BrowserRouter>
   );
