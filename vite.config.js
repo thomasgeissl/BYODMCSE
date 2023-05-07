@@ -6,7 +6,7 @@ export default ({ mode }) => {
 
 
   return defineConfig({
-    base: mode === "prod" ? "/BYODMCSE/" : "/",
+    base: mode === "dev" ? "/" : "/BYODMCSE/",
     plugins: [react()],
   });
 }
