@@ -177,4 +177,4 @@ PERFORMANCE OF THIS SOFTWARE.
   width: 100vw;
   height: 100vh;
   text-align: center;
-`;function rF(){return IA(_G,{children:IA($y,{theme:nF,children:IA(iF,{children:zA(PG,{children:[IA(_I,{path:"/",element:IA(tR,{})}),IA(_I,{path:"/rooms",element:IA(nR,{})}),IA(_I,{path:"/rooms/:roomId",element:IA(tF,{})}),IA(_I,{path:"*",element:IA("main",{style:{padding:"1rem"},children:IA("p",{children:"There's nothing here!"})})})]})})})})}sC.createRoot(document.getElementById("root")).render(IA(It.StrictMode,{children:IA(rF,{})}));
+`;function rF(){return IA(_G,{basename:"/BYODMCSE",children:IA($y,{theme:nF,children:IA(iF,{children:zA(PG,{children:[IA(_I,{path:"/",element:IA(tR,{})}),IA(_I,{path:"/rooms",element:IA(nR,{})}),IA(_I,{path:"/rooms/:roomId",element:IA(tF,{})}),IA(_I,{path:"*",element:IA("main",{style:{padding:"1rem"},children:IA("p",{children:"There's nothing here!"})})})]})})})})}sC.createRoot(document.getElementById("root")).render(IA(It.StrictMode,{children:IA(rF,{})}));
