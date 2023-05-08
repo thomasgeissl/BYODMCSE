@@ -185,4 +185,4 @@ PERFORMANCE OF THIS SOFTWARE.
   text-align: center;
   background-color: ${lF};
   color: white;
-`;function dF(){return IA($G,{basename:"/BYODMCSE",children:IA(eD,{theme:fF,children:IA(hF,{children:zA(VG,{children:[IA(XI,{path:"/",element:IA(IR,{})}),IA(XI,{path:"/rooms",element:IA(oR,{})}),IA(XI,{path:"/rooms/:roomId",element:IA(EF,{})}),IA(XI,{path:"*",element:IA("main",{style:{padding:"1rem"},children:IA("p",{children:"There's nothing here!"})})})]})})})})}EC.createRoot(document.getElementById("root")).render(IA(It.StrictMode,{children:IA(dF,{})}));
+`;function dF(){return IA($G,{children:IA(eD,{theme:fF,children:IA(hF,{children:zA(VG,{children:[IA(XI,{path:"/",element:IA(IR,{})}),IA(XI,{path:"/rooms",element:IA(oR,{})}),IA(XI,{path:"/rooms/:roomId",element:IA(EF,{})}),IA(XI,{path:"*",element:IA("main",{style:{padding:"1rem"},children:IA("p",{children:"There's nothing here!"})})})]})})})})}EC.createRoot(document.getElementById("root")).render(IA(It.StrictMode,{children:IA(dF,{})}));
