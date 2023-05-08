@@ -6,7 +6,7 @@ import Login from "./components/Login";
 import Rooms from "./components/Rooms";
 import Room from "./components/Room";
 import styled from "@emotion/styled";
-import { BrowserRouter, Routes, Route, Outlet } from "react-router-dom";
+import { HashRouter as Router, Routes, Route, Outlet } from "react-router-dom";
 import "./App.css";
 import Lobby from "./components/Lobby";
 import theme, {backgroundColor} from "./theme";
@@ -21,7 +21,7 @@ const Container = styled.div`
 
 function App() {
   return (
-    <BrowserRouter
+    <Router
       basename={import.meta.env.MODE === "development" ? "/" : `/BYODMCSE`}
     >
       <ThemeProvider theme={theme}>
@@ -41,7 +41,7 @@ function App() {
           </Routes>
         </Container>
       </ThemeProvider>
-    </BrowserRouter>
+    </Router>
   );
 }
 
