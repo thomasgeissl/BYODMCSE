@@ -22,7 +22,7 @@ const Container = styled.div`
 function App() {
   return (
     <Router
-      basename={import.meta.env.MODE === "development" ? "/" : `/BYODMCSE`}
+      // basename={import.meta.env.MODE === "development" ? "/" : `/BYODMCSE`}
     >
       <ThemeProvider theme={theme}>
         <Container>
