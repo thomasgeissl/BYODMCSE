@@ -9,7 +9,7 @@ class Orchestra {
   constructor(config) {
     this.instruments = {}
     Object.entries(config).forEach(([key, value]) => {
-        switch (value) {
+        switch (value.type) {
           case "synth": {
             this.instruments[key] = { instrument: new Synth() };
             break;
@@ -23,7 +23,7 @@ class Orchestra {
             break;
           }
           case "tape_noise": {
-            this.instruments[key] = { instrument: new TapeNoise() };
+            this.instruments[key] = { instrument: new TapeNoise(value.effects) };
             break;
           }
         }

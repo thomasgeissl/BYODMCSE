@@ -20,7 +20,8 @@ function Room(props) {
 
   useEffect(
     () => {
-      mqttClient = mqtt.connect("ws://localhost:9001");
+      // mqttClient = mqtt.connect("ws://localhost:9001");
+      mqttClient = mqtt.connect("wss://public:public@public.cloud.shiftr.io");
       mqttClient.on("connect", function () {
         mqttClient.subscribe(topic, function (err) {
           if (err) {

@@ -3,6 +3,7 @@ import { WebMidi } from "webmidi";
 import mqtt from "mqtt";
 
 import Orchestra from "./src/audio/Orchestra.js";
+import config from "../assets/config"
 
 
 const client = mqtt.connect("mqtt://localhost:1883");
@@ -26,13 +27,6 @@ function onEnabled() {
 // TODO: get sessionPrefix from command line arguments
 const sessionPrefix = "";
 
-// TODO: get orchestra config from cms
-const config = {
-  1: "synth",
-  2: "noise",
-  3: "sampler",
-  // 3: "noise",
-};
 const orchestra = new Orchestra(config);
 
 client.on("connect", function () {

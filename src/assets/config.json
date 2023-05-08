@@ -1,7 +1,20 @@
 {
-    "orchestra":{
-        "1": "synth",
-        "2": "tape_noise",
-        "3": "sampler"
-    }
+  "orchestra": {
+    "1": { "type": "synth", "effects": [] },
+    "2": { "type": "tape_noise", "effects": ["delay"] },
+    "3": { "type": "sampler", "effects": [] }
+  },
+  "files": {
+    "/samples/number_0.wav": "https://ia800407.us.archive.org/9/items/999WavFiles/0.mp3",
+    "/samples/number_1.wav": "https://ia800407.us.archive.org/9/items/999WavFiles/1.mp3",
+    "/samples/number_2.wav": "https://ia800407.us.archive.org/9/items/999WavFiles/2.mp3",
+    "/samples/number_3.wav": "https://ia800407.us.archive.org/9/items/999WavFiles/3.mp3",
+    "/samples/number_4.wav": "https://ia800407.us.archive.org/9/items/999WavFiles/4.mp3",
+    "/samples/number_5.wav": "https://ia800407.us.archive.org/9/items/999WavFiles/5.mp3",
+    "/samples/number_6.wav": "https://ia800407.us.archive.org/9/items/999WavFiles/6.mp3",
+    "/samples/number_7.wav": "https://ia800407.us.archive.org/9/items/999WavFiles/7.mp3",
+    "/samples/number_8.wav": "https://ia800407.us.archive.org/9/items/999WavFiles/8.mp3",
+    "/samples/number_9.wav": "https://ia800407.us.archive.org/9/items/999WavFiles/9.mp3",
+    "/samples/number_10.wav": "https://ia800407.us.archive.org/9/items/999WavFiles/10.mp3"
+  }
 }
