@@ -1,4 +1,7 @@
 {
+  "connection": {
+    "broker": "wss://public:public@public.cloud.shiftr.io"
+  },
   "orchestra": {
     "1": { "type": "synth", "effects": [] },
     "2": { "type": "tape_noise", "effects": ["delay"] },

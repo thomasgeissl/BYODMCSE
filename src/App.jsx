@@ -9,12 +9,14 @@ import styled from "@emotion/styled";
 import { BrowserRouter, Routes, Route, Outlet } from "react-router-dom";
 import "./App.css";
 import Lobby from "./components/Lobby";
-import theme from "./theme";
+import theme, {backgroundColor} from "./theme";
 
 const Container = styled.div`
   width: 100vw;
   height: 100vh;
   text-align: center;
+  background-color: ${backgroundColor};
+  color: white;
 `;
 
 function App() {
