@@ -2406,6 +2406,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"nosleep.js@npm:^0.12.0":
+  version: 0.12.0
+  resolution: "nosleep.js@npm:0.12.0"
+  checksum: 1bf5f9aaaed80104285e63e440d1cdecfd8eb759e3e1f3b7d1b74a98cd895654b6e99e6947a2ef528099e077b68cd49d92d96d6ae8a3ea8d244bbac3be81e318
+  languageName: node
+  linkType: hard
+
 "npmlog@npm:^6.0.0":
   version: 6.0.2
   resolution: "npmlog@npm:6.0.2"
@@ -2685,6 +2692,7 @@ __metadata:
     "@types/react-dom": ^18.0.0
     "@vitejs/plugin-react": ^1.3.0
     mqtt: ^4.3.7
+    nosleep.js: ^0.12.0
     react: ^18.0.0
     react-dom: ^18.0.0
     react-router-dom: ^6.3.0
