@@ -1,10 +1,11 @@
 import { createTheme } from "@mui/material/styles";
 // https://coolors.co/palette/000000-14213d-fca311-e5e5e5-ffffff
 
-const backgroundColor = "#181818"
-const primary = "#FCA311"
-const secondary = "#FFFFFF"
-const tertiary = "#14213D"
+const backgroundColor = "#001524"
+const primary = "#15616d"
+const secondary = "#ffecd1"
+const tertiary = "#ff7d00"
+const quarternary = "#78290f"
 const theme = createTheme({
   palette: {
     mode: "dark",
@@ -20,4 +21,4 @@ const theme = createTheme({
 });
 
 export default theme;
-export {backgroundColor, primary, secondary, tertiary}
+export {backgroundColor, primary, secondary, tertiary, quarternary}

@@ -19,6 +19,7 @@ const loadSample = async (path, ctx) => {
 };
 
 const Container = styled.div``;
+const Instructions = styled.div``;
 
 function Lobby() {
   const { roomId } = useParams();
@@ -59,7 +60,9 @@ function Lobby() {
       {/* room {roomId} */}
       {!inited && (
         <>
-          lobby
+        <Instructions>
+          please turn on your speakers and 
+        </Instructions>
           <Button
             onClick={() => {
               init();
