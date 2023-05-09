@@ -15,8 +15,7 @@ let mqttClient;
 function Room(props) {
   const { roomId } = useParams();
   const {orchestra, core} = props
-  // const topic = `rooms/${roomId}/#`;
-  const topic = `ofMIDI2MQTT`;
+  const topic = `byod/${roomId}`;
 
   useEffect(
     () => {
@@ -39,7 +38,7 @@ function Room(props) {
         try {
           const payload = JSON.parse(message.toString());
           switch (topic) {
-            case `${sessionPrefix}ofMIDI2MQTT`: {
+            case `${sessionPrefix}byod/${roomId}`: {
               if (payload.status === 144) {
                 orchestra?.noteOn(
                   payload.channel,
