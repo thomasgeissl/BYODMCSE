@@ -34,7 +34,7 @@ function Login() {
           size="big"
           onChange={(event) => setRoomId(event.target.value)}
         />
-        <Button variant="outlined" onClick={onEnterClicked}>
+        <Button variant="outlined" onClick={onEnterClicked} disabled={roomId === ""}>
           enter
         </Button>
       </Bottom>

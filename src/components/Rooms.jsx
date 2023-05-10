@@ -17,10 +17,7 @@ function Rooms() {
       list of rooms, will be fetched from cms later
       <List>
         <li>
-          <Link to="/rooms/demoA">demo A</Link>
-        </li>
-        <li>
-          <Link to="/rooms/demoB">demo B</Link>
+          <Link to="/rooms/taxi">taxi</Link>
         </li>
       </List>
     </Container>

@@ -27,6 +27,7 @@ const Container = styled.div`
 const Instructions = styled.div`
   flex-grow: 1;
   display: flex;
+  text-align: center;
   justify-content: center;
   align-content: center;
   flex-direction: column;
