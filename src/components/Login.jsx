@@ -6,7 +6,15 @@ import { useNavigate } from "react-router-dom";
 const Container = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 3;
+  width: 100%;
+  height:100%;
+`;
+const Top = styled.div`
+  flex: 1;
+`;
+const Bottom = styled.div`
+display: flex;
+flex-direction: column;
 `;
 
 function Login() {
@@ -17,16 +25,19 @@ function Login() {
   };
   return (
     <Container>
-      <TextField
-        label="room id"
-        variant="outlined"
-        value={roomId}
-        size="big"
-        onChange={(event) => setRoomId(event.target.value)}
-      />
-      <Button variant="outlined" onClick={onEnterClicked}>
-        enter
-      </Button>
+      <Top></Top>
+      <Bottom>
+        <TextField
+          label="room id"
+          variant="outlined"
+          value={roomId}
+          size="big"
+          onChange={(event) => setRoomId(event.target.value)}
+        />
+        <Button variant="outlined" onClick={onEnterClicked}>
+          enter
+        </Button>
+      </Bottom>
     </Container>
   );
 }

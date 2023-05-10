@@ -2,12 +2,12 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import styled from "@emotion/styled";
 import WebRenderer from "@elemaudio/web-renderer";
-import NoSleep from 'nosleep.js'; 
+import NoSleep from "nosleep.js";
 import Orchestra from "../audio/Orchestra";
 import Button from "@mui/material/Button";
 import Room from "./Room";
 
-import config from "../assets/config.json"
+import config from "../assets/config.json";
 
 let core = new WebRenderer();
 var noSleep = new NoSleep();
@@ -18,8 +18,19 @@ const loadSample = async (path, ctx) => {
   return sampleBuffer.getChannelData(0);
 };
 
-const Container = styled.div``;
-const Instructions = styled.div``;
+const Container = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height:100%;
+`;
+const Instructions = styled.div`
+  flex-grow: 1;
+  display: flex;
+  justify-content: center;
+  align-content: center;
+  flex-direction: column;
+`;
 
 function Lobby() {
   const { roomId } = useParams();
@@ -60,9 +71,7 @@ function Lobby() {
       {/* room {roomId} */}
       {!inited && (
         <>
-        <Instructions>
-          please turn on your speakers and 
-        </Instructions>
+          <Instructions>please turn on your speakers and</Instructions>
           <Button
             onClick={() => {
               init();
