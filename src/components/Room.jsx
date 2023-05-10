@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useParams } from "react-router-dom";
 import styled from "@emotion/styled";
 import * as mqtt from "mqtt/dist/mqtt.min";
@@ -7,14 +7,40 @@ import { el } from "@elemaudio/core";
 import Orchestra from "../audio/Orchestra";
 import Button from "@mui/material/Button";
 
+import { Canvas, useFrame } from "@react-three/fiber";
+
 const Container = styled.div``;
 
 const sessionPrefix = "";
 let mqttClient;
 
+function Box(props) {
+  // This reference will give us direct access to the mesh
+  const mesh = useRef();
+  // Set up state for the hovered and active state
+  const [hovered, setHover] = useState(false);
+  const [active, setActive] = useState(false);
+  // Subscribe this component to the render-loop, rotate the mesh every frame
+  useFrame((state, delta) => (mesh.current.rotation.x += delta));
+  // Return view, these are regular three.js elements expressed in JSX
+  return (
+    <mesh
+      {...props}
+      ref={mesh}
+      scale={active ? 1.5 : 1}
+      onClick={(event) => setActive(!active)}
+      onPointerOver={(event) => setHover(true)}
+      onPointerOut={(event) => setHover(false)}
+    >
+      <boxGeometry args={[1, 1, 1]} />
+      <meshStandardMaterial color={hovered ? "hotpink" : "orange"} />
+    </mesh>
+  );
+}
+
 function Room(props) {
   const { roomId } = useParams();
-  const {orchestra, core} = props
+  const { orchestra, core } = props;
   const topic = `byod/${roomId}`;
 
   useEffect(
@@ -29,10 +55,6 @@ function Room(props) {
         });
       });
 
-      // mqttClient.on("message", function (topic, message) {
-      //   // message is Buffer
-      //   console.log(message.toString());
-      // });
       mqttClient.on("message", function (topic, message) {
         // message is Buffer
         try {
@@ -81,7 +103,12 @@ function Room(props) {
   );
   return (
     <Container>
-room: rf3 visuals here
+      <Canvas>
+        <ambientLight />
+        <pointLight position={[10, 10, 10]} />
+        <Box position={[-1.2, 0, 0]} />
+        <Box position={[1.2, 0, 0]} />
+      </Canvas>
     </Container>
   );
 }

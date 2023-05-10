@@ -3,7 +3,7 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
-  "homepage": "https://thomasgeissl.github.io/BYODMCSE",
+  "homepage": "https://byod.live",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
