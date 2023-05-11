@@ -15,4 +15,4 @@
 
 
 ##
-` ofMIDI2MQTT -h public.cloud.shiftr.io -p 1883 -u public -r public `
+` ofMIDI2MQTT -h public.cloud.shiftr.io -p 1883 -u public -r public -t byod/roomId`
