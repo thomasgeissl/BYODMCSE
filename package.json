@@ -6,7 +6,7 @@
   "homepage": "https://byod.live",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "build": "vite build && cp CNAME dist/CNAME",
     "preview": "vite preview",
     "node-dev": "nodemon --exec '/Users/thomasgeissl_1/.elementary/bin/elementary -i 0 -o 2' index.js"
   },
