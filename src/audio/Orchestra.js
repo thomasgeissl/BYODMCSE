@@ -28,12 +28,9 @@ class Orchestra {
           }
         }
       });
-
-    //   create and fill virtual file system
   }
 
   noteOn(channel, note, velocity){
-    console.log("note on")
     this.instruments[channel].instrument.noteOn(note, velocity);
   }
   noteOff(channel, note){
@@ -44,7 +41,6 @@ class Orchestra {
       return instrument.instrument.render();
     });
     const out = el.add(...signals);
-            // core?.render(el.cycle(440), el.cycle(440))
     return out
   }
 }

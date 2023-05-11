@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import styled from "@emotion/styled";
 import WebRenderer from "@elemaudio/web-renderer";
+import { el } from "@elemaudio/core";
 import NoSleep from "nosleep.js";
 import Orchestra from "../audio/Orchestra";
 import Button from "@mui/material/Button";
@@ -9,8 +10,8 @@ import Room from "./Room";
 
 import config from "../assets/config.json";
 
-let core = new WebRenderer();
-var noSleep = new NoSleep();
+const core = new WebRenderer();
+const noSleep = new NoSleep();
 
 const loadSample = async (path, ctx) => {
   const res = await fetch(path);
@@ -22,7 +23,7 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
-  height:100%;
+  height: 100%;
 `;
 const Instructions = styled.div`
   flex-grow: 1;
@@ -35,22 +36,14 @@ const Instructions = styled.div`
 
 function Lobby() {
   const { roomId } = useParams();
-  // const topic = `rooms/${roomId}/#`;
-  const topic = `ofMIDI2MQTT`;
   const [inited, setInited] = useState(false);
   const [orchestra, setOrchestra] = useState(null);
   const init = async () => {
     const ctx = new AudioContext();
-    // if (ctx.state !== "running") {
-    //   await ctx.resume();
-    // }
-    let node = await core.initialize(ctx, {
-      numberOfInputs: 0,
-      numberOfOutputs: 1,
-      outputChannelCount: [2],
-    });
+    // core.on('load', function() {
+    //   core.render(el.cycle(440), el.cycle(441));
+    // });
 
-    node.connect(ctx.destination);
     core.on("load", async function () {
       const files = {};
       const entries = Object.entries(config.files);
@@ -60,10 +53,20 @@ function Lobby() {
       }
 
       core.updateVirtualFileSystem(files);
+      // core.render(el.cycle(440), el.cycle(440));
       const orchestra = new Orchestra(config.orchestra);
       setOrchestra(orchestra);
       setInited(true);
     });
+    if (ctx.state !== "running") {
+      await ctx.resume();
+    }
+    let node = await core.initialize(ctx, {
+      numberOfInputs: 0,
+      numberOfOutputs: 1,
+      outputChannelCount: [2],
+    });
+    node.connect(ctx.destination);
     noSleep.enable();
   };
 

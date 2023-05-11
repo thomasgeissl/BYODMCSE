@@ -4,8 +4,8 @@
   },
   "orchestra": {
     "1": { "type": "synth", "effects": [] },
-    "2": { "type": "tape_noise", "effects": ["delay"] },
-    "3": { "type": "sampler", "effects": [] }
+    "2": { "type": "sampler", "effects": [] },
+    "3": { "type": "tape_noise", "effects": ["delay"] }
   },
   "files": {
     "/samples/number_0.wav": "https://ia800407.us.archive.org/9/items/999WavFiles/0.mp3",

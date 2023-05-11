@@ -2,12 +2,8 @@ import { useEffect, useState, useRef } from "react";
 import { useParams } from "react-router-dom";
 import styled from "@emotion/styled";
 import * as mqtt from "mqtt/dist/mqtt.min";
-import WebRenderer from "@elemaudio/web-renderer";
-import { el } from "@elemaudio/core";
-import Orchestra from "../audio/Orchestra";
-import Button from "@mui/material/Button";
-
 import { Canvas, useFrame } from "@react-three/fiber";
+import { el } from "@elemaudio/core";
 
 const Container = styled.div``;
 
@@ -91,7 +87,8 @@ function Room(props) {
         if (orchestra) {
           const mainOut = orchestra?.render();
           core?.render(mainOut, mainOut);
-          // core?.render(el.cycle(440), el.cycle(440))
+          console.log(core)
+          // core?.render(el.cycle(440), el.cycle(440));
         }
       });
       console.log("subscribed to topic", topic);

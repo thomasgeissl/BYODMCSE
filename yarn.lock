@@ -3150,7 +3150,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "renderer@workspace:."
   dependencies:
-    "@elemaudio/core": ^1.0.8
+    "@elemaudio/core": ^2.0.0
     "@elemaudio/node-renderer": ^1.0.5
     "@elemaudio/web-renderer": ^2.0.0
     "@emotion/react": ^11.9.0
