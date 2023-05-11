@@ -87,7 +87,6 @@ function Room(props) {
         if (orchestra) {
           const mainOut = orchestra?.render();
           core?.render(mainOut, mainOut);
-          console.log(core)
           // core?.render(el.cycle(440), el.cycle(440));
         }
       });
