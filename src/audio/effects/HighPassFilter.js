@@ -1,8 +1,11 @@
 import { el } from "@elemaudio/core";
 
-class Highpass {
+class HighPassFilter {
   constructor() {
     this.cutoffFrequency = 100
+  }
+  setCufOffFrequency(frequency){
+    this.cutoffFrequency = frequency
   }
 
   render(signal) {
@@ -11,4 +14,4 @@ class Highpass {
   }
 }
 
-export default Highpass;
+export default HighPassFilter;

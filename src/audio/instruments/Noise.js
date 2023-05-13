@@ -19,6 +19,7 @@ class Noise {
     this.gate = 0
   }
   render() {
+    console.log("noise render")
     const gate = el.const({
       key: `gate-${this.key}`,
       value: this.gate,

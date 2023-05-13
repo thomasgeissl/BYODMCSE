@@ -5,7 +5,7 @@ class Delay {
   }
 
   render(signal) {
-    const out = el.delay({size: 44100}, el.ms2samps(1000), 1, signal)
+    const out = el.delay({size: 44100}, el.ms2samps(1000), 0.3, signal)
     return out;
   }
 }

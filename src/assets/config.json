@@ -1,11 +1,24 @@
 {
   "connection": {
-    "broker": "wss://public:public@public.cloud.shiftr.io"
+    "broker": "ws://localhost:9001",
+    "broker2": "wss://public:public@public.cloud.shiftr.io"
   },
   "orchestra": {
-    "1": { "type": "synth", "effects": [] },
-    "2": { "type": "sampler", "effects": [] },
-    "3": { "type": "tape_noise", "effects": ["delay"] }
+    "1": { "instrument": "synth", "effects": [] },
+    "2": {
+      "instrument": "sampler",
+      "effects": [
+        {
+          "type": "lowPassFilter"
+        },
+        {
+          "type": "delay"
+        }
+      ]
+    },
+    "3": { "instrument": "tapeNoise", "effects": [] },
+    "15": { "instrument": "grainTrain", "effects": [] },
+    "16": { "instrument": "noise", "effects": [] }
   },
   "files": {
     "/samples/number_0.wav": "https://ia800407.us.archive.org/9/items/999WavFiles/0.mp3",

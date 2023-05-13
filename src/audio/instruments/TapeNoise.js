@@ -5,23 +5,12 @@ import Delay from "../effects/Delay";
 // https://twitter.com/ubcomposer/status/1647659387396169728?s=46&t=Z3VnznKKxadB7DXpOQN7dg
 
 class TapeNoise {
-  constructor(effects) {
+  constructor() {
     this.voices = [
         { gate: 0.0, note: 0, velocity: 0, key: `tape_noise-v1-${v4()}` },
         //   { gate: 0.0, note: 0, key: `synth-v9-${v4()}` },
         //   { gate: 0.0, note: 0, key: `synth-v10-${v4()}` },
       ];
-      this.effects = []
-      effects.forEach(effect =>{
-        switch(effect){
-          case "delay":{
-            this.effects.push(new Delay())
-            break;
-          }
-        }
-      })
-      
-
   }
   voice = (voice) => {
     const gate = el.const({
@@ -69,6 +58,7 @@ class TapeNoise {
   }
   noteOff(note) {
     this.voices[0].gate = 0
+    this.voices[0].velocity = 0
   }
   render() {
     const out = el.add(...this.voices.map((v) => this.voice(v)));
@@ -76,11 +66,6 @@ class TapeNoise {
     //   return effect.render(signal)
     // })
     return out
-    let wet = out
-    for(let i = 0; i < this.effects.length; i++){
-      wet = this.effects[i].render(wet)
-    }
-    return wet;
   }
 }
 

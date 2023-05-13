@@ -1,12 +1,12 @@
 import { el } from "@elemaudio/core";
 import { v4 } from "uuid";
-import Lowpass from "../effects/Lowpass.js";
-import Highpass from "../effects/Highpass.js";
+import Lowpass from "../effects/LowPassFilter.js";
+import HighPassFilter from "../effects/HighPassFilter.js";
 
 // https://www.youtube.com/watch?v=0voWrxLDnSE
 
 const lowpass = new Lowpass();
-const highpass = new Highpass();
+const highpass = new HighPassFilter();
 
 class Sampler {
   constructor(voices) {
@@ -14,31 +14,37 @@ class Sampler {
     this.voices = {
       60: {
         gate: 0.0,
+        velocity: 0,
         path: "/samples/number_0.wav",
         key: `sampler-v1-${v4()}`,
       },
       61: {
         gate: 0.0,
+        velocity: 0,
         path: "/samples/number_1.wav",
         key: `sampler-v1-${v4()}`,
       },
       62: {
         gate: 0.0,
+        velocity: 0,
         path: "/samples/number_2.wav",
         key: `sampler-v1-${v4()}`,
       },
       63: {
         gate: 0.0,
+        velocity: 0,
         path: "/samples/number_3.wav",
         key: `sampler-v1-${v4()}`,
       },
       64: {
         gate: 0.0,
+        velocity: 0,
         path: "/samples/number_4.wav",
         key: `sampler-v1-${v4()}`,
       },
       65: {
         gate: 0.0,
+        velocity: 0,
         path: "/samples/number_5.wav",
         key: `sampler-v1-${v4()}`,
       }
@@ -61,6 +67,7 @@ class Sampler {
     });
     if (voice) {
       voice[1].gate = 1.0;
+      voice[1].velocity = velocity
     }
   }
   noteOff(note) {

@@ -4,6 +4,7 @@ import styled from "@emotion/styled";
 import * as mqtt from "mqtt/dist/mqtt.min";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { el } from "@elemaudio/core";
+import config from "../assets/config.json"
 
 const Container = styled.div``;
 
@@ -41,8 +42,7 @@ function Room(props) {
 
   useEffect(
     () => {
-      // mqttClient = mqtt.connect("ws://localhost:9001");
-      mqttClient = mqtt.connect("wss://public:public@public.cloud.shiftr.io");
+      mqttClient = mqtt.connect(config.connection.broker);
       mqttClient.on("connect", function () {
         mqttClient.subscribe(topic, function (err) {
           if (err) {

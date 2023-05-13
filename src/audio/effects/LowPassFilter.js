@@ -1,8 +1,11 @@
 import { el } from "@elemaudio/core";
 
-class Lowpass {
+class LowPassFilter {
   constructor() {
     this.cutoffFrequency = 1000
+  }
+  setCufOffFrequency(frequency){
+    this.cutoffFrequency = frequency
   }
 
   render(signal) {
@@ -11,4 +14,4 @@ class Lowpass {
   }
 }
 
-export default Lowpass;
+export default LowPassFilter;
