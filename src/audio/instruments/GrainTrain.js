@@ -10,7 +10,6 @@ class GrainTrain {
     ];
   }
   voice = (voice) => {
-    console.log("grain train");
     // Our phasors. The second, `t2`, is derived from `t` and offset by exactly
     // half a cycle.
     let t = el.phasor(1, 0);

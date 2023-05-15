@@ -10,7 +10,7 @@ import { v4 } from "uuid";
 class Noise {
   constructor() {
     this.gate = 0
-    this.key = v4()
+    this.key = `noise-v1-${v4()}`
   }
   noteOn(note, velocity) {
     this.gate = 1.0;
@@ -19,7 +19,6 @@ class Noise {
     this.gate = 0
   }
   render() {
-    console.log("noise render")
     const gate = el.const({
       key: `gate-${this.key}`,
       value: this.gate,

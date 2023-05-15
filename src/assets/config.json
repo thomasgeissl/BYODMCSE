@@ -4,7 +4,7 @@
     "broker2": "wss://public:public@public.cloud.shiftr.io"
   },
   "orchestra": {
-    "1": { "instrument": "synth", "effects": [] },
+    "1": { "instrument": "synth", "effects": [], "midiEffects": [] },
     "2": {
       "instrument": "sampler",
       "effects": [
@@ -14,11 +14,12 @@
         {
           "type": "delay"
         }
-      ]
+      ],
+      "midiEffects": []
     },
-    "3": { "instrument": "tapeNoise", "effects": [] },
-    "15": { "instrument": "grainTrain", "effects": [] },
-    "16": { "instrument": "noise", "effects": [] }
+    "3": { "instrument": "tapeNoise", "effects": [], "midiEffects": [] },
+    "15": { "instrument": "grainTrain", "effects": [], "midiEffects": [] },
+    "16": { "instrument": "noise", "effects": [], "midiEffects": [] }
   },
   "files": {
     "/samples/number_0.wav": "https://ia800407.us.archive.org/9/items/999WavFiles/0.mp3",
