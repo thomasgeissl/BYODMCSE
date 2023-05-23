@@ -1,15 +1,12 @@
 import { el } from "@elemaudio/core";
 import { v4 } from "uuid";
 import { Interval, Note, Scale, Midi } from "tonal";
-import Delay from "../effects/Delay";
 // https://twitter.com/ubcomposer/status/1647659387396169728?s=46&t=Z3VnznKKxadB7DXpOQN7dg
 
 class TapeNoise {
   constructor() {
     this.voices = [
         { gate: 0.0, note: 0, velocity: 0, key: `tape_noise-v1-${v4()}` },
-        //   { gate: 0.0, note: 0, key: `synth-v9-${v4()}` },
-        //   { gate: 0.0, note: 0, key: `synth-v10-${v4()}` },
       ];
   }
   voice = (voice) => {
@@ -25,17 +22,18 @@ class TapeNoise {
     // return value
     const noiseAmount = el.mul(
       100,
-      el.latch(el.train(Math.random() * 100), el.abs(el.noise()))
+      el.latch(el.train(Math.random() * 1000), el.abs(el.noise()))
     );
     const noiseSignal = el.mul(
       el.cycle(el.cycle(value)),
       el.latch(el.train(Math.random() * 10), el.noise())
     );
     return el.mul(
-      0.7,
-      env,
+      0.4,
+      // env,
+      gate,
       el.allpass(
-        el.mul(10000, el.latch(el.train(2), el.abs(el.noise()))),
+        el.mul(1000, el.latch(el.train(2), el.abs(el.noise()))),
         noiseAmount,
         noiseSignal
       )
@@ -62,9 +60,6 @@ class TapeNoise {
   }
   render() {
     const out = el.add(...this.voices.map((v) => this.voice(v)));
-    // this.effects.reduce((signal, effect) =>{
-    //   return effect.render(signal)
-    // })
     return out
   }
 }

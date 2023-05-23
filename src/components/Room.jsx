@@ -39,6 +39,7 @@ function Room(props) {
   const { roomId } = useParams();
   const { orchestra, core } = props;
   const topic = `byod/${roomId}`;
+  console.log("room.render")
 
   useEffect(
     () => {
@@ -86,6 +87,7 @@ function Room(props) {
         }
         if (orchestra) {
           const mainOut = orchestra?.render();
+          el.fft({name: "mainFft"}, mainOut)
           core?.render(mainOut, mainOut);
           // core?.render(el.cycle(440), el.cycle(440));
         }

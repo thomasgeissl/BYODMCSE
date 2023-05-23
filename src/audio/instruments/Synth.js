@@ -28,8 +28,8 @@ class Synth {
     const env = el.adsr(1.0, 1.0, 1.0, 2.0, gate);
     const frequency = Midi.midiToFreq(voice.note);
     return el.mul(
-      env,
-      // gate,
+      // env,
+      gate,
       el.cycle(
         el.const({
           key: `frequency-${voice.key}`,

@@ -44,6 +44,20 @@ function Lobby() {
     //   core.render(el.cycle(440), el.cycle(441));
     // });
 
+    core.on('meter', function(e) {
+      if (e.source === 'left') {
+        console.log("left peak", e.max)
+        // handleLeftPeakValue(e.max);
+      }
+      if (e.source === 'right') {
+        console.log("right peak", e.max)
+        // handleRightPeakValue(e.max);
+      }
+    });
+    core.on('fft', function(e) {
+      console.log(e)
+    });
+
     core.on("load", async function () {
       const files = {};
       const entries = Object.entries(config.files);
