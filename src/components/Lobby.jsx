@@ -7,8 +7,8 @@ import NoSleep from "nosleep.js";
 import Orchestra from "../audio/Orchestra";
 import Button from "@mui/material/Button";
 import Room from "./Room";
-
-import config from "../assets/config.json";
+import configGeneral from "../assets/config.json";
+import configTaxi from "../assets/config.taxi.json";
 
 const core = new WebRenderer();
 const noSleep = new NoSleep();
@@ -38,24 +38,24 @@ function Lobby() {
   const { roomId } = useParams();
   const [inited, setInited] = useState(false);
   const [orchestra, setOrchestra] = useState(null);
+
+  // TODO: get from cms
+  const config = roomId === "taxi" ? configTaxi : configGeneral;
   const init = async () => {
     const ctx = new AudioContext();
-    // core.on('load', function() {
-    //   core.render(el.cycle(440), el.cycle(441));
-    // });
 
-    core.on('meter', function(e) {
-      if (e.source === 'left') {
-        console.log("left peak", e.max)
+    core.on("meter", function (e) {
+      if (e.source === "left") {
+        console.log("left peak", e.max);
         // handleLeftPeakValue(e.max);
       }
-      if (e.source === 'right') {
-        console.log("right peak", e.max)
+      if (e.source === "right") {
+        console.log("right peak", e.max);
         // handleRightPeakValue(e.max);
       }
     });
-    core.on('fft', function(e) {
-      console.log(e)
+    core.on("fft", function (e) {
+      console.log(e);
     });
 
     core.on("load", async function () {
@@ -75,7 +75,7 @@ function Lobby() {
     if (ctx.state !== "running") {
       await ctx.resume();
     }
-    let node = await core.initialize(ctx, {
+    const node = await core.initialize(ctx, {
       numberOfInputs: 0,
       numberOfOutputs: 1,
       outputChannelCount: [2],
