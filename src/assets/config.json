@@ -4,31 +4,30 @@
     "broker2": "wss://public:public@public.cloud.shiftr.io"
   },
   "orchestra": {
-    "1": {
+    "1":{
       "instrument": {
-        "type": "sampler",
-        "config": {
-          "60": {"path": "/samples/trash_0.wav"},
-          "61": {"path": "/samples/trash_1.wav"},
-          "62": {"path": "/samples/trash_2.wav"},
-          "63": {"path": "/samples/trash_3.wav"}
-        }
+        "type": "synth"
       },
       "effects": [],
       "midiEffects": []
     },
-    "2": {
+    "2":{
+      "instrument": {
+        "type": "tapeNoise"
+      },
+      "effects": [],
+      "midiEffects": []
+    },
+    "11": {
       "instrument": {
         "type": "sampler",
         "config": {
-          "60": {"path": "/samples/number_0.wav"},
-          "61": {"path": "/samples/number_1.wav"},
-          "62": {"path": "/samples/number_2.wav"},
-          "63": {"path": "/samples/number_3.wav"},
-          "64": {"path": "/samples/number_4.wav"},
-          "65": {"path": "/samples/number_5.wav"},
-          "66": {"path": "/samples/number_6.wav"},
-          "67": {"path": "/samples/number_7.wav"}
+          "60": {"path": "/samples/texture_0.wav"},
+          "61": {"path": "/samples/texture_1.wav"},
+          "62": {"path": "/samples/trash_0.wav"},
+          "63": {"path": "/samples/trash_1.wav"},
+          "64": {"path": "/samples/trash_2.wav"},
+          "65": {"path": "/samples/trash_3.wav"}
         }
       },
       "effects": [],
@@ -36,21 +35,12 @@
     }
   },
   "files": {
+    "/samples/texture_0.wav": "/samples/220910__hard3eat__strange-texture.mp3",
+    "/samples/texture_1.wav": "/samples/509846__joltin_joe_castaldo__sailing-the-styx-texture.mp3",
     "/samples/trash_0.wav": "/samples/258075__sarah_orio__trash-can-top.wav",
     "/samples/trash_1.wav": "/samples/383461__deleted_user_7146007__dumping-trash-in-a-trash-can.wav",
     "/samples/trash_2.wav": "/samples/444589__tatiana229__trash.wav",
     "/samples/trash_3.wav": "/samples/540877__dullbananas__trash.wav",
-    "/samples/trash_4.wav": "/samples/660566__cfedorek16__trash-can-lid-openclose.wav",
-    "/samples/number_0.wav": "https://ia800407.us.archive.org/9/items/999WavFiles/0.mp3",
-    "/samples/number_1.wav": "https://ia800407.us.archive.org/9/items/999WavFiles/1.mp3",
-    "/samples/number_2.wav": "https://ia800407.us.archive.org/9/items/999WavFiles/2.mp3",
-    "/samples/number_3.wav": "https://ia800407.us.archive.org/9/items/999WavFiles/3.mp3",
-    "/samples/number_4.wav": "https://ia800407.us.archive.org/9/items/999WavFiles/4.mp3",
-    "/samples/number_5.wav": "https://ia800407.us.archive.org/9/items/999WavFiles/5.mp3",
-    "/samples/number_6.wav": "https://ia800407.us.archive.org/9/items/999WavFiles/6.mp3",
-    "/samples/number_7.wav": "https://ia800407.us.archive.org/9/items/999WavFiles/7.mp3",
-    "/samples/number_8.wav": "https://ia800407.us.archive.org/9/items/999WavFiles/8.mp3",
-    "/samples/number_9.wav": "https://ia800407.us.archive.org/9/items/999WavFiles/9.mp3",
-    "/samples/number_10.wav": "https://ia800407.us.archive.org/9/items/999WavFiles/10.mp3"
+    "/samples/trash_4.wav": "/samples/660566__cfedorek16__trash-can-lid-openclose.wav"
   }
 }

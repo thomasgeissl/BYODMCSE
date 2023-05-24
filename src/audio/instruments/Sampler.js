@@ -11,49 +11,11 @@ const highpass = new HighPassFilter();
 class Sampler {
   constructor(voices) {
     this.voices = voices;
-    Object.values(this.voices).forEach((voice, index)=>{
-        voice.gate = 0.0
-        voice.velocity =0,
-        voice.key = `sampler-v${index}-${v4()}`
-    })
-    // this.voices = {
-    //   60: {
-    //     gate: 0.0,
-    //     velocity: 0,
-    //     path: "/samples/number_0.wav",
-    //     key: `sampler-v1-${v4()}`,
-    //   },
-    //   61: {
-    //     gate: 0.0,
-    //     velocity: 0,
-    //     path: "/samples/number_1.wav",
-    //     key: `sampler-v1-${v4()}`,
-    //   },
-    //   62: {
-    //     gate: 0.0,
-    //     velocity: 0,
-    //     path: "/samples/number_2.wav",
-    //     key: `sampler-v1-${v4()}`,
-    //   },
-    //   63: {
-    //     gate: 0.0,
-    //     velocity: 0,
-    //     path: "/samples/number_3.wav",
-    //     key: `sampler-v1-${v4()}`,
-    //   },
-    //   64: {
-    //     gate: 0.0,
-    //     velocity: 0,
-    //     path: "/samples/number_4.wav",
-    //     key: `sampler-v1-${v4()}`,
-    //   },
-    //   65: {
-    //     gate: 0.0,
-    //     velocity: 0,
-    //     path: "/samples/number_5.wav",
-    //     key: `sampler-v1-${v4()}`,
-    //   }
-    // };
+    Object.values(this.voices).forEach((voice, index) => {
+      voice.gate = 0.0;
+      voice.velocity = 0;
+      voice.key = `sampler-v${index}-${v4()}`;
+    });
   }
 
   voice = (voice) => {
@@ -63,7 +25,7 @@ class Sampler {
     });
     const env = el.env(4.0, 1.0, 0.4, 2.0, gate);
     const out = el.sample({ path: voice.path, mode: "trigger" }, gate, 1.0);
-    return out;
+    return el.mul(out, voice.velocity);
   };
 
   noteOn(note, velocity) {
@@ -72,7 +34,7 @@ class Sampler {
     });
     if (voice) {
       voice[1].gate = 1.0;
-      voice[1].velocity = velocity
+      voice[1].velocity = velocity/127;
     }
   }
   noteOff(note) {
@@ -91,11 +53,7 @@ class Sampler {
         return this.voice(voice);
       })
     );
-    return el.mul(0.4, out)
-    // const delayed = highpass.render(
-      return lowpass.render(el.delay({ size: 44100 }, el.ms2samps(1000), 0.8, out))
-    // );
-    // return delayed;
+    return el.mul(0.4, out);
   }
 }
 

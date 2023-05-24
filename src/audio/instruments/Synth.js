@@ -27,9 +27,8 @@ class Synth {
     });
     const env = el.adsr(1.0, 1.0, 1.0, 2.0, gate);
     const frequency = Midi.midiToFreq(voice.note);
-    return el.mul(
-      // env,
-      gate,
+    const signal = el.mul(
+      env,
       el.cycle(
         el.const({
           key: `frequency-${voice.key}`,
@@ -37,13 +36,14 @@ class Synth {
         })
       )
     );
+    return el.mul(signal, voice.velocity);
   };
   noteOn(note, velocity) {
     const voiceIndex = this.voices.findIndex((v) => v.note === note);
     if (voiceIndex >= 0) {
       this.voices[voiceIndex].gate = 1.0;
       this.voices[voiceIndex].note = note;
-      this.voices[voiceIndex].velocity = velocity;
+      this.voices[voiceIndex].velocity = velocity/127;
     } else {
       this.voices[this.nextVoice].gate = 1.0;
       this.voices[this.nextVoice].note = note;

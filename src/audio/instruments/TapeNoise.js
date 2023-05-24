@@ -30,8 +30,7 @@ class TapeNoise {
     );
     return el.mul(
       0.4,
-      // env,
-      gate,
+      env,
       el.allpass(
         el.mul(1000, el.latch(el.train(2), el.abs(el.noise()))),
         noiseAmount,
