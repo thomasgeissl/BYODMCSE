@@ -4,21 +4,6 @@
     "broker2": "wss://public:public@public.cloud.shiftr.io"
   },
   "orchestra": {
-    "lobby": {
-      "instrument": {
-        "type": "sampler",
-        "config": {
-          "60": {"path": "/samples/texture_0.wav"},
-          "61": {"path": "/samples/texture_1.wav"},
-          "62": {"path": "/samples/trash_0.wav"},
-          "63": {"path": "/samples/trash_1.wav"},
-          "64": {"path": "/samples/trash_2.wav"},
-          "65": {"path": "/samples/trash_3.wav"}
-        }
-      },
-      "effects": [],
-      "midiEffects": []
-    },
     "11": {
       "instrument": {
         "type": "sampler",

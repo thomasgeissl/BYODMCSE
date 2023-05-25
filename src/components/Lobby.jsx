@@ -9,6 +9,7 @@ import Button from "@mui/material/Button";
 import Room from "./Room";
 import configGeneral from "../assets/config.json";
 import configTaxi from "../assets/config.taxi.json";
+import configFrog from "../assets/config.frog.json";
 
 const core = new WebRenderer();
 const noSleep = new NoSleep();
@@ -40,7 +41,17 @@ function Lobby() {
   const [orchestra, setOrchestra] = useState(null);
 
   // TODO: get from cms
-  const config = roomId === "taxi" ? configTaxi : configGeneral;
+  let config = configGeneral
+  switch(roomId) {
+    case "taxi":{
+      config = configTaxi
+      break;
+    }
+    case "frog":{
+      config = configTaxi
+      break;
+    }
+  }
   const init = async () => {
     const ctx = new AudioContext();
 
@@ -53,9 +64,6 @@ function Lobby() {
         console.log("right peak", e.max);
         // handleRightPeakValue(e.max);
       }
-    });
-    core.on("fft", function (e) {
-      console.log(e);
     });
 
     core.on("load", async function () {

@@ -6,9 +6,12 @@ import { Canvas, useFrame } from "@react-three/fiber";
 import { OrbitControls } from "@react-three/drei";
 import * as THREE from "three";
 import { el } from "@elemaudio/core";
-import config from "../assets/config.json";
+import configGeneral from "../assets/config.json";
 import configTaxi from "../assets/config.taxi.json";
+import configFrog from "../assets/config.frog.json";
+import useStore from "../store/store";
 // import { WaveMaterial } from "./WaveMaterial.js";
+import { extractBaseFrequenciesEnergy, map } from "../audio/utils";
 
 const Container = styled.div`
   width: 100%;
@@ -22,24 +25,12 @@ const StyledCanvas = styled(Canvas)`
 const sessionPrefix = "";
 let mqttClient;
 
-// function ShaderPlane() {
-//   const ref = useRef();
-//   const { width, height } = useThree((state) => state.viewport);
-//   useFrame((state, delta) => (ref.current.time += delta));
-//   return (
-//     <mesh scale={[width, height, 1]}>
-//       <planeGeometry />
-//       <waveMaterial
-//         ref={ref}
-//         key={WaveMaterial.key}
-//         toneMapped={true}
-//         colorStart={"#505050"}
-//         colorEnd={"black"}
-//       />
-//     </mesh>
-//   );
-// }
+let baseEnergy = 0;
+let midEnergy = 0;
+let highEnergy = 0;
+
 const CustomGeometryParticles = (props) => {
+  // https://blog.maximeheckel.com/posts/the-magical-world-of-particles-with-react-three-fiber-and-shaders/
   const { count } = props;
 
   // This reference gives us direct access to our points
@@ -48,7 +39,7 @@ const CustomGeometryParticles = (props) => {
   // Generate our positions attributes array
   const particlesPosition = useMemo(() => {
     const positions = new Float32Array(count * 3);
-    const distance = 2;
+    const distance = map(midEnergy, 0, 4, 1, 3, true);
 
     for (let i = 0; i < count; i++) {
       const theta = THREE.MathUtils.randFloatSpread(360);
@@ -103,15 +94,57 @@ const CustomGeometryParticles = (props) => {
 
 function Room(props) {
   const { roomId } = useParams();
+  const [playing, setPlaying] = useState(false);
   const { orchestra, core } = props;
   const topic = `byod/${roomId}`;
-  console.log("room.render");
+
+  const uuid = useStore((state) => state.uuid);
+
+  useEffect(() => {
+    core.on("fft", function (e) {
+      const baseFrequencyRange = [20, 200]; // Example base frequency range in Hz
+      const midFrequencyRange = [201, 4000]; // Example base frequency range in Hz
+      const highFrequencyRange = [4001, 10000]; // Example base frequency range in Hz
+      baseEnergy = extractBaseFrequenciesEnergy(
+        e.data.real,
+        44100,
+        baseFrequencyRange
+      );
+      midEnergy = extractBaseFrequenciesEnergy(
+        e.data.real,
+        44100,
+        midFrequencyRange
+      );
+      highEnergy = extractBaseFrequenciesEnergy(
+        e.data.real,
+        44100,
+        highFrequencyRange  
+      );
+    });
+  }, [core]);
 
   useEffect(
     () => {
+      // TODO: get from cms
+      let config = configGeneral;
+      switch (roomId) {
+        case "taxi": {
+          config = configTaxi;
+          break;
+        }
+        case "frog": {
+          config = configTaxi;
+          break;
+        }
+      }
       mqttClient = mqtt.connect(config.connection.broker);
       mqttClient.on("connect", function () {
         mqttClient.subscribe(topic, function (err) {
+          if (err) {
+            console.error(err);
+          }
+        });
+        mqttClient.subscribe(`${topic}/user`, function (err) {
           if (err) {
             console.error(err);
           }
@@ -124,6 +157,11 @@ function Room(props) {
           const payload = JSON.parse(message.toString());
           switch (topic) {
             case `${sessionPrefix}byod/${roomId}`: {
+              // TODO: reset timeout
+              if (!playing) {
+                setPlaying(true);
+                // TODO: set timeout to stop playing
+              }
               if (payload.status === 144) {
                 orchestra?.noteOn(
                   payload.channel,
@@ -135,26 +173,20 @@ function Room(props) {
               }
               break;
             }
-            // case "test/noteOn": {
-            //   orchestra?.noteOn(
-            //     payload.channel,
-            //     payload.note,
-            //     payload.velocity
-            //   );
-            //   break;
-            // }
-            // case "test/noteOff": {
-            //   orchestra?.noteOff(payload.channel, payload.note);
-            //   break;
-            // }
+            case `${sessionPrefix}byod/${roomId}/user`: {
+              console.log("got user message", payload);
+              orchestra?.noteOn("lobby", 61, 100);
+              // setTimeout(() => {
+              //   orchestra?.noteOff("lobby", 60);
+              // }, 300);
+            }
           }
         } catch (error) {
           console.log("error", error);
         }
         if (orchestra) {
           const mainOut = orchestra?.render();
-          el.fft({ name: "mainFft" }, mainOut);
-          core?.render(mainOut, mainOut);
+          core?.render(el.fft({ size: 1024 }, mainOut), mainOut); // el.fft({ name: "mainFft" }, mainOut));
           // core?.render(el.cycle(440), el.cycle(440));
         }
       });
@@ -167,7 +199,19 @@ function Room(props) {
   );
   return (
     <Container>
-      <StyledCanvas>
+      <StyledCanvas
+        onClick={() => {
+          if (!playing) {
+            console.log("clicked");
+            // TODO: send mqtt message to trigger sounds on other peoples phones
+            const message = { uuid };
+            mqttClient.publish(
+              `${sessionPrefix}byod/${roomId}/user`,
+              JSON.stringify(message)
+            );
+          }
+        }}
+      >
         {/* <ShaderPlane /> */}
         <CustomGeometryParticles count={2000} />
 
