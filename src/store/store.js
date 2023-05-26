@@ -1,5 +1,5 @@
 import { v4 } from 'uuid'
-import create from 'zustand'
+import { create } from 'zustand'
 
 const useStore = create((set) => ({
   uuid: v4(),

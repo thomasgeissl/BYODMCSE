@@ -12,6 +12,13 @@ import configFrog from "../assets/config.frog.json";
 import useStore from "../store/store";
 // import { WaveMaterial } from "./WaveMaterial.js";
 import { extractBaseFrequenciesEnergy, map } from "../audio/utils";
+import {
+  Bloom,
+  DepthOfField,
+  EffectComposer,
+  Noise,
+  Vignette,
+} from "@react-three/postprocessing";
 
 const Container = styled.div`
   width: 100%;
@@ -118,7 +125,7 @@ function Room(props) {
       highEnergy = extractBaseFrequenciesEnergy(
         e.data.real,
         44100,
-        highFrequencyRange  
+        highFrequencyRange
       );
     });
   }, [core]);
@@ -174,11 +181,16 @@ function Room(props) {
               break;
             }
             case `${sessionPrefix}byod/${roomId}/user`: {
-              console.log("got user message", payload);
-              orchestra?.noteOn("lobby", 61, 100);
-              // setTimeout(() => {
-              //   orchestra?.noteOff("lobby", 60);
-              // }, 300);
+              const note = 60;
+              orchestra?.noteOn("lobby", note, 100);
+              setTimeout(() => {
+                if (orchestra) {
+                  orchestra?.noteOff("lobby", note);
+                  const mainOut = orchestra?.render();
+                  core?.render(el.fft({ size: 1024 }, mainOut), mainOut);
+                }
+              }, 300);
+              break;
             }
           }
         } catch (error) {
@@ -186,8 +198,7 @@ function Room(props) {
         }
         if (orchestra) {
           const mainOut = orchestra?.render();
-          core?.render(el.fft({ size: 1024 }, mainOut), mainOut); // el.fft({ name: "mainFft" }, mainOut));
-          // core?.render(el.cycle(440), el.cycle(440));
+          core?.render(el.fft({ size: 1024 }, mainOut), mainOut);
         }
       });
       console.log("subscribed to topic", topic);
@@ -202,8 +213,6 @@ function Room(props) {
       <StyledCanvas
         onClick={() => {
           if (!playing) {
-            console.log("clicked");
-            // TODO: send mqtt message to trigger sounds on other peoples phones
             const message = { uuid };
             mqttClient.publish(
               `${sessionPrefix}byod/${roomId}/user`,
@@ -212,10 +221,19 @@ function Room(props) {
           }
         }}
       >
-        {/* <ShaderPlane /> */}
         <CustomGeometryParticles count={2000} />
-
         <ambientLight intensity={0.5} />
+        <EffectComposer>
+          <DepthOfField
+            focusDistance={0}
+            focalLength={0.02}
+            bokehScale={2}
+            height={480}
+          />
+          <Bloom luminanceThreshold={0} luminanceSmoothing={0.9} height={300} />
+          <Noise opacity={0.02} />
+          <Vignette eskil={false} offset={0.1} darkness={1.1} />
+        </EffectComposer>
       </StyledCanvas>
     </Container>
   );

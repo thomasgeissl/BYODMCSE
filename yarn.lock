@@ -935,20 +935,20 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@react-three/postprocessing@npm:^2.11.0":
-  version: 2.12.3
-  resolution: "@react-three/postprocessing@npm:2.12.3"
+"@react-three/postprocessing@npm:^2.13.0":
+  version: 2.13.0
+  resolution: "@react-three/postprocessing@npm:2.13.0"
   dependencies:
     maath: ^0.5.3
-    n8ao: ^1.2.1
-    postprocessing: ^6.30.2
+    n8ao: ^1.3.1
+    postprocessing: ^6.31.0
     screen-space-reflections: 2.5.0
     three-stdlib: ^2.21.10
   peerDependencies:
     "@react-three/fiber": ">=8.0"
     react: ">=18.0"
     three: ">= 0.138.0"
-  checksum: 1e08c96b18bd7fcbc255d98c400a3967079427b99dbf407e0b0dc8e90e623f6c97e691111ea53ab128f389e059da2445b7a4327298f8a78cb48344390bd772bd
+  checksum: a193792ef044542bcb46ccffe02deac4aeded46fe939d6dc664c538a4f539861ebb8f7e74a9c0debf8d05de4520eed93c1f7c3b85b1171a6d78f01c1c609c3c9
   languageName: node
   linkType: hard
 
@@ -2741,13 +2741,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"n8ao@npm:^1.2.1":
-  version: 1.2.1
-  resolution: "n8ao@npm:1.2.1"
+"n8ao@npm:^1.3.1":
+  version: 1.3.2
+  resolution: "n8ao@npm:1.3.2"
   peerDependencies:
     postprocessing: ">=6.30.0"
     three: ">=0.137"
-  checksum: 0cde75c97583ea55bbaa5dee4ae511aee63315dc952615cad0256ca9affa9e95c59d8992af56da0ce69011b9fbc5179b88f02a749ccf6273c3fbe5c937826735
+  checksum: 63ef9d77a51d05589de4541f00d8be55c1818825c07a167dd92c0c2784ea16c2528136a6419b080b63338b17433e251c6e907ccd8c1dc29dc58b04cad7f07bd1
   languageName: node
   linkType: hard
 
@@ -2938,7 +2938,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"postprocessing@npm:^6.30.2":
+"postprocessing@npm:^6.31.0":
   version: 6.31.0
   resolution: "postprocessing@npm:6.31.0"
   peerDependencies:
@@ -3166,7 +3166,7 @@ __metadata:
     "@mui/material": ^5.7.0
     "@react-three/drei": ^9.67.0
     "@react-three/fiber": ^8.13.0
-    "@react-three/postprocessing": ^2.11.0
+    "@react-three/postprocessing": ^2.13.0
     "@types/react": ^18.0.0
     "@types/react-dom": ^18.0.0
     "@vitejs/plugin-react": ^1.3.0
