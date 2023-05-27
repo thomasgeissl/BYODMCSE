@@ -100,7 +100,7 @@ const CustomGeometryParticles = (props) => {
 };
 
 function Room(props) {
-  const { roomId } = useParams();
+  const roomId = useParams().roomId ?? "taxi";
   const [playing, setPlaying] = useState(false);
   const { orchestra, core } = props;
   const topic = `byod/${roomId}`;
