@@ -7,12 +7,10 @@
       "instrument": {
         "type": "sampler",
         "config": {
-          "60": {"path": "/samples/texture_0.wav"},
-          "61": {"path": "/samples/texture_1.wav"},
-          "62": {"path": "/samples/trash_0.wav"},
-          "63": {"path": "/samples/trash_1.wav"},
-          "64": {"path": "/samples/trash_2.wav"},
-          "65": {"path": "/samples/trash_3.wav"}
+          "60": {"path": "/samples/texture_2.wav"},
+          "61": {"path": "/samples/texture_3.wav"},
+          "62": {"path": "/samples/texture_4.wav"},
+          "63": {"path": "/samples/texture_5.wav"}
         }
       },
       "effects": [],
@@ -37,6 +35,10 @@
   "files": {
     "/samples/texture_0.wav": "/samples/220910__hard3eat__strange-texture.mp3",
     "/samples/texture_1.wav": "/samples/509846__joltin_joe_castaldo__sailing-the-styx-texture.mp3",
+    "/samples/texture_2.wav": "/samples/424994__gregorquendel__fire-effects-textures-glitch-01.mp3",
+    "/samples/texture_3.wav": "/samples/685596__dflee4__rain-on-tarp-texture.mp3",
+    "/samples/texture_4.wav": "/samples/517304__newlocknew__click-snap-glitch-txtr-hrnlzrflt-frk4.mp3",
+    "/samples/texture_5.wav": "/samples/683468__twigy233__dirt-walker-foley-sfx-textured.mp3",
     "/samples/trash_0.wav": "/samples/258075__sarah_orio__trash-can-top.wav",
     "/samples/trash_1.wav": "/samples/383461__deleted_user_7146007__dumping-trash-in-a-trash-can.wav",
     "/samples/trash_2.wav": "/samples/444589__tatiana229__trash.wav",

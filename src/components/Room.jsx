@@ -181,8 +181,13 @@ function Room(props) {
               break;
             }
             case `${sessionPrefix}byod/${roomId}/user`: {
-              const note = 60;
-              orchestra?.noteOn("lobby", note, 100);
+              // TODO: get mapping from config file
+              let velocity = map(payload.y, 0, 1, 0, 127, true)
+              let note = Math.floor(map(payload.x, 0, 1, 60, 64, true))
+              if(payload.x > 0.5){
+                note = 61
+              }
+              orchestra?.noteOn("lobby", note, velocity);
               setTimeout(() => {
                 if (orchestra) {
                   orchestra?.noteOff("lobby", note);
@@ -209,18 +214,24 @@ function Room(props) {
     }
   );
   return (
-    <Container>
-      <StyledCanvas
-        onClick={() => {
-          if (!playing) {
-            const message = { uuid };
-            mqttClient.publish(
-              `${sessionPrefix}byod/${roomId}/user`,
-              JSON.stringify(message)
-            );
-          }
-        }}
-      >
+    <Container
+      onClick={(event) => {
+        if (!playing) {
+          const rect = event.target.getBoundingClientRect();
+          const x = event.clientX - rect.left;
+          const y = event.clientY - rect.top;
+
+          const normalizedX = x / rect.width;
+          const normalizedY = y / rect.height;
+          const message = { uuid, x: normalizedX, y: normalizedY};
+          mqttClient.publish(
+            `${sessionPrefix}byod/${roomId}/user`,
+            JSON.stringify(message)
+          );
+        }
+      }}
+    >
+      <StyledCanvas>
         <CustomGeometryParticles count={2000} />
         <ambientLight intensity={0.5} />
         <EffectComposer>

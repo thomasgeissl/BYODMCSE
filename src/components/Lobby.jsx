@@ -11,6 +11,8 @@ import configGeneral from "../assets/config.json";
 import configTaxi from "../assets/config.taxi.json";
 import configFrog from "../assets/config.frog.json";
 
+import LoopIcon from "@mui/icons-material/Loop";
+
 const core = new WebRenderer();
 const noSleep = new NoSleep();
 
@@ -24,7 +26,6 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   flex-grow: 1;
-  padding: 64px;
 `;
 const Instructions = styled.div`
   flex-grow: 1;
@@ -108,13 +109,28 @@ function Lobby() {
             onClick={() => {
               setTimeout(() => {
                 init();
-              }, 500);
+              }, 100);
             }}
             variant={"outlined"}
             size="large"
             sx={{ height: "128px" }}
             disabled={loading}
           >
+            {loading && (
+              <LoopIcon
+                sx={{
+                  animation: "spin 2s linear infinite",
+                  "@keyframes spin": {
+                    "0%": {
+                      transform: "rotate(360deg)",
+                    },
+                    "100%": {
+                      transform: "rotate(0deg)",
+                    },
+                  },
+                }}
+              />
+            )}
             enter
           </Button>
         </>
