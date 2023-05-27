@@ -19,6 +19,7 @@ const Container = styled.div`
   a{
     color: ${primary}
   }
+  display: flex;
 `;
 
 function App() {
@@ -29,7 +30,8 @@ function App() {
       <ThemeProvider theme={theme}>
         <Container>
           <Routes>
-            <Route path="/" element={<Login></Login>}></Route>
+            {/* <Route path="/" element={<Login></Login>}></Route> */}
+            <Route path="/" element={<Lobby></Lobby>}></Route>
             <Route path="/rooms" element={<Rooms></Rooms>}></Route>
             <Route path="/rooms/:roomId" element={<Lobby />} />
             <Route

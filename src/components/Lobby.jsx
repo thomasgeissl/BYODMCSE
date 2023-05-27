@@ -23,8 +23,8 @@ const loadSample = async (path, ctx) => {
 const Container = styled.div`
   display: flex;
   flex-direction: column;
-  width: 100%;
-  height: 100%;
+  flex-grow:1;
+  padding: 64px;
 `;
 const Instructions = styled.div`
   flex-grow: 1;
@@ -36,8 +36,9 @@ const Instructions = styled.div`
 `;
 
 function Lobby() {
-  const { roomId } = useParams();
+  const roomId = useParams().roomId || "taxi";
   const [inited, setInited] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [orchestra, setOrchestra] = useState(null);
 
   // TODO: get from cms
@@ -54,6 +55,7 @@ function Lobby() {
   }
   const init = async () => {
     const ctx = new AudioContext();
+    setLoading(true);
 
     core.on("meter", function (e) {
       if (e.source === "left") {
@@ -79,6 +81,7 @@ function Lobby() {
       const orchestra = new Orchestra(config.orchestra);
       setOrchestra(orchestra);
       setInited(true);
+      setLoading(false);
     });
     if (ctx.state !== "running") {
       await ctx.resume();
@@ -97,12 +100,15 @@ function Lobby() {
       {/* room {roomId} */}
       {!inited && (
         <>
-          <Instructions>please turn on your speakers and</Instructions>
+          <Instructions>please turn on your speakers and enter the room</Instructions>
           <Button
             onClick={() => {
               init();
             }}
             variant={"outlined"}
+            size="large"
+            sx={{height: '128px'}}
+            disabled={loading}
           >
             enter
           </Button>
