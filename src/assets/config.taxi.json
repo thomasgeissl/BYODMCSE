@@ -1,9 +1,6 @@
 {
   "connection": {
-    "broker": "wss://byodmcse:aFyYJo7b6rKnORki@byodmcse.cloud.shiftr.io:443",
-    "broker4": "ws://167.172.97.108:3000",
-    "broker3": "ws://localhost:9001",
-    "broker2": "wss://public:public@public.cloud.shiftr.io"
+    "broker": "wss://byodmcse:aFyYJo7b6rKnORki@byodmcse.cloud.shiftr.io:443"
   },
   "orchestra": {
     "lobby": {

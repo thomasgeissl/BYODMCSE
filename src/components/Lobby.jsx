@@ -23,7 +23,7 @@ const loadSample = async (path, ctx) => {
 const Container = styled.div`
   display: flex;
   flex-direction: column;
-  flex-grow:1;
+  flex-grow: 1;
   padding: 64px;
 `;
 const Instructions = styled.div`
@@ -42,14 +42,14 @@ function Lobby() {
   const [orchestra, setOrchestra] = useState(null);
 
   // TODO: get from cms
-  let config = configGeneral
-  switch(roomId) {
-    case "taxi":{
-      config = configTaxi
+  let config = configGeneral;
+  switch (roomId) {
+    case "taxi": {
+      config = configTaxi;
       break;
     }
-    case "frog":{
-      config = configTaxi
+    case "frog": {
+      config = configTaxi;
       break;
     }
   }
@@ -100,14 +100,18 @@ function Lobby() {
       {/* room {roomId} */}
       {!inited && (
         <>
-          <Instructions>please turn on your speakers and enter the room</Instructions>
+          <Instructions>
+            please turn on your speakers and enter the room
+          </Instructions>
           <Button
             onClick={() => {
-              init();
+              setTimeout(() => {
+                init();
+              }, 500);
             }}
             variant={"outlined"}
             size="large"
-            sx={{height: '128px'}}
+            sx={{ height: "128px" }}
             disabled={loading}
           >
             enter
