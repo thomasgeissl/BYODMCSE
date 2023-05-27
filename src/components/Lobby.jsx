@@ -101,6 +101,7 @@ function Lobby() {
       {!inited && (
         <>
           <Instructions>
+            room: {roomId}
             please turn on your speakers and enter the room
           </Instructions>
           <Button
