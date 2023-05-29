@@ -21,7 +21,7 @@ class Sampler {
   voice = (voice) => {
     const gate = el.const({
       key: `gate-${voice.key}`,
-      value: 0.8 * voice.gate,
+      value: voice.gate,
     });
     const env = el.env(4.0, 1.0, 0.4, 2.0, gate);
     const out = el.sample({ path: voice.path, mode: "trigger" }, gate, 1.0);
@@ -53,7 +53,8 @@ class Sampler {
         return this.voice(voice);
       })
     );
-    return el.mul(0.9, out);
+    return out
+    // return el.mul(0.9, out);
   }
 }
 
