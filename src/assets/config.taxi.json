@@ -3,7 +3,7 @@
     "broker": "wss://byodmcse:aFyYJo7b6rKnORki@byodmcse.cloud.shiftr.io:443"
   },
   "orchestra": {
-    "lobby": {
+    "lobbyTextures": {
       "instrument": {
         "type": "sampler",
         "config": {
@@ -11,6 +11,23 @@
           "61": {"path": "/samples/texture_3.wav"},
           "62": {"path": "/samples/texture_4.wav"},
           "63": {"path": "/samples/texture_5.wav"}
+        }
+      },
+      "effects": [],
+      "midiEffects": []
+    },
+    "lobbyNumbers": {
+      "instrument": {
+        "type": "sampler",
+        "config": {
+          "60": {"path": "/samples/number_1.wav"},
+          "61": {"path": "/samples/number_2.wav"},
+          "62": {"path": "/samples/number_3.wav"},
+          "63": {"path": "/samples/number_4.wav"},
+          "64": {"path": "/samples/number_5.wav"},
+          "65": {"path": "/samples/number_6.wav"},
+          "67": {"path": "/samples/number_7.wav"},
+          "68": {"path": "/samples/number_8.wav"}
         }
       },
       "effects": [],
@@ -43,6 +60,16 @@
     "/samples/trash_1.wav": "/samples/383461__deleted_user_7146007__dumping-trash-in-a-trash-can.wav",
     "/samples/trash_2.wav": "/samples/444589__tatiana229__trash.wav",
     "/samples/trash_3.wav": "/samples/540877__dullbananas__trash.wav",
-    "/samples/trash_4.wav": "/samples/660566__cfedorek16__trash-can-lid-openclose.wav"
+    "/samples/trash_4.wav": "/samples/660566__cfedorek16__trash-can-lid-openclose.wav",
+    "/samples/number_1.wav": "/samples/999WavFiles/1.mp3",
+    "/samples/number_2.wav": "/samples/999WavFiles/2.mp3",
+    "/samples/number_3.wav": "/samples/999WavFiles/3.mp3",
+    "/samples/number_4.wav": "/samples/999WavFiles/4.mp3",
+    "/samples/number_5.wav": "/samples/999WavFiles/5.mp3",
+    "/samples/number_6.wav": "/samples/999WavFiles/6.mp3",
+    "/samples/number_7.wav": "/samples/999WavFiles/7.mp3",
+    "/samples/number_8.wav": "/samples/999WavFiles/8.mp3",
+    "/samples/number_9.wav": "/samples/999WavFiles/9.mp3",
+    "/samples/number_10.wav": "/samples/999WavFiles/10.mp3"
   }
 }

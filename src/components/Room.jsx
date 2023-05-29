@@ -99,6 +99,7 @@ const CustomGeometryParticles = (props) => {
   );
 };
 
+let playingTimeoutId;
 function Room(props) {
   const roomId = useParams().roomId ?? "taxi";
   const [playing, setPlaying] = useState(false);
@@ -109,9 +110,9 @@ function Room(props) {
 
   useEffect(() => {
     core.on("fft", function (e) {
-      const baseFrequencyRange = [20, 200]; // Example base frequency range in Hz
-      const midFrequencyRange = [201, 4000]; // Example base frequency range in Hz
-      const highFrequencyRange = [4001, 10000]; // Example base frequency range in Hz
+      const baseFrequencyRange = [20, 200];
+      const midFrequencyRange = [201, 4000];
+      const highFrequencyRange = [4001, 10000];
       baseEnergy = extractBaseFrequenciesEnergy(
         e.data.real,
         44100,
@@ -164,10 +165,12 @@ function Room(props) {
           const payload = JSON.parse(message.toString());
           switch (topic) {
             case `${sessionPrefix}byod/${roomId}`: {
-              // TODO: reset timeout
+              clearTimeout(playingTimeoutId);
               if (!playing) {
                 setPlaying(true);
-                // TODO: set timeout to stop playing
+                setTimeout(() => {
+                  setPlaying(false);
+                }, 3 * 60 * 1000);
               }
               if (payload.status === 144) {
                 orchestra?.noteOn(
@@ -182,15 +185,27 @@ function Room(props) {
             }
             case `${sessionPrefix}byod/${roomId}/user`: {
               // TODO: get mapping from config file
-              let velocity = map(payload.y, 0, 1, 0, 127, true)
-              let note = Math.floor(map(payload.x, 0, 1, 60, 64, true))
-              if(payload.x > 0.5){
-                note = 61
-              }
-              orchestra?.noteOn("lobby", note, velocity);
+              // let velocity = map(payload.y, 0, 1, 0, 127, true)
+              const velocity = 127;
+              const channel =
+                payload.y > 0.5 ? "lobbyTextures" : "lobbyNumbers";
+              const note =
+                60 +
+                Math.floor(
+                  map(
+                    payload.x,
+                    0,
+                    1,
+                    0,
+                    channel === "lobbyTextures" ? 4 : 8,
+                    true
+                  )
+                );
+              console.log(channel, note, velocity);
+              orchestra?.noteOn(channel, note, velocity);
               setTimeout(() => {
                 if (orchestra) {
-                  orchestra?.noteOff("lobby", note);
+                  orchestra?.noteOff(channel, note);
                   const mainOut = orchestra?.render();
                   core?.render(el.fft({ size: 1024 }, mainOut), mainOut);
                 }
@@ -206,7 +221,6 @@ function Room(props) {
           core?.render(el.fft({ size: 1024 }, mainOut), mainOut);
         }
       });
-      console.log("subscribed to topic", topic);
     },
     [orchestra],
     () => {
@@ -223,7 +237,7 @@ function Room(props) {
 
           const normalizedX = x / rect.width;
           const normalizedY = y / rect.height;
-          const message = { uuid, x: normalizedX, y: normalizedY};
+          const message = { uuid, x: normalizedX, y: normalizedY };
           mqttClient.publish(
             `${sessionPrefix}byod/${roomId}/user`,
             JSON.stringify(message)

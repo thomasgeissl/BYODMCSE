@@ -53,7 +53,7 @@ class Sampler {
         return this.voice(voice);
       })
     );
-    return el.mul(0.4, out);
+    return el.mul(0.9, out);
   }
 }
 
