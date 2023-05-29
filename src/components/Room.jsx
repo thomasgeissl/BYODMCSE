@@ -197,11 +197,11 @@ function Room(props) {
                     0,
                     1,
                     0,
-                    channel === "lobbyTextures" ? 4 : 8,
+                    channel === "lobbyTextures" ? 6 : 7,
                     true
                   )
                 );
-              console.log(channel, note, velocity);
+              // console.log(channel, note, velocity);
               orchestra?.noteOn(channel, note, velocity);
               setTimeout(() => {
                 if (orchestra) {
