@@ -186,7 +186,7 @@ function Room(props) {
       }}
     >
       <StyledCanvas>
-        <CustomGeometryParticles count={2000} />
+        <CustomGeometryParticles count={2000} core={core} />
         <ambientLight intensity={0.5} />
         <EffectComposer>
           <DepthOfField
