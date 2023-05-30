@@ -26,6 +26,7 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   flex-grow: 1;
+  padding: 16px;
 `;
 const Instructions = styled.div`
   flex-grow: 1;
@@ -34,6 +35,7 @@ const Instructions = styled.div`
   justify-content: center;
   align-content: center;
   flex-direction: column;
+  font-size: 24px;
 `;
 
 function Lobby() {
@@ -102,8 +104,7 @@ function Lobby() {
       {!inited && (
         <>
           <Instructions>
-            {/* room: {roomId} */}
-            please turn on your speakers and enter the room
+            please increase your volume to the max and enter the room
           </Instructions>
           <Button
             onClick={() => {
@@ -113,7 +114,7 @@ function Lobby() {
             }}
             variant={"outlined"}
             size="large"
-            sx={{ height: "128px" }}
+            sx={{ marginBottom: "128px !important", height: "128px", width:"75%", margin:"auto" }}
             disabled={loading}
           >
             {loading && (
