@@ -1,205 +1,139 @@
-import { useEffect, useState, useRef, useMemo } from "react";
+import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import styled from "@emotion/styled";
-import * as mqtt from "mqtt/dist/mqtt.min";
-import { Canvas, useFrame } from "@react-three/fiber";
-import { OrbitControls } from "@react-three/drei";
-import * as THREE from "three";
+import WebRenderer from "@elemaudio/web-renderer";
 import { el } from "@elemaudio/core";
+import NoSleep from "nosleep.js";
+import Orchestra from "../audio/Orchestra";
+import Button from "@mui/material/Button";
+import Stage from "./Stage";
 import configGeneral from "../assets/config.json";
 import configTaxi from "../assets/config.taxi.json";
-import configFrog from "../assets/config.frog.json";
-import useStore from "../store/store";
-// import { WaveMaterial } from "./WaveMaterial.js";
-import { extractBaseFrequenciesEnergy, map } from "../audio/utils";
-import {
-  Bloom,
-  DepthOfField,
-  EffectComposer,
-  Noise,
-  Vignette,
-} from "@react-three/postprocessing";
-import CustomGeometryParticles from "./3d/Particles";
+
+import LoopIcon from "@mui/icons-material/Loop";
+
+const core = new WebRenderer();
+const noSleep = new NoSleep();
+
+const loadSample = async (path, ctx) => {
+  const res = await fetch(path);
+  const sampleBuffer = await ctx.decodeAudioData(await res.arrayBuffer());
+  return sampleBuffer.getChannelData(0);
+};
 
 const Container = styled.div`
-  width: 100%;
-  height: 100%;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  padding: 16px;
 `;
-const StyledCanvas = styled(Canvas)`
-  width: 100%;
-  height: 100%;
+const Instructions = styled.div`
+  flex-grow: 1;
+  display: flex;
+  text-align: center;
+  justify-content: center;
+  align-content: center;
+  flex-direction: column;
+  font-size: 24px;
 `;
 
-const sessionPrefix = "";
-let mqttClient;
+function Room() {
+  console.log("room render")
+  const roomId = useParams().roomId || "taxi";
+  const [inited, setInited] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [orchestra, setOrchestra] = useState(null);
 
-let baseEnergy = 0;
-let midEnergy = 0;
-let highEnergy = 0;
-
-
-
-let playingTimeoutId;
-function Room(props) {
-  const roomId = useParams().roomId ?? "taxi";
-  const [playing, setPlaying] = useState(false);
-  const { orchestra, core } = props;
-  const topic = `byod/${roomId}`;
-
-  const uuid = useStore((state) => state.uuid);
-
-  useEffect(() => {
-    core.on("fft", function (e) {
-      const baseFrequencyRange = [20, 200];
-      const midFrequencyRange = [201, 4000];
-      const highFrequencyRange = [4001, 10000];
-      baseEnergy = extractBaseFrequenciesEnergy(
-        e.data.real,
-        44100,
-        baseFrequencyRange
-      );
-      midEnergy = extractBaseFrequenciesEnergy(
-        e.data.real,
-        44100,
-        midFrequencyRange
-      );
-      highEnergy = extractBaseFrequenciesEnergy(
-        e.data.real,
-        44100,
-        highFrequencyRange
-      );
-    });
-  }, [core]);
-
-  useEffect(
-    () => {
-      // TODO: get from cms
-      let config = configGeneral;
-      switch (roomId) {
-        case "taxi": {
-          config = configTaxi;
-          break;
-        }
-        case "frog": {
-          config = configTaxi;
-          break;
-        }
-      }
-      mqttClient = mqtt.connect(config.connection.broker);
-      mqttClient.on("connect", function () {
-        mqttClient.subscribe(topic, function (err) {
-          if (err) {
-            console.error(err);
-          }
-        });
-        mqttClient.subscribe(`${topic}/user`, function (err) {
-          if (err) {
-            console.error(err);
-          }
-        });
-      });
-
-      mqttClient.on("message", function (topic, message) {
-        // message is Buffer
-        try {
-          const payload = JSON.parse(message.toString());
-          switch (topic) {
-            case `${sessionPrefix}byod/${roomId}`: {
-              clearTimeout(playingTimeoutId);
-              if (!playing) {
-                setPlaying(true);
-                setTimeout(() => {
-                  setPlaying(false);
-                }, 3 * 60 * 1000);
-              }
-              if (payload.status === 144) {
-                orchestra?.noteOn(
-                  payload.channel,
-                  payload.note,
-                  payload.velocity
-                );
-              } else if (payload.status === 128) {
-                orchestra?.noteOff(payload.channel, payload.note);
-              }
-              break;
-            }
-            case `${sessionPrefix}byod/${roomId}/user`: {
-              // TODO: get mapping from config file
-              // let velocity = map(payload.y, 0, 1, 0, 127, true)
-              const velocity = 127;
-              const channel =
-                payload.y > 0.5 ? "lobbyTextures" : "lobbyNumbers";
-              const note =
-                60 +
-                Math.floor(
-                  map(
-                    payload.x,
-                    0,
-                    1,
-                    0,
-                    channel === "lobbyTextures" ? 6 : 7,
-                    true
-                  )
-                );
-              // console.log(channel, note, velocity);
-              orchestra?.noteOn(channel, note, velocity);
-              setTimeout(() => {
-                if (orchestra) {
-                  orchestra?.noteOff(channel, note);
-                  const mainOut = orchestra?.render();
-                  core?.render(el.fft({ size: 1024 }, mainOut), mainOut);
-                }
-              }, 300);
-              break;
-            }
-          }
-        } catch (error) {
-          console.log("error", error);
-        }
-        if (orchestra) {
-          const mainOut = orchestra?.render();
-          core?.render(el.fft({ size: 1024 }, mainOut), mainOut);
-        }
-      });
-    },
-    [orchestra],
-    () => {
-      mqttClient.unsubscribe(topic);
+  // TODO: get from cms
+  let config = configGeneral;
+  switch (roomId) {
+    case "taxi": {
+      config = configTaxi;
+      break;
     }
-  );
-  return (
-    <Container
-      onClick={(event) => {
-        if (!playing) {
-          const rect = event.target.getBoundingClientRect();
-          const x = event.clientX - rect.left;
-          const y = event.clientY - rect.top;
+  }
+  const init = async () => {
+    const ctx = new AudioContext();
+    setLoading(true);
 
-          const normalizedX = x / rect.width;
-          const normalizedY = y / rect.height;
-          const message = { uuid, x: normalizedX, y: normalizedY };
-          mqttClient.publish(
-            `${sessionPrefix}byod/${roomId}/user`,
-            JSON.stringify(message)
-          );
-        }
-      }}
-    >
-      <StyledCanvas>
-        <CustomGeometryParticles count={2000} core={core} />
-        <ambientLight intensity={0.5} />
-        <EffectComposer>
-          <DepthOfField
-            focusDistance={0}
-            focalLength={0.02}
-            bokehScale={2}
-            height={480}
-          />
-          <Bloom luminanceThreshold={0} luminanceSmoothing={0.9} height={300} />
-          <Noise opacity={0.02} />
-          <Vignette eskil={false} offset={0.1} darkness={1.1} />
-        </EffectComposer>
-      </StyledCanvas>
+    core.on("meter", function (e) {
+      if (e.source === "left") {
+        console.log("left peak", e.max);
+        // handleLeftPeakValue(e.max);
+      }
+      if (e.source === "right") {
+        console.log("right peak", e.max);
+        // handleRightPeakValue(e.max);
+      }
+    });
+
+    core.on("load", async function () {
+      const files = {};
+      const entries = Object.entries(config.files);
+      for (let i = 0; i < entries.length; i++) {
+        const [key, path] = entries[i];
+        files[key] = await loadSample(path, ctx);
+      }
+
+      core.updateVirtualFileSystem(files);
+      // core.render(el.cycle(440), el.cycle(440));
+      const orchestra = new Orchestra(config.orchestra);
+      setOrchestra(orchestra);
+      setLoading(false);
+      setInited(true);
+      console.log("set inited")
+    });
+    if (ctx.state !== "running") {
+      await ctx.resume();
+    }
+    const node = await core.initialize(ctx, {
+      numberOfInputs: 0,
+      numberOfOutputs: 1,
+      outputChannelCount: [2],
+    });
+    node.connect(ctx.destination);
+    noSleep.enable();
+  };
+
+  return (
+    <Container>
+      {/* room {roomId} */}
+      {!inited && (
+        <>
+          <Instructions>
+            please increase your volume to the max and enter the room
+          </Instructions>
+          <Button
+            onClick={() => {
+              setTimeout(() => {
+                init();
+              }, 100);
+            }}
+            variant={"outlined"}
+            size="large"
+            sx={{ marginBottom: "128px !important", height: "128px", width:"75%", margin:"auto" }}
+            disabled={loading}
+          >
+            {loading && (
+              <LoopIcon
+                sx={{
+                  animation: "spin 2s linear infinite",
+                  "@keyframes spin": {
+                    "0%": {
+                      transform: "rotate(360deg)",
+                    },
+                    "100%": {
+                      transform: "rotate(0deg)",
+                    },
+                  },
+                }}
+              />
+            )}
+            enter
+          </Button>
+        </>
+      )}
+      {inited && <Stage core={core} orchestra={orchestra}></Stage>}
     </Container>
   );
 }
