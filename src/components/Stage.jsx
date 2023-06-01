@@ -118,7 +118,7 @@ function Stage(props) {
               clearTimeout(playingTimeoutId);
               if (!playing) {
                 setPlaying(true);
-                setTimeout(() => {
+                playingTimeoutId = setTimeout(() => {
                   setPlaying(false);
                 }, 3 * 60 * 1000);
               }
