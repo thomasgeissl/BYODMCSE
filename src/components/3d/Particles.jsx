@@ -7,9 +7,9 @@ let baseEnergy = 0;
 let midEnergy = 0;
 let highEnergy = 0;
 
-const CustomGeometryParticles = (props) => {
+const Particles = (props) => {
   // https://blog.maximeheckel.com/posts/the-magical-world-of-particles-with-react-three-fiber-and-shaders/
-  const { count, core } = props;
+  const { count, core, color } = props;
   useEffect(() => {
     core.on("fft", function (e) {
       const baseFrequencyRange = [20, 200];
@@ -84,7 +84,7 @@ const CustomGeometryParticles = (props) => {
       </bufferGeometry>
       <pointsMaterial
         size={0.012}
-        color="#5786F5"
+        color={color}
         sizeAttenuation
         depthWrite={false}
       />
@@ -92,4 +92,4 @@ const CustomGeometryParticles = (props) => {
   );
 };
 
-export default CustomGeometryParticles;
+export default Particles;

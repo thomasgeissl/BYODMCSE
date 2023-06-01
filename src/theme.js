@@ -2,20 +2,20 @@ import { createTheme } from "@mui/material/styles";
 // https://coolors.co/palette/000000-14213d-fca311-e5e5e5-ffffff
 
 const backgroundColor = "#001524"
-const primary = "#15616d"
-const secondary = "#ffecd1"
-const tertiary = "#ff7d00"
-const quarternary = "#78290f"
+const primary = "#2a9d8f"
+const secondary = "#e9c46a"
+const tertiary = "#f4a261"
+const quarternary = "#e76f51"
 const theme = createTheme({
   palette: {
     mode: "dark",
     // TODO: get the correct frog green
     // and the secondary color
     primary: {
-      main: primary,
+      main: secondary,
     },
     secondary: {
-      main: secondary,
+      main: tertiary,
     },
   },
 });

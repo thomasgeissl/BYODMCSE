@@ -38,7 +38,6 @@ const Instructions = styled.div`
 `;
 
 function Room() {
-  console.log("room render")
   const roomId = useParams().roomId || "taxi";
   const [inited, setInited] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -81,7 +80,6 @@ function Room() {
       setOrchestra(orchestra);
       setLoading(false);
       setInited(true);
-      console.log("set inited")
     });
     if (ctx.state !== "running") {
       await ctx.resume();

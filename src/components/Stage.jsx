@@ -18,7 +18,9 @@ import {
   Noise,
   Vignette,
 } from "@react-three/postprocessing";
-import CustomGeometryParticles from "./3d/Particles";
+import Particles from "./3d/Particles";
+import { quarternary, tertiary } from "../theme";
+import Spheres from "./3d/Spheres";
 
 const Container = styled.div`
   width: 100%;
@@ -38,7 +40,6 @@ let highEnergy = 0;
 
 let playingTimeoutId;
 function Stage(props) {
-  console.log("stage render")
   const roomId = useParams().roomId ?? "taxi";
   const [playing, setPlaying] = useState(false);
   const { orchestra, core } = props;
@@ -74,7 +75,6 @@ function Stage(props) {
 
   useEffect(
     () => {
-      console.log("orchestra", orchestra)
       // TODO: get from cms
       let config = configGeneral;
       switch (roomId) {
@@ -204,7 +204,8 @@ function Stage(props) {
       }}
     >
       <StyledCanvas>
-        <CustomGeometryParticles count={2000} core={core} />
+        {playing && <Particles count={2000} core={core} color={playing ? quarternary : tertiary} />}
+        {!playing && <Spheres />}
         <ambientLight intensity={0.5} />
         <EffectComposer>
           <DepthOfField
