@@ -106,9 +106,9 @@ function Room() {
           </Instructions>
           <Button
             onClick={() => {
-              setTimeout(() => {
+              // setTimeout(() => {
                 init();
-              }, 100);
+              // }, 200);
             }}
             variant={"outlined"}
             size="large"
