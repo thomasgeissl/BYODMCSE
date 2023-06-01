@@ -43,6 +43,9 @@ function Room() {
   const [inited, setInited] = useState(false);
   const [loading, setLoading] = useState(false);
   const [orchestra, setOrchestra] = useState(null);
+  if (ctx.state !== "suspended") {
+    ctx.resume();
+  }
 
   // TODO: get from cms
   let config = configGeneral;
@@ -67,7 +70,7 @@ function Room() {
     });
 
     core.on("load", async function () {
-      if (ctx.state === 'suspended') {
+      if (ctx.state === "suspended") {
         await ctx.resume();
       }
       const files = {};
@@ -106,12 +109,17 @@ function Room() {
           <Button
             onClick={() => {
               // setTimeout(() => {
-                init();
+              init();
               // }, 200);
             }}
             variant={"outlined"}
             size="large"
-            sx={{ marginBottom: "128px !important", height: "128px", width:"75%", margin:"auto" }}
+            sx={{
+              marginBottom: "128px !important",
+              height: "128px",
+              width: "75%",
+              margin: "auto",
+            }}
             disabled={loading}
           >
             {loading && (
