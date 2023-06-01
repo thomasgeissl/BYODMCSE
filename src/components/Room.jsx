@@ -11,6 +11,7 @@ import configGeneral from "../assets/config.json";
 import configTaxi from "../assets/config.taxi.json";
 
 import LoopIcon from "@mui/icons-material/Loop";
+const ctx = new (window.AudioContext || window.webkitAudioContext)();
 
 const core = new WebRenderer();
 const noSleep = new NoSleep();
@@ -52,7 +53,6 @@ function Room() {
     }
   }
   const init = async () => {
-    const ctx = new AudioContext();
     setLoading(true);
 
     core.on("meter", function (e) {
@@ -98,7 +98,6 @@ function Room() {
 
   return (
     <Container>
-      {/* room {roomId} */}
       {!inited && (
         <>
           <Instructions>
