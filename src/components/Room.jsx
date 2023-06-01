@@ -11,7 +11,7 @@ import configGeneral from "../assets/config.json";
 import configTaxi from "../assets/config.taxi.json";
 
 import LoopIcon from "@mui/icons-material/Loop";
-const ctx = new (window.AudioContext || window.webkitAudioContext)();
+let ctx;
 
 const core = new WebRenderer();
 const noSleep = new NoSleep();
@@ -43,7 +43,8 @@ function Room() {
   const [inited, setInited] = useState(false);
   const [loading, setLoading] = useState(false);
   const [orchestra, setOrchestra] = useState(null);
-  if (ctx.state !== "suspended") {
+  if (inited && ctx.state !== "running") {
+    console.log("ctx.state", ctx.state);
     ctx.resume();
   }
 
@@ -57,6 +58,10 @@ function Room() {
   }
   const init = async () => {
     setLoading(true);
+    ctx = new (window.AudioContext || window.webkitAudioContext)();
+    if (ctx.state === "suspended") {
+      await ctx.resume();
+    }
 
     core.on("meter", function (e) {
       if (e.source === "left") {
@@ -70,9 +75,6 @@ function Room() {
     });
 
     core.on("load", async function () {
-      if (ctx.state === "suspended") {
-        await ctx.resume();
-      }
       const files = {};
       const entries = Object.entries(config.files);
       for (let i = 0; i < entries.length; i++) {
