@@ -67,6 +67,9 @@ function Room() {
     });
 
     core.on("load", async function () {
+      if (ctx.state === 'suspended') {
+        await ctx.resume();
+      }
       const files = {};
       const entries = Object.entries(config.files);
       for (let i = 0; i < entries.length; i++) {
@@ -81,9 +84,9 @@ function Room() {
       setLoading(false);
       setInited(true);
     });
-    if (ctx.state !== "running") {
-      await ctx.resume();
-    }
+    // if (ctx.state !== "running") {
+    //   await ctx.resume();
+    // }
     const node = await core.initialize(ctx, {
       numberOfInputs: 0,
       numberOfOutputs: 1,

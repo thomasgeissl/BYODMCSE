@@ -20,7 +20,7 @@ const Particle = ({ position }) => {
     // ref.current.scale.z = 1 + Math.sin(clock.elapsedTime / 10);
     ref.current.needsUpdate = true;
   });
-  return <Sphere ref={ref} material-color={`rgba(${200+Math.floor(Math.random()*55)},${200 + Math.floor(Math.random()*55)},0,0.3)`}></Sphere>;
+  return <Sphere ref={ref} material-color={`rgb(${200+Math.floor(Math.random()*55)},${200 + Math.floor(Math.random()*55)},0)`}></Sphere>;
 };
 const Spheres = () => {
   const group = useRef(null);
