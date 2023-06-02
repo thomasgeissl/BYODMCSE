@@ -56,17 +56,8 @@ function Room() {
     }
   }
   const init = async () => {
-    noSleep.enable();
-    console.log("init");
     setLoading(true);
-    if (ctx.state !== "runnnig") {
-      await ctx.resume();
-      setLoading(false);
-      setInited(true);
-    }
-  };
 
-  useEffect(() => {
     renderer.on("meter", function (e) {
       if (e.source === "left") {
         console.log("left peak", e.max);
@@ -79,7 +70,6 @@ function Room() {
     });
 
     renderer.on("load", async function () {
-      console.log("loaded");
       const files = {};
       const entries = Object.entries(config.files);
       for (let i = 0; i < entries.length; i++) {
@@ -90,18 +80,20 @@ function Room() {
       renderer.updateVirtualFileSystem(files);
       const orchestra = new Orchestra(config.orchestra);
       setOrchestra(orchestra);
+      setLoading(false);
+      setInited(true);
     });
-    const patch = async () => {
-      const node = await renderer.initialize(ctx, {
-        numberOfInputs: 0,
-        numberOfOutputs: 1,
-        outputChannelCount: [2],
-      });
-      node.connect(ctx.destination);
-    };
-
-    patch();
-  }, []);
+    if (ctx.state !== "runnnig") {
+      await ctx.resume();
+    }
+    const node = await renderer.initialize(ctx, {
+      numberOfInputs: 0,
+      numberOfOutputs: 1,
+      outputChannelCount: [2],
+    });
+    node.connect(ctx.destination);
+    noSleep.enable();
+  };
 
   return (
     <Container>
