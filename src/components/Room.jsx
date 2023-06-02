@@ -109,10 +109,10 @@ function Room() {
             please increase your volume to the max and enter the room
           </Instructions>
           <Button
-            onClick={async () => {
-              setTimeout(() => {
-                init();
-              }, 200);
+            onClick={() => {
+              // setTimeout(() => {
+              init();
+              // }, 200);
             }}
             variant={"outlined"}
             size="large"
