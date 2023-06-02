@@ -104,9 +104,9 @@ function Room() {
           </Instructions>
           <Button
             onClick={async () => {
-              // setTimeout(() => {
-              await init();
-              // }, 200);
+              setTimeout(() => {
+                init();
+              }, 200);
             }}
             variant={"outlined"}
             size="large"
@@ -121,6 +121,7 @@ function Room() {
             {loading && (
               <LoopIcon
                 sx={{
+                  marginRight: "16px",
                   animation: "spin 2s linear infinite",
                   "@keyframes spin": {
                     "0%": {
