@@ -11,9 +11,9 @@ import configGeneral from "../assets/config.json";
 import configTaxi from "../assets/config.taxi.json";
 
 import LoopIcon from "@mui/icons-material/Loop";
+let ctx;
 
-const renderer = new WebRenderer();
-const ctx = new AudioContext();
+const core = new WebRenderer();
 const noSleep = new NoSleep();
 
 const loadSample = async (path, ctx) => {
@@ -44,6 +44,7 @@ function Room() {
   const [loading, setLoading] = useState(false);
   const [orchestra, setOrchestra] = useState(null);
   if (inited && ctx.state !== "running") {
+    console.log("ctx.state", ctx.state);
     ctx.resume();
   }
 
@@ -57,8 +58,12 @@ function Room() {
   }
   const init = async () => {
     setLoading(true);
+    ctx = new (window.AudioContext || window.webkitAudioContext)();
+    if (ctx.state === "suspended") {
+      await ctx.resume();
+    }
 
-    renderer.on("meter", function (e) {
+    core.on("meter", function (e) {
       if (e.source === "left") {
         console.log("left peak", e.max);
         // handleLeftPeakValue(e.max);
@@ -69,7 +74,7 @@ function Room() {
       }
     });
 
-    renderer.on("load", async function () {
+    core.on("load", async function () {
       const files = {};
       const entries = Object.entries(config.files);
       for (let i = 0; i < entries.length; i++) {
@@ -77,16 +82,17 @@ function Room() {
         files[key] = await loadSample(path, ctx);
       }
 
-      renderer.updateVirtualFileSystem(files);
+      core.updateVirtualFileSystem(files);
+      // core.render(el.cycle(440), el.cycle(440));
       const orchestra = new Orchestra(config.orchestra);
       setOrchestra(orchestra);
       setLoading(false);
       setInited(true);
     });
-    if (ctx.state !== "runnnig") {
-      await ctx.resume();
-    }
-    const node = await renderer.initialize(ctx, {
+    // if (ctx.state !== "running") {
+    //   await ctx.resume();
+    // }
+    const node = await core.initialize(ctx, {
       numberOfInputs: 0,
       numberOfOutputs: 1,
       outputChannelCount: [2],
@@ -138,7 +144,7 @@ function Room() {
           </Button>
         </>
       )}
-      {inited && <Stage core={renderer} orchestra={orchestra}></Stage>}
+      {inited && <Stage core={core} orchestra={orchestra}></Stage>}
     </Container>
   );
 }
