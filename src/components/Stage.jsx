@@ -26,6 +26,10 @@ const Container = styled.div`
   width: 100%;
   height: 100%;
 `;
+const Overlay = styled.div`
+position:absolute;
+font-size: 24px;
+`;
 const StyledCanvas = styled(Canvas)`
   width: 100%;
   height: 100%;
@@ -203,6 +207,7 @@ function Stage(props) {
         }
       }}
     >
+        {!playing && <Overlay>tap on the screen to trigger sounds.</Overlay>}
       <StyledCanvas>
         {playing && <Particles count={2000} core={core} color={playing ? quarternary : tertiary} />}
         {!playing && <Spheres />}
