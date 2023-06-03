@@ -207,7 +207,7 @@ function Stage(props) {
         }
       }}
     >
-        {!playing && <Overlay>tap on the screen to trigger sounds.</Overlay>}
+        {!playing && <Overlay>tap on the screen to trigger sounds.<br></br>if it does not work, refresh and pray - sorry, it is an early stage prototype.</Overlay>}
       <StyledCanvas>
         {playing && <Particles count={2000} core={core} color={playing ? quarternary : tertiary} />}
         {!playing && <Spheres />}
