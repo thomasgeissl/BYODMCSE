@@ -11,9 +11,9 @@
     "node-dev": "nodemon --exec '/Users/thomasgeissl_1/.elementary/bin/elementary -i 0 -o 2' index.js"
   },
   "dependencies": {
-    "@elemaudio/core": "^2.0.1",
+    "@elemaudio/core": "^2.1.0",
     "@elemaudio/node-renderer": "^1.0.5",
-    "@elemaudio/web-renderer": "^2.0.1",
+    "@elemaudio/web-renderer": "^2.1.0",
     "@emotion/react": "^11.9.0",
     "@emotion/styled": "^11.8.1",
     "@mui/icons-material": "^5.11.16",
