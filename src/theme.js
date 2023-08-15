@@ -9,8 +9,6 @@ const quarternary = "#e76f51"
 const theme = createTheme({
   palette: {
     mode: "dark",
-    // TODO: get the correct frog green
-    // and the secondary color
     primary: {
       main: secondary,
     },
