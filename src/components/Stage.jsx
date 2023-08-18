@@ -6,8 +6,7 @@ import { Canvas, useFrame } from "@react-three/fiber";
 import { OrbitControls } from "@react-three/drei";
 import * as THREE from "three";
 import { el } from "@elemaudio/core";
-import configGeneral from "../assets/config.json";
-import configTaxi from "../assets/config.taxi.json";
+import config from "../assets/config.json";
 import useStore from "../store/store";
 // import { WaveMaterial } from "./WaveMaterial.js";
 import { extractBaseFrequenciesEnergy, map } from "../audio/utils";
@@ -27,8 +26,8 @@ const Container = styled.div`
   height: 100%;
 `;
 const Overlay = styled.div`
-position:absolute;
-font-size: 24px;
+  position: absolute;
+  font-size: 24px;
 `;
 const StyledCanvas = styled(Canvas)`
   width: 100%;
@@ -79,14 +78,6 @@ function Stage(props) {
 
   useEffect(
     () => {
-      // TODO: get from cms
-      let config = configGeneral;
-      switch (roomId) {
-        case "taxi": {
-          config = configTaxi;
-          break;
-        }
-      }
       mqttClient = mqtt.connect(config.connection.broker);
       mqttClient.on("connect", function () {
         mqttClient.subscribe(topic, function (err) {
@@ -102,9 +93,9 @@ function Stage(props) {
         mqttClient.subscribe(`${topic}/joined`, function (err) {
           if (err) {
             console.error(err);
-            return
+            return;
           }
-          mqttClient.publish(`${topic}/joined`, JSON.stringify({ uuid }))
+          mqttClient.publish(`${topic}/joined`, JSON.stringify({ uuid }));
         });
         mqttClient.subscribe(`${topic}/left`, function (err) {
           if (err) {
@@ -167,11 +158,11 @@ function Stage(props) {
               break;
             }
             case `${sessionPrefix}byod/${roomId}/joined`: {
-              addUser(payload.uuid)
+              addUser(payload.uuid);
               break;
             }
             case `${sessionPrefix}byod/${roomId}/left`: {
-              removeUser(payload.uuid)
+              removeUser(payload.uuid);
               break;
             }
           }
@@ -207,9 +198,20 @@ function Stage(props) {
         }
       }}
     >
-        {!playing && <Overlay>tap on the screen to trigger sounds.<br></br>if it does not work, refresh and pray - sorry, it is an early stage prototype.</Overlay>}
+      {!playing && (
+        <Overlay>
+          tap on the screen to trigger sounds.<br></br>if it does not work,
+          refresh and pray - sorry, it is an early stage prototype.
+        </Overlay>
+      )}
       <StyledCanvas>
-        {playing && <Particles count={2000} core={core} color={playing ? quarternary : tertiary} />}
+        {playing && (
+          <Particles
+            count={2000}
+            core={core}
+            color={playing ? quarternary : tertiary}
+          />
+        )}
         {!playing && <Spheres />}
         <ambientLight intensity={0.5} />
         <EffectComposer>

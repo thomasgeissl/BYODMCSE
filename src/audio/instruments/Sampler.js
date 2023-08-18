@@ -18,15 +18,9 @@ class Sampler {
         gate: 0.0,
         velocity: 0,
         key: `sampler-v${i}-${v4()}`,
-        sample: null
+        sample: null,
       });
     }
-    // this.voices = voices;
-    // Object.values(this.voices).forEach((voice, index) => {
-    //   voice.gate = 0.0;
-    //   voice.velocity = 0;
-    //   voice.key = `sampler-v${index}-${v4()}`;
-    // });
   }
 
   voice = (voice) => {
@@ -35,40 +29,61 @@ class Sampler {
       value: voice.gate,
     });
     const env = el.env(4.0, 1.0, 0.4, 2.0, gate);
-    const out = el.sample({ path: voice.path, mode: "trigger" }, gate, 1.0);
-    return el.mul(out, voice.velocity);
+    if (voice.sample) {
+      const out = el.sample(
+        { path: this.samples[voice.sample].path, mode: "trigger" },
+        gate,
+        1.0
+      );
+      return el.mul(out, voice.velocity);
+    } else {
+      // TODO
+      return el.mul(el.cycle(), 0);
+    }
   };
 
   noteOn(note, velocity) {
     // turn of sample if currently played
-    this.voices.find(voice => voice.sample === note)?.gate = 0
-
-    let voice = this.voices.find(voice => voice.sample === null)
-    if(!voice){
-      voice = this.voices.sort((a, b) => a.timestamp - b.timestamp)[this.voices.length - 1]
+    const oldVoice = this.voices.find((voice) => voice.sample === note);
+    if (oldVoice) {
+      oldVoice.gate = 0;
     }
-    
+
+    let voice = this.voices.find((voice) => voice.sample === null);
+    if (!voice) {
+      voice = this.voices.sort((a, b) => a.timestamp - b.timestamp)[
+        this.voices.length - 1
+      ];
+    }
+
     if (voice) {
-      voice.sample = note
-      voice.timestamp = new Date()
-      voice[1].gate = 1.0;
-      voice[1].velocity = velocity / 127;
+      voice.sample = note;
+      voice.timestamp = new Date();
+      voice.gate = 1.0;
+      voice.velocity = velocity / 127;
     }
   }
   noteOff(note) {
     const voice = this.voices.find((voice) => {
-      return value.sample == note;
+      return voice.sample == note;
     });
     if (voice) {
       voice.gate = 0;
       voice.sample = null;
     }
   }
+
   render() {
+    if (this.voices.filter((voice) => voice.sample != null).length === 0) {
+      // TODO: is there a 0 node?
+      return el.mul(el.cycle(440), 0);
+    }
     const out = el.add(
-      ...this.voices.map((voice) => {
-        return this.voice(voice);
-      })
+      ...this.voices
+        .filter((voice) => voice.sample != null)
+        .map((voice) => {
+          return this.voice(voice);
+        })
     );
     return out;
     // return el.mul(0.9, out);

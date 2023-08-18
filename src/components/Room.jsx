@@ -7,8 +7,7 @@ import NoSleep from "nosleep.js";
 import Orchestra from "../audio/Orchestra";
 import Button from "@mui/material/Button";
 import Stage from "./Stage";
-import configGeneral from "../assets/config.json";
-import configTaxi from "../assets/config.taxi.json";
+import config from "../assets/config.json";
 
 import LoopIcon from "@mui/icons-material/Loop";
 let ctx;
@@ -48,14 +47,6 @@ function Room() {
     ctx.resume();
   }
 
-  // TODO: get from cms
-  let config = configGeneral;
-  switch (roomId) {
-    case "taxi": {
-      config = configTaxi;
-      break;
-    }
-  }
   const init = async () => {
     setLoading(true);
     ctx = new (window.AudioContext || window.webkitAudioContext)();
