@@ -9,13 +9,24 @@ const lowpass = new Lowpass();
 const highpass = new HighPassFilter();
 
 class Sampler {
-  constructor(voices) {
-    this.voices = voices;
-    Object.values(this.voices).forEach((voice, index) => {
-      voice.gate = 0.0;
-      voice.velocity = 0;
-      voice.key = `sampler-v${index}-${v4()}`;
-    });
+  constructor(samples) {
+    this.samples = samples;
+    this.voices = [];
+    const VOICES_COUNT = 32;
+    for (let i = 0; i < VOICES_COUNT; i++) {
+      this.voices.push({
+        gate: 0.0,
+        velocity: 0,
+        key: `sampler-v${i}-${v4()}`,
+        sample: null
+      });
+    }
+    // this.voices = voices;
+    // Object.values(this.voices).forEach((voice, index) => {
+    //   voice.gate = 0.0;
+    //   voice.velocity = 0;
+    //   voice.key = `sampler-v${index}-${v4()}`;
+    // });
   }
 
   voice = (voice) => {
@@ -29,31 +40,37 @@ class Sampler {
   };
 
   noteOn(note, velocity) {
-    const voice = Object.entries(this.voices).find(([key, value]) => {
-      return key == note;
-    });
+    // turn of sample if currently played
+    this.voices.find(voice => voice.sample === note)?.gate = 0
+
+    let voice = this.voices.find(voice => voice.sample === null)
+    if(!voice){
+      voice = this.voices.sort((a, b) => a.timestamp - b.timestamp)[this.voices.length - 1]
+    }
+    
     if (voice) {
+      voice.sample = note
+      voice.timestamp = new Date()
       voice[1].gate = 1.0;
-      voice[1].velocity = velocity/127;
+      voice[1].velocity = velocity / 127;
     }
   }
   noteOff(note) {
-    const voice = Object.entries(this.voices).find(([key, value]) => {
-      return key == note;
+    const voice = this.voices.find((voice) => {
+      return value.sample == note;
     });
     if (voice) {
-      voice[1].gate = 0;
+      voice.gate = 0;
+      voice.sample = null;
     }
   }
   render() {
-    // console.log(Object.values(this.voices))
-    const voices = Object.values(this.voices);
     const out = el.add(
-      ...voices.map((voice) => {
+      ...this.voices.map((voice) => {
         return this.voice(voice);
       })
     );
-    return out
+    return out;
     // return el.mul(0.9, out);
   }
 }
