@@ -15,8 +15,8 @@ class Synth {
       { gate: 0.0, note: 0, velocity: 0, key: `synth-v6-${v4()}` },
       { gate: 0.0, note: 0, velocity: 0, key: `synth-v7-${v4()}` },
       { gate: 0.0, note: 0, velocity: 0, key: `synth-v8-${v4()}` },
-      //   { gate: 0.0, note: 0, key: `synth-v9-${v4()}` },
-      //   { gate: 0.0, note: 0, key: `synth-v10-${v4()}` },
+      { gate: 0.0, note: 0, velocity: 0, key: `synth-v9-${v4()}` },
+      { gate: 0.0, note: 0, velocity: 0, key: `synth-v10-${v4()}` },
     ];
   }
   nextVoice = 0;
@@ -43,7 +43,7 @@ class Synth {
     if (voiceIndex >= 0) {
       this.voices[voiceIndex].gate = 1.0;
       this.voices[voiceIndex].note = note;
-      this.voices[voiceIndex].velocity = velocity/127;
+      this.voices[voiceIndex].velocity = velocity / 127;
     } else {
       this.voices[this.nextVoice].gate = 1.0;
       this.voices[this.nextVoice].note = note;
