@@ -1,6 +1,7 @@
 {
   "connection": {
-    "broker": "wss://byodmcse:aFyYJo7b6rKnORki@byodmcse.cloud.shiftr.io:443"
+    "broker.no": "wss://byodmcse:aFyYJo7b6rKnORki@byodmcse.cloud.shiftr.io:443",
+    "broker": "ws://localhost:9001"
   },
   "orchestra": {
     "lobbyTextures": {
@@ -28,8 +29,8 @@
           "63": {"path": "/samples/number_4.wav"},
           "64": {"path": "/samples/number_5.wav"},
           "65": {"path": "/samples/number_6.wav"},
-          "67": {"path": "/samples/number_7.wav"},
-          "68": {"path": "/samples/number_8.wav"}
+          "66": {"path": "/samples/number_7.wav"},
+          "67": {"path": "/samples/number_8.wav"}
         }
       },
       "effects": [],
