@@ -1,7 +1,6 @@
 import { el } from "@elemaudio/core";
 // import { Interval, Note, Scale, Midi } from "tonal";
 import Synth from "./instruments/Synth.js";
-import Sampler from "./instruments/Sampler.js";
 import Noise from "./instruments/Noise.js";
 import TapeNoise from "./instruments/TapeNoise.js";
 import GrainTrain from "./instruments/GrainTrain.js";
@@ -9,6 +8,8 @@ import LowPassFilter from "./effects/LowPassFilter.js";
 import HighPassFilter from "./effects/HighPassFilter.js";
 import Delay from "./effects/Delay.js";
 import Velocity from "./midiEffects/Velocity.js";
+import DrumRack from "./instruments/DrumRack.js";
+import Simpler from "./instruments/Simpler.js";
 
 class Orchestra {
   constructor(config) {
@@ -20,8 +21,18 @@ class Orchestra {
           this.channels[key] = { instrument: new Synth(), effects: [] };
           break;
         }
-        case "sampler": {
-          this.channels[key] = { instrument: new Sampler(value.instrument.config), effects: [] };
+        case "drumrack": {
+          this.channels[key] = {
+            instrument: new DrumRack(value.instrument.config),
+            effects: [],
+          };
+          break;
+        }
+        case "simpler": {
+          this.channels[key] = {
+            instrument: new Simpler(value.instrument.config),
+            effects: [],
+          };
           break;
         }
         case "noise": {

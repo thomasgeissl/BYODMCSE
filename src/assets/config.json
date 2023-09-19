@@ -6,7 +6,7 @@
   "orchestra": {
     "lobbyTextures": {
       "instrument": {
-        "type": "sampler",
+        "type": "drumrack",
         "config": {
           "60": { "path": "/samples/texture_2.wav" },
           "61": { "path": "/samples/texture_3.wav" },
@@ -21,7 +21,7 @@
     },
     "lobbyNumbers": {
       "instrument": {
-        "type": "sampler",
+        "type": "drumrack",
         "config": {
           "60": { "path": "/samples/number_1.wav" },
           "61": { "path": "/samples/number_2.wav" },
@@ -45,14 +45,24 @@
     },
     "11": {
       "instrument": {
-        "type": "sampler",
+        "type": "drumrack",
         "config": {
-          "60": { "path": "/samples/texture_0.wav", "type": "singleShot" },
-          "61": { "path": "/samples/texture_1.wav", "type": "singleShot" },
-          "62": { "path": "/samples/trash_0.wav", "type": "singleShot" },
-          "63": { "path": "/samples/trash_1.wav", "type": "singleShot" },
-          "64": { "path": "/samples/trash_2.wav", "type": "singleShot" },
-          "65": { "path": "/samples/trash_3.wav", "type": "singleShot" }
+          "60": { "path": "/samples/texture_0.wav" },
+          "61": { "path": "/samples/texture_1.wav" },
+          "62": { "path": "/samples/trash_0.wav" },
+          "63": { "path": "/samples/trash_1.wav" },
+          "64": { "path": "/samples/trash_2.wav" },
+          "65": { "path": "/samples/trash_3.wav" }
+        }
+      },
+      "effects": [],
+      "midiEffects": []
+    },
+    "12": {
+      "instrument": {
+        "type": "simpler",
+        "config": {
+          "60": { "path": "/samples/texture_0.wav"}
         }
       },
       "effects": [],
