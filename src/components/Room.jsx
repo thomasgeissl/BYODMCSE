@@ -135,7 +135,7 @@ function Room() {
           </Button>
         </>
       )}
-      {inited && <Stage core={core} orchestra={orchestra}></Stage>}
+      {inited && <Stage core={core} orchestra={orchestra} mappings={config.mappings}></Stage>}
     </Container>
   );
 }

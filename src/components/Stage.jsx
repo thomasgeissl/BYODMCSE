@@ -45,7 +45,7 @@ let playingTimeoutId;
 function Stage(props) {
   const roomId = useParams().roomId ?? "taxi";
   const [playing, setPlaying] = useState(false);
-  const { orchestra, core } = props;
+  const { orchestra, mappings, core } = props;
   const topic = `byod/${roomId}`;
 
   const uuid = useStore((state) => state.uuid);
@@ -116,6 +116,15 @@ function Stage(props) {
                 playingTimeoutId = setTimeout(() => {
                   setPlaying(false);
                 }, 3 * 60 * 1000);
+              }
+              if (payload.status === 176) {
+                //CC
+                const { channel, control, value } = payload;
+                const destination = mappings[control]
+                if(destination){
+                  // TODO: get device from orchestra, get parameter from device and map value and finally set
+                  console.log(destination.device, destination.parameter)
+                }
               }
               if (payload.status === 144) {
                 orchestra?.noteOn(

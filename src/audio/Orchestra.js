@@ -21,7 +21,7 @@ class Orchestra {
           this.channels[key] = { instrument: new Synth(), effects: [] };
           break;
         }
-        case "drumrack": {
+        case "drumRack": {
           this.channels[key] = {
             instrument: new DrumRack(value.instrument.config),
             effects: [],

@@ -6,7 +6,8 @@
   "orchestra": {
     "lobbyTextures": {
       "instrument": {
-        "type": "drumrack",
+        "id": "lobbyTextures",
+        "type": "drumRack",
         "config": {
           "60": { "path": "/samples/texture_2.wav" },
           "61": { "path": "/samples/texture_3.wav" },
@@ -21,7 +22,8 @@
     },
     "lobbyNumbers": {
       "instrument": {
-        "type": "drumrack",
+        "id": "lobbyNumbers",
+        "type": "drumRack",
         "config": {
           "60": { "path": "/samples/number_1.wav" },
           "61": { "path": "/samples/number_2.wav" },
@@ -38,6 +40,7 @@
     },
     "1": {
       "instrument": {
+        "id": "tapeNoise",
         "type": "tapeNoise"
       },
       "effects": [],
@@ -45,7 +48,8 @@
     },
     "11": {
       "instrument": {
-        "type": "drumrack",
+        "id": "trashes",
+        "type": "drumRack",
         "config": {
           "60": { "path": "/samples/texture_0.wav" },
           "61": { "path": "/samples/texture_1.wav" },
@@ -60,6 +64,7 @@
     },
     "12": {
       "instrument": {
+        "id": "simplerTest",
         "type": "simpler",
         "config": {
           "60": { "path": "/samples/texture_0.wav"}
@@ -93,5 +98,13 @@
     "/samples/number_8.wav": "/samples/999WavFiles/8.mp3",
     "/samples/number_9.wav": "/samples/999WavFiles/9.mp3",
     "/samples/number_10.wav": "/samples/999WavFiles/10.mp3"
+  }, 
+  "mappings": {
+    "20": {
+      "device": 1,
+      "parameter": 11,
+      "min": 0,
+      "max": 127
+    }
   }
 }
