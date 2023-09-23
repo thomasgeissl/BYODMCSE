@@ -95,16 +95,24 @@ function Stage(props) {
             const value = e.value;
             const destination = mappings[control];
             if (destination) {
-              // TODO: get device from orchestra, get parameter from device and map value and finally set
-              const matchedDevices = Object.values(orchestra.channels).filter(
-                (channel) => channel?.instrument?.id === destination.device
+              const matchedInstruments = [
+                ...Object.values(orchestra.channels).filter(
+                  (channel) => channel?.instrument?.id === destination.device
+                ),
+              ].map(channel => channel.instrument);
+              let effects = [];
+              Object.values(orchestra.channels).forEach((channel) => {
+                effects = effects.concat(channel.effects);
+              });
+              const matchedEffects = effects.filter(
+                (effect) => effect.id === destination.device
               );
-              matchedDevices.forEach((device) => {
-                if (device.instrument.setParameter) {
-                  device.instrument.setParameter(destination.parameter, value);
+
+              [...matchedInstruments, ...matchedEffects].forEach((device) => {
+                if (device.setParameter) {
+                  device.setParameter(destination.parameter, map(value, 0, 1, destination.min, destination.max));
                 }
               });
-              // console.log(destination.device, destination.parameter);
             }
             if (orchestra) {
               const mainOut = orchestra?.render();

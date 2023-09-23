@@ -1,15 +1,15 @@
 import { el } from "@elemaudio/core";
+import HasParameters from "../HasParameters";
 
-class LowPassFilter {
-  constructor() {
-    this.cutoffFrequency = 1000
-  }
-  setCufOffFrequency(frequency){
-    this.cutoffFrequency = frequency
+class LowPassFilter extends HasParameters {
+  constructor(id) {
+    super();
+    this.id = id;
+    this.setParameter("cutOffFrequency", 500);
   }
 
   render(signal) {
-    const out = el.lowpass(this.cutoffFrequency, 1.414, signal)
+    const out = el.lowpass(this.getParameter("cutOffFrequency"), 1.414, signal);
     return out;
   }
 }

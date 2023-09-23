@@ -72,15 +72,15 @@ class Orchestra {
         let effect;
         switch (effectConfig.type) {
           case "lowPassFilter": {
-            effect = new LowPassFilter();
+            effect = new LowPassFilter(effectConfig.id);
             break;
           }
           case "highPassFilter": {
-            effect = new HighPassFilter();
+            effect = new HighPassFilter(effectConfig.id);
             break;
           }
           case "delay": {
-            effect = new Delay();
+            effect = new Delay(effectConfig.id);
             break;
           }
         }
