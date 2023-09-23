@@ -6,6 +6,7 @@
   "homepage": "https://byod.live",
   "scripts": {
     "dev": "vite --host",
+    "tauri": "tauri",
     "build": "vite build && cp CNAME dist/CNAME",
     "preview": "vite preview",
     "node-dev": "nodemon --exec '/Users/thomasgeissl_1/.elementary/bin/elementary -i 0 -o 2' index.js"
@@ -34,6 +35,7 @@
     "zustand": "^4.3.8"
   },
   "devDependencies": {
+    "@tauri-apps/cli": "^1.4.0",
     "@types/react": "^18.0.0",
     "@types/react-dom": "^18.0.0",
     "@vitejs/plugin-react": "^1.3.0",
