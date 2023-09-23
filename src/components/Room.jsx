@@ -7,7 +7,7 @@ import NoSleep from "nosleep.js";
 import Orchestra from "../audio/Orchestra";
 import Button from "@mui/material/Button";
 import Stage from "./Stage";
-import config from "../assets/config.json";
+import staticConfig from "../assets/config.json";
 
 import LoopIcon from "@mui/icons-material/Loop";
 import axios from "axios";
@@ -15,6 +15,7 @@ let ctx;
 
 const core = new WebRenderer();
 const noSleep = new NoSleep();
+let config = staticConfig
 
 const loadSample = async (path, ctx) => {
   const res = await fetch(path);
@@ -50,6 +51,11 @@ function Room() {
     const configPath = searchParams.get("config");
     axios.get(configPath).then((response) => {
       console.log(response.data);
+      try {
+        config = JSON.parse(response.data)
+      } catch (error) {
+        
+      }
       // TODO: should tis be done async?
       // TODO: set config and load orchestra
     });
