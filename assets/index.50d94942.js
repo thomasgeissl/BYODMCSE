@@ -5822,7 +5822,7 @@ void main() {
   display: flex;
   flex-direction: column;
   flex-grow: 1;
-  padding: 16px;
+  /* padding: 16px; */
 `,HIe=Ui.div`
   flex-grow: 1;
   display: flex;
