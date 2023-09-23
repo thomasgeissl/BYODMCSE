@@ -3,7 +3,8 @@ import { v4 } from "uuid";
 
 const NUM_VOICES = 16;
 class Simpler {
-  constructor(samples) {
+  constructor(id, samples) {
+    this.id = id;
     this.samples = samples;
 
     this.voices = Array.apply(null, Array(NUM_VOICES)).map((voice, index) => {

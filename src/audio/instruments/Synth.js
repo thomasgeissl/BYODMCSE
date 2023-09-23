@@ -5,7 +5,8 @@ import { v4 } from "uuid";
 // https://www.youtube.com/watch?v=0voWrxLDnSE
 
 class Synth {
-  constructor() {
+  constructor(id) {
+    this.id = id;
     this.voices = [
       { gate: 0.0, note: 0, velocity: 0, key: `synth-v1-${v4()}` },
       { gate: 0.0, note: 0, velocity: 0, key: `synth-v2-${v4()}` },

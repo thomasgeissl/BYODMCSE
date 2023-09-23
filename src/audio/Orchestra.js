@@ -18,33 +18,51 @@ class Orchestra {
       // add instruments
       switch (value.instrument.type) {
         case "synth": {
-          this.channels[key] = { instrument: new Synth(), effects: [] };
+          this.channels[key] = {
+            instrument: new Synth(value.instrument.id),
+            effects: [],
+          };
           break;
         }
         case "drumRack": {
           this.channels[key] = {
-            instrument: new DrumRack(value.instrument.config),
+            instrument: new DrumRack(
+              value.instrument.id,
+              value.instrument.config
+            ),
             effects: [],
           };
           break;
         }
         case "simpler": {
           this.channels[key] = {
-            instrument: new Simpler(value.instrument.config),
+            instrument: new Simpler(
+              value.instrument.id,
+              value.instrument.config
+            ),
             effects: [],
           };
           break;
         }
         case "noise": {
-          this.channels[key] = { instrument: new Noise(), effects: [] };
+          this.channels[key] = {
+            instrument: new Noise(value.instrument.id),
+            effects: [],
+          };
           break;
         }
         case "grainTrain": {
-          this.channels[key] = { instrument: new GrainTrain(), effects: [] };
+          this.channels[key] = {
+            instrument: new GrainTrain(value.instrument.id),
+            effects: [],
+          };
           break;
         }
         case "tapeNoise": {
-          this.channels[key] = { instrument: new TapeNoise(), effects: [] };
+          this.channels[key] = {
+            instrument: new TapeNoise(value.instrument.id),
+            effects: [],
+          };
           break;
         }
       }

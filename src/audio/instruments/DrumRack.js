@@ -1,14 +1,21 @@
 import { el } from "@elemaudio/core";
 import { v4 } from "uuid";
+import HasParameters from "../HasParameters";
 
-class DrumRack {
-  constructor(samples) {
+class DrumRack extends HasParameters {
+  constructor(id, samples) {
+    super();
+    this.id = id;
     this.voices = samples;
+
     Object.values(this.voices).forEach((voice, index) => {
       voice.gate = 0;
       voice.velocity = 0;
       voice.key = `drumrack-v${index}-${v4()}`;
     });
+
+    this.setParameter("testparam", 0);
+    this.setParameter("volume", 1);
   }
 
   voice = (voice) => {
@@ -22,29 +29,27 @@ class DrumRack {
   };
 
   noteOn(note, velocity) {
-    const voice = this.voices[note];
+    const voice = Object.entries(this.voices).find(([key, value]) => {
+      return key == note;
+    });
     if (voice) {
       voice.timestamp = new Date();
-      voice.gate = 1.0;
-      voice.velocity = velocity / 127;
+      voice[1].gate = 1.0;
+      // TODO: setting a new key to restart the sample seems quite hacky, what are smarter ways of doing this?
+      voice[1].key = `drumrack-${v4()}`;
+      voice[1].velocity = velocity / 127;
     }
   }
   noteOff(note) {}
 
   render() {
-    // if (this.voices.filter((voice) => voice.sampleId !== null).length === 0) {
-    //   // TODO: is there a 0 node?
-    //   return el.mul(el.cycle(440), 0);
-    // }
+    const voices = Object.values(this.voices);
     const out = el.add(
-      ...Object.values(this.voices)
-        // .filter((voice) => voice.sampleId !== null)
-        .map((voice) => {
-          return this.voice(voice);
-        })
+      ...voices.map((voice) => {
+        return this.voice(voice);
+      })
     );
-    return out;
-    // return el.mul(0.9, out);
+    return el.mul(this.getParameter("volume"), out);
   }
 }
 

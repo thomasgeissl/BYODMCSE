@@ -4,10 +4,11 @@ import { Interval, Note, Scale, Midi } from "tonal";
 // https://twitter.com/ubcomposer/status/1647659387396169728?s=46&t=Z3VnznKKxadB7DXpOQN7dg
 
 class TapeNoise {
-  constructor() {
+  constructor(id) {
+    this.id = id;
     this.voices = [
-        { gate: 0.0, note: 0, velocity: 0, key: `tape_noise-v1-${v4()}` },
-      ];
+      { gate: 0.0, note: 0, velocity: 0, key: `tape_noise-v1-${v4()}` },
+    ];
   }
   voice = (voice) => {
     const gate = el.const({
@@ -49,17 +50,17 @@ class TapeNoise {
     // );
   };
   noteOn(note, velocity) {
-    this.voices[0].gate = 1
-    this.voices[0].note = note
-    this.voices[0].velocity = velocity
+    this.voices[0].gate = 1;
+    this.voices[0].note = note;
+    this.voices[0].velocity = velocity;
   }
   noteOff(note) {
-    this.voices[0].gate = 0
-    this.voices[0].velocity = 0
+    this.voices[0].gate = 0;
+    this.voices[0].velocity = 0;
   }
   render() {
     const out = el.add(...this.voices.map((v) => this.voice(v)));
-    return out
+    return out;
   }
 }
 

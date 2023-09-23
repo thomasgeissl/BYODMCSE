@@ -101,10 +101,10 @@
   }, 
   "mappings": {
     "20": {
-      "device": 1,
-      "parameter": 11,
+      "device": "trashes",
+      "parameter": "testparam",
       "min": 0,
-      "max": 127
+      "max": 1
     }
   }
 }

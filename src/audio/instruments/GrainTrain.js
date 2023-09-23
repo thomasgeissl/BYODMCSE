@@ -4,7 +4,8 @@ import { v4 } from "uuid";
 // https://github.com/zya/granular/blob/gh-pages/js/main.js
 
 class GrainTrain {
-  constructor() {
+  constructor(id) {
+    this.id = id;
     this.voices = [
       { gate: 0.0, note: 0, velocity: 0, key: `grainTrain-v1-${v4()}` },
     ];
