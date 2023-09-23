@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useEffect, useMemo, useState } from "react";
+import { useParams, useLocation, useSearchParams } from "react-router-dom";
 import styled from "@emotion/styled";
 import WebRenderer from "@elemaudio/web-renderer";
 import { el } from "@elemaudio/core";
@@ -10,6 +10,7 @@ import Stage from "./Stage";
 import config from "../assets/config.json";
 
 import LoopIcon from "@mui/icons-material/Loop";
+import axios from "axios";
 let ctx;
 
 const core = new WebRenderer();
@@ -37,8 +38,23 @@ const Instructions = styled.div`
   font-size: 24px;
 `;
 
+function useQuery() {
+  const { search } = useLocation();
+  return useMemo(() => new URLSearchParams(search), [search]);
+}
+
 function Room() {
   const roomId = useParams().roomId || "taxi";
+  const [searchParams] = useSearchParams();
+  if (searchParams.get("config")) {
+    const configPath = searchParams.get("config");
+    axios.get(configPath).then((response) => {
+      console.log(response.data);
+      // TODO: should tis be done async?
+      // TODO: set config and load orchestra
+    });
+  }
+
   const [inited, setInited] = useState(false);
   const [loading, setLoading] = useState(false);
   const [orchestra, setOrchestra] = useState(null);
@@ -135,7 +151,13 @@ function Room() {
           </Button>
         </>
       )}
-      {inited && <Stage core={core} orchestra={orchestra} mappings={config.mappings}></Stage>}
+      {inited && (
+        <Stage
+          core={core}
+          orchestra={orchestra}
+          mappings={config.mappings}
+        ></Stage>
+      )}
     </Container>
   );
 }
