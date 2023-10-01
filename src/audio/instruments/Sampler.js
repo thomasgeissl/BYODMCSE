@@ -5,6 +5,7 @@ import HighPassFilter from "../effects/HighPassFilter.js";
 
 // https://www.youtube.com/watch?v=0voWrxLDnSE
 
+const VOICES_COUNT = 32;
 const lowpass = new Lowpass();
 const highpass = new HighPassFilter();
 
@@ -12,7 +13,6 @@ class Sampler {
   constructor(samples) {
     this.samples = samples;
     this.voices = [];
-    const VOICES_COUNT = 32;
     for (let i = 0; i < VOICES_COUNT; i++) {
       this.voices.push({
         gate: 0.0,

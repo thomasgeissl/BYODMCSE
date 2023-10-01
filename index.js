@@ -3,8 +3,7 @@ import { WebMidi } from "webmidi";
 import mqtt from "mqtt";
 
 import Orchestra from "./src/audio/Orchestra.js";
-import config from "../assets/config"
-
+import config from "../assets/config";
 
 const client = mqtt.connect("mqtt://localhost:1883");
 
@@ -17,7 +16,6 @@ function onEnabled() {
   // WebMidi.inputs.forEach((input) =>
   //   console.log(input.manufacturer, input.name)
   // );
-
   // Outputs
   // WebMidi.outputs.forEach((output) =>
   //   console.log(output.manufacturer, output.name)
@@ -41,7 +39,7 @@ client.on("connect", function () {
     }
   });
   client.subscribe(`${sessionPrefix}ofMIDI2MQTT`, function (err) {
-    console.log("connected to broker")
+    console.log("connected to broker");
     if (err) {
       console.log("error", err);
     }
@@ -49,24 +47,24 @@ client.on("connect", function () {
 });
 client.on("error", function (error) {
   console.log("error", error);
-
-})
+});
 
 core.on("load", function () {
   client.on("message", function (topic, message) {
     // message is Buffer
     try {
       const payload = JSON.parse(message.toString());
-    console.log("got message", topic, payload)
+      console.log("got message", topic, payload);
       switch (topic) {
         case `${sessionPrefix}ofMIDI2MQTT`: {
           if (payload.status === 144) {
             orchestra.noteOn(payload.channel, payload.note, payload.velocity);
           } else if (payload.status === 128) {
             orchestra.noteOff(payload.channel, payload.note);
-          }
-          else if(payload.status === 176){
-            console.log("got cc, TODO: pass to instruments and effects parameters")
+          } else if (payload.status === 176) {
+            console.log(
+              "got cc, TODO: pass to instruments and effects parameters"
+            );
           }
           break;
         }
