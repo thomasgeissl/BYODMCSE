@@ -1,7 +1,6 @@
 import { el } from "@elemaudio/core";
 // import { Interval, Note, Scale, Midi } from "tonal";
 import Synth from "./instruments/Synth.js";
-import Sampler from "./instruments/Sampler.js";
 import Noise from "./instruments/Noise.js";
 import TapeNoise from "./instruments/TapeNoise.js";
 import GrainTrain from "./instruments/GrainTrain.js";
@@ -9,6 +8,8 @@ import LowPassFilter from "./effects/LowPassFilter.js";
 import HighPassFilter from "./effects/HighPassFilter.js";
 import Delay from "./effects/Delay.js";
 import Velocity from "./midiEffects/Velocity.js";
+import DrumRack from "./instruments/DrumRack.js";
+import Simpler from "./instruments/Simpler.js";
 
 class Orchestra {
   constructor(config) {
@@ -17,23 +18,51 @@ class Orchestra {
       // add instruments
       switch (value.instrument.type) {
         case "synth": {
-          this.channels[key] = { instrument: new Synth(), effects: [] };
+          this.channels[key] = {
+            instrument: new Synth(value.instrument.id),
+            effects: [],
+          };
           break;
         }
-        case "sampler": {
-          this.channels[key] = { instrument: new Sampler(value.instrument.config), effects: [] };
+        case "drumRack": {
+          this.channels[key] = {
+            instrument: new DrumRack(
+              value.instrument.id,
+              value.instrument.config
+            ),
+            effects: [],
+          };
+          break;
+        }
+        case "simpler": {
+          this.channels[key] = {
+            instrument: new Simpler(
+              value.instrument.id,
+              value.instrument.config
+            ),
+            effects: [],
+          };
           break;
         }
         case "noise": {
-          this.channels[key] = { instrument: new Noise(), effects: [] };
+          this.channels[key] = {
+            instrument: new Noise(value.instrument.id),
+            effects: [],
+          };
           break;
         }
         case "grainTrain": {
-          this.channels[key] = { instrument: new GrainTrain(), effects: [] };
+          this.channels[key] = {
+            instrument: new GrainTrain(value.instrument.id),
+            effects: [],
+          };
           break;
         }
         case "tapeNoise": {
-          this.channels[key] = { instrument: new TapeNoise(), effects: [] };
+          this.channels[key] = {
+            instrument: new TapeNoise(value.instrument.id),
+            effects: [],
+          };
           break;
         }
       }
@@ -43,15 +72,15 @@ class Orchestra {
         let effect;
         switch (effectConfig.type) {
           case "lowPassFilter": {
-            effect = new LowPassFilter();
+            effect = new LowPassFilter(effectConfig.id);
             break;
           }
           case "highPassFilter": {
-            effect = new HighPassFilter();
+            effect = new HighPassFilter(effectConfig.id);
             break;
           }
           case "delay": {
-            effect = new Delay();
+            effect = new Delay(effectConfig.id);
             break;
           }
         }

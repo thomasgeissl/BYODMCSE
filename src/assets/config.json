@@ -1,18 +1,20 @@
 {
   "connection": {
-    "broker": "wss://byodmcse:aFyYJo7b6rKnORki@byodmcse.cloud.shiftr.io:443"
+    "broker.no": "wss://byodmcse:aFyYJo7b6rKnORki@byodmcse.cloud.shiftr.io:443",
+    "broker": "ws://localhost:9001"
   },
   "orchestra": {
     "lobbyTextures": {
       "instrument": {
-        "type": "sampler",
+        "id": "lobbyTextures",
+        "type": "drumRack",
         "config": {
-          "60": {"path": "/samples/texture_2.wav"},
-          "61": {"path": "/samples/texture_3.wav"},
-          "62": {"path": "/samples/texture_4.wav"},
-          "63": {"path": "/samples/texture_5.wav"},
-          "64": {"path": "/samples/vibraphone_0.wav"},
-          "65": {"path": "/samples/vibraphone_1.wav"}
+          "60": { "path": "/samples/texture_2.wav" },
+          "61": { "path": "/samples/texture_3.wav" },
+          "62": { "path": "/samples/texture_4.wav" },
+          "63": { "path": "/samples/texture_5.wav" },
+          "64": { "path": "/samples/vibraphone_0.wav" },
+          "65": { "path": "/samples/vibraphone_1.wav" }
         }
       },
       "effects": [],
@@ -20,31 +22,61 @@
     },
     "lobbyNumbers": {
       "instrument": {
-        "type": "sampler",
+        "id": "lobbyNumbers",
+        "type": "drumRack",
         "config": {
-          "60": {"path": "/samples/number_1.wav"},
-          "61": {"path": "/samples/number_2.wav"},
-          "62": {"path": "/samples/number_3.wav"},
-          "63": {"path": "/samples/number_4.wav"},
-          "64": {"path": "/samples/number_5.wav"},
-          "65": {"path": "/samples/number_6.wav"},
-          "67": {"path": "/samples/number_7.wav"},
-          "68": {"path": "/samples/number_8.wav"}
+          "60": { "path": "/samples/number_1.wav" },
+          "61": { "path": "/samples/number_2.wav" },
+          "62": { "path": "/samples/number_3.wav" },
+          "63": { "path": "/samples/number_4.wav" },
+          "64": { "path": "/samples/number_5.wav" },
+          "65": { "path": "/samples/number_6.wav" },
+          "66": { "path": "/samples/number_7.wav" },
+          "67": { "path": "/samples/number_8.wav" }
         }
+      },
+      "effects": [],
+      "midiEffects": []
+    },
+    "1": {
+      "instrument": {
+        "id": "tapeNoise",
+        "type": "tapeNoise"
       },
       "effects": [],
       "midiEffects": []
     },
     "11": {
       "instrument": {
-        "type": "sampler",
+        "id": "trashes",
+        "type": "drumRack",
         "config": {
-          "60": {"path": "/samples/texture_0.wav"},
-          "61": {"path": "/samples/texture_1.wav"},
-          "62": {"path": "/samples/trash_0.wav"},
-          "63": {"path": "/samples/trash_1.wav"},
-          "64": {"path": "/samples/trash_2.wav"},
-          "65": {"path": "/samples/trash_3.wav"}
+          "60": { "path": "/samples/texture_0.wav" },
+          "61": { "path": "/samples/texture_1.wav" },
+          "62": { "path": "/samples/trash_0.wav" },
+          "63": { "path": "/samples/trash_1.wav" },
+          "64": { "path": "/samples/trash_2.wav" },
+          "65": { "path": "/samples/trash_3.wav" }
+        }
+      },
+      "effects": [
+        {
+          "id": "trashesDelay",
+          "type": "delay"
+        },
+        {
+          "id": "trashesLowPassFilter",
+          "type": "lowPassFilter"
+        }
+      ],
+      "midiEffects": []
+    },
+    "12": {
+      "instrument": {
+        "id": "simplerTest",
+        "type": "simpler",
+        "config": {
+          "60": { "path": "/samples/texture_0.wav"}
         }
       },
       "effects": [],
@@ -75,5 +107,19 @@
     "/samples/number_8.wav": "/samples/999WavFiles/8.mp3",
     "/samples/number_9.wav": "/samples/999WavFiles/9.mp3",
     "/samples/number_10.wav": "/samples/999WavFiles/10.mp3"
+  }, 
+  "mappings": {
+    "20": {
+      "device": "trashes",
+      "parameter": "volume",
+      "min": 0,
+      "max": 1
+    },
+    "21": {
+      "device": "trashesLowPassFilter",
+      "parameter": "cutOffFrequency",
+      "min": 0,
+      "max": 5000
+    }
   }
 }

@@ -8,15 +8,16 @@ import { v4 } from "uuid";
 // https://www.youtube.com/watch?v=0voWrxLDnSE
 
 class Noise {
-  constructor() {
-    this.gate = 0
-    this.key = `noise-v1-${v4()}`
+  constructor(id) {
+    this.id = id;
+    this.gate = 0;
+    this.key = `noise-v1-${v4()}`;
   }
   noteOn(note, velocity) {
     this.gate = 1.0;
   }
   noteOff(note) {
-    this.gate = 0
+    this.gate = 0;
   }
   render() {
     const gate = el.const({

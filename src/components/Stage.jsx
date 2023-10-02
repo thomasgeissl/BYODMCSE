@@ -6,6 +6,8 @@ import { Canvas, useFrame } from "@react-three/fiber";
 import { OrbitControls } from "@react-three/drei";
 import * as THREE from "three";
 import { el } from "@elemaudio/core";
+import { WebMidi } from "webmidi";
+
 import config from "../assets/config.json";
 import useStore from "../store/store";
 // import { WaveMaterial } from "./WaveMaterial.js";
@@ -42,16 +44,91 @@ let midEnergy = 0;
 let highEnergy = 0;
 
 let playingTimeoutId;
+
 function Stage(props) {
   const roomId = useParams().roomId ?? "taxi";
   const [playing, setPlaying] = useState(false);
-  const { orchestra, core } = props;
+  const { orchestra, mappings, core } = props;
   const topic = `byod/${roomId}`;
 
   const uuid = useStore((state) => state.uuid);
   const users = useStore((state) => state.user);
   const addUser = useStore((state) => state.addUser);
   const removeUser = useStore((state) => state.removeUser);
+
+  useEffect(() => {
+    WebMidi.enable()
+      .then(() => {
+        console.log("WebMidi enabled!");
+        onEnabled();
+      })
+      .catch((err) => alert(err));
+
+    function onEnabled() {
+      // Inputs
+      WebMidi.inputs.forEach((input) => {
+        console.log(input.name);
+        input.channels.forEach((channel, index) => {
+          clearTimeout(playingTimeoutId);
+          if (!playing) {
+            setPlaying(true);
+            playingTimeoutId = setTimeout(() => {
+              setPlaying(false);
+            }, 3 * 60 * 1000);
+          }
+          channel.addListener("noteon", (e) => {
+            orchestra.noteOn(channel.number, e.note.number, e.data[2]);
+            if (orchestra) {
+              const mainOut = orchestra?.render();
+              core?.render(el.fft({ size: 1024 }, mainOut), mainOut);
+            }
+          });
+          channel.addListener("noteoff", (e) => {
+            orchestra.noteOff(channel.number, e.note.number);
+            if (orchestra) {
+              const mainOut = orchestra?.render();
+              core?.render(el.fft({ size: 1024 }, mainOut), mainOut);
+            }
+          });
+          channel.addListener("controlchange", (e) => {
+            const control = e.controller.number;
+            const value = e.value;
+            const destination = mappings[control];
+            if (destination) {
+              const matchedInstruments = [
+                ...Object.values(orchestra.channels).filter(
+                  (channel) => channel?.instrument?.id === destination.device
+                ),
+              ].map(channel => channel.instrument);
+              let effects = [];
+              Object.values(orchestra.channels).forEach((channel) => {
+                effects = effects.concat(channel.effects);
+              });
+              const matchedEffects = effects.filter(
+                (effect) => effect.id === destination.device
+              );
+
+              [...matchedInstruments, ...matchedEffects].forEach((device) => {
+                if (device.setParameter) {
+                  device.setParameter(destination.parameter, map(value, 0, 1, destination.min, destination.max));
+                }
+              });
+            }
+            if (orchestra) {
+              const mainOut = orchestra?.render();
+              core?.render(el.fft({ size: 1024 }, mainOut), mainOut);
+            }
+          });
+        });
+      });
+
+      // Outputs
+      WebMidi.outputs.forEach((output) => console.log(output.name));
+    }
+    return () => {
+      console.log("TODO: remove all midi listeners");
+    };
+  }, [orchestra, setPlaying]);
 
   useEffect(() => {
     core.on("fft", function (e) {
@@ -116,6 +193,15 @@ function Stage(props) {
                 playingTimeoutId = setTimeout(() => {
                   setPlaying(false);
                 }, 3 * 60 * 1000);
+              }
+              if (payload.status === 176) {
+                //CC
+                const { channel, control, value } = payload;
+                const destination = mappings[control];
+                if (destination) {
+                  // TODO: get device from orchestra, get parameter from device and map value and finally set
+                  // console.log(destination.device, destination.parameter);
+                }
               }
               if (payload.status === 144) {
                 orchestra?.noteOn(
