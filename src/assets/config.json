@@ -1,7 +1,7 @@
 {
   "connection": {
-    "broker.no": "wss://byodmcse:aFyYJo7b6rKnORki@byodmcse.cloud.shiftr.io:443",
-    "broker": "ws://localhost:9001"
+    "broker": "wss://byodmcse:aFyYJo7b6rKnORki@byodmcse.cloud.shiftr.io:443",
+    "broker.local": "ws://localhost:9001"
   },
   "orchestra": {
     "lobbyTextures": {
@@ -121,5 +121,6 @@
       "min": 0,
       "max": 5000
     }
-  }
+  },
+  "useMidi": false
 }
