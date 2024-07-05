@@ -57,12 +57,14 @@ function Stage(props) {
   const removeUser = useStore((state) => state.removeUser);
 
   useEffect(() => {
-    WebMidi.enable()
-      .then(() => {
-        console.log("WebMidi enabled!");
-        onEnabled();
-      })
-      .catch((err) => alert(err));
+    if (navigator.requestMIDIAccess) {
+      WebMidi.enable()
+        .then(() => {
+          console.log("WebMidi enabled!");
+          onEnabled();
+        })
+        .catch((err) => alert(err));
+    }
 
     function onEnabled() {
       // Inputs
@@ -99,7 +101,7 @@ function Stage(props) {
                 ...Object.values(orchestra.channels).filter(
                   (channel) => channel?.instrument?.id === destination.device
                 ),
-              ].map(channel => channel.instrument);
+              ].map((channel) => channel.instrument);
               let effects = [];
               Object.values(orchestra.channels).forEach((channel) => {
                 effects = effects.concat(channel.effects);
@@ -110,7 +112,10 @@ function Stage(props) {
 
               [...matchedInstruments, ...matchedEffects].forEach((device) => {
                 if (device.setParameter) {
-                  device.setParameter(destination.parameter, map(value, 0, 1, destination.min, destination.max));
+                  device.setParameter(
+                    destination.parameter,
+                    map(value, 0, 1, destination.min, destination.max)
+                  );
                 }
               });
             }
