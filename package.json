@@ -19,6 +19,7 @@
     "@emotion/styled": "^11.8.1",
     "@mui/icons-material": "^5.11.16",
     "@mui/material": "^5.7.0",
+    "@nick-thompson/drumsynth": "^0.4.0",
     "@react-three/drei": "^9.67.0",
     "@react-three/fiber": "^8.13.0",
     "@react-three/postprocessing": "^2.13.0",
@@ -39,7 +40,8 @@
     "@tauri-apps/cli": "^1.4.0",
     "@types/react": "^18.0.0",
     "@types/react-dom": "^18.0.0",
-    "@vitejs/plugin-react": "^1.3.0",
-    "vite": "^2.9.9"
+    "@vitejs/plugin-react": "^4.3.1",
+    "vite": "^5.3.3",
+    "vite-plugin-pwa": "^0.20.0"
   }
 }
