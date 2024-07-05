@@ -58,15 +58,24 @@ const Particles = (props) => {
   useFrame((state) => {
     const { clock } = state;
 
+    const distance = map(midEnergy, 0, 4, 1, 3, true);
+
+      const theta = THREE.MathUtils.randFloatSpread(360);
+      const phi = THREE.MathUtils.randFloatSpread(360);
+
+      let x = distance * Math.sin(theta) * Math.cos(phi);
+      let y = distance * Math.sin(theta) * Math.sin(phi);
+      let z = distance * Math.cos(theta);
+
     for (let i = 0; i < count; i++) {
       const i3 = i * 3;
 
       points.current.geometry.attributes.position.array[i3] +=
-        Math.sin(clock.elapsedTime + Math.random() * 10) * 0.01;
+        Math.sin(clock.elapsedTime + Math.random() * 10) * 0.01 + x/100;
       points.current.geometry.attributes.position.array[i3 + 1] +=
-        Math.cos(clock.elapsedTime + Math.random() * 10) * 0.01;
+        Math.cos(clock.elapsedTime + Math.random() * 10) * 0.01 + y/100;
       points.current.geometry.attributes.position.array[i3 + 2] +=
-        Math.sin(clock.elapsedTime + Math.random() * 10) * 0.01;
+        Math.sin(clock.elapsedTime + Math.random() * 10) * 0.01 + z/100;
     }
 
     points.current.geometry.attributes.position.needsUpdate = true;
