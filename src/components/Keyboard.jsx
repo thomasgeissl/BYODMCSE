@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState} from "react";
 import { Box, Container, Typography } from "@mui/material";
 
 const keys = [
@@ -22,6 +22,7 @@ const blackKeyWidth = 30;
 const blackKeyOffset = whiteKeyWidth - blackKeyWidth / 2;
 
 const MusicalKeyboard = ({ onKeyPressed, onKeyReleased }) => {
+    const [octave, setOctave] = useState(0)
   useEffect(() => {
     const handleKeyDown = (event) => {
       const keyObj = keys.find((key) => key.key === event.key);
@@ -48,18 +49,25 @@ const MusicalKeyboard = ({ onKeyPressed, onKeyReleased }) => {
 
   const handleKeyPress = (midi) => {
     if (onKeyPressed) {
-      onKeyPressed(midi);
+      onKeyPressed(midi + octave * 12);
     }
   };
 
   const handleKeyRelease = (midi) => {
     if (onKeyReleased) {
-      onKeyReleased(midi);
+      onKeyReleased(midi + octave*12);
     }
   };
 
   return (
     <Container>
+        <Box display="flex" marginBottom={10}>
+          <Box display={"flex"} gap={1}>
+            <button onClick={() => setOctave(octave - 1)}>{"<"}</button>
+            <span>{octave}</span>
+            <button onClick={() => setOctave(octave + 1)}>{">"}</button>
+          </Box>
+        </Box>
       <Box display="flex" alignItems="center" position="relative" height={150}>
         {keys.map((key, index) => {
           const isBlackKey = key.color === "black";

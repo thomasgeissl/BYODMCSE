@@ -9,6 +9,8 @@ class Simpler extends HasParameters {
     const {sample} = config
     this.sample = sample;
 
+    console.log(this.sample, config)
+
     this.voices = [
       { gate: 0.0, note: 0, velocity: 0, key: `simpler-v1-${v4()}` },
       { gate: 0.0, note: 0, velocity: 0, key: `simpler-v2-${v4()}` },
@@ -21,7 +23,7 @@ class Simpler extends HasParameters {
       { gate: 0.0, note: 0, velocity: 0, key: `simpler-v9-${v4()}` },
       { gate: 0.0, note: 0, velocity: 0, key: `simpler-v10-${v4()}` },
     ];
-    nextVoice = 0;
+    this.nextVoice = 0;
 
     this.setParameter("volume", 1);
   }

@@ -68,7 +68,10 @@ function SoundCheck() {
   const handleKeyPressed = (note: number) => {
     console.log(`Key Pressed: MIDI number ${note}`);
     if (orchestra) {
-      orchestra.noteOn(11, note, 100);
+      armedInstruments.map(i => {
+        console.log(i)
+        orchestra.noteOn(i.channel, note, 100);
+      })
       const mainOut = orchestra?.render();
       core?.render(mainOut, mainOut);
     }
@@ -77,10 +80,27 @@ function SoundCheck() {
   const handleKeyReleased = (note: number) => {
     console.log(`Key Released: MIDI number ${note}`);
     if (orchestra) {
-      orchestra.noteOff(11, note, 0);
+      armedInstruments.map(i => {
+        orchestra.noteOff(i.channel, note, 0);
+      })
       const mainOut = orchestra?.render();
       core?.render(mainOut, mainOut);
     }
+  };
+
+  const toggleInstrument = (instrument: any, channel: any) => {
+    setArmedInstruments((prevArmedInstruments) => {
+      const index = prevArmedInstruments.findIndex(
+        (armedInstrument) => armedInstrument.id === instrument.id
+      );
+      if (index > -1) {
+        return prevArmedInstruments.filter(
+          (armedInstrument) => armedInstrument.id !== instrument.id
+        );
+      } else {
+        return [...prevArmedInstruments, {...instrument, channel}];
+      }
+    });
   };
 
   return (
@@ -103,18 +123,10 @@ function SoundCheck() {
                 </Box>
                 <Box>ch: {channel}</Box>
 
-{/* TODO: toggle armed instruments, show correct button state */}
                 <ToggleButton
-                  onClick={() => {
-                    const newArmedInstruments = [...armedInstruments];
-                    const newInstrument = newArmedInstruments.findIndex(
-                      (armedInstrument) =>
-                        armedInstrument?.id === instrument?.id
-                    );
-                    if (newInstrument) {
-                      newArmedInstruments.splice(newInstrument, 1);
-                    }
-                  }}
+                  selected={armedInstruments.findIndex(i => i.id === instrument.id) > -1}
+                  value={instrument.id}
+                  onClick={() => toggleInstrument(instrument, channel)}
                 >
                   <FiberManualRecordIcon></FiberManualRecordIcon>
                 </ToggleButton>

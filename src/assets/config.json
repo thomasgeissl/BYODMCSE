@@ -57,7 +57,17 @@
       "effects": [],
       "midiEffects": []
     },
-    
+    "3": {
+      "instrument": {
+        "id": "synth",
+        "type": "synth",
+        "config": {
+          "waveform": "sine",
+          "frequency": 440.0,
+          "gain": 0.5
+        }
+      }
+    },
     "11": {
       "instrument": {
         "id": "trashes",
@@ -81,17 +91,6 @@
           "type": "lowPassFilter"
         }
       ],
-      "midiEffects": []
-    },
-    "12": {
-      "instrument": {
-        "id": "simplerTest",
-        "type": "simpler",
-        "config": {
-          "60": { "path": "/samples/texture_0.wav"}
-        }
-      },
-      "effects": [],
       "midiEffects": []
     }
   },

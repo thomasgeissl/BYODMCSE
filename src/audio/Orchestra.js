@@ -68,7 +68,7 @@ class Orchestra {
       }
 
       // add effects
-      value.effects.forEach((effectConfig) => {
+      value.effects?.forEach((effectConfig) => {
         let effect;
         switch (effectConfig.type) {
           case "lowPassFilter": {
@@ -89,7 +89,7 @@ class Orchestra {
         }
       });
       // add effects
-      value.midiEffects.forEach((effectConfig) => {
+      value.midiEffects?.forEach((effectConfig) => {
         let effect;
         switch (effectConfig.type) {
           case "velocity": {
