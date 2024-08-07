@@ -11,23 +11,15 @@ import staticConfig from "../assets/config.json";
 
 import LoopIcon from "@mui/icons-material/Loop";
 import axios from "axios";
+import { Box } from "@mui/material";
+import { loadSample } from "../audio/utils";
 let ctx;
 
 const core = new WebRenderer();
 const noSleep = new NoSleep();
 let config = staticConfig;
 
-const loadSample = async (path, ctx) => {
-  const res = await fetch(path);
-  const sampleBuffer = await ctx.decodeAudioData(await res.arrayBuffer());
-  return sampleBuffer.getChannelData(0);
-};
 
-const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  flex-grow: 1;
-`;
 const Instructions = styled.div`
   flex-grow: 1;
   display: flex;
@@ -49,6 +41,7 @@ function Room() {
   const [inited, setInited] = useState(false);
   const [loading, setLoading] = useState(false);
   const [orchestra, setOrchestra] = useState(null);
+  console.log(roomId)
 
   useEffect(() => {
     if (searchParams.get("config")) {
@@ -104,7 +97,7 @@ function Room() {
   };
 
   return (
-    <Container>
+    <Box flex={1}>
       {!inited && (
         <>
           <Instructions>
@@ -145,7 +138,7 @@ function Room() {
       {inited && (
         <Stage core={core} orchestra={orchestra} mappings={config.mappings} />
       )}
-    </Container>
+    </Box>
   );
 }
 

@@ -1,51 +1,34 @@
-import { useState } from "react";
-import { ThemeProvider } from "@mui/material/styles";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import CssBaseline from "@mui/material/CssBaseline";
-
-import Login from "./components/Login";
-import Rooms from "./components/Rooms";
-import Stage from "./components/Stage";
-import styled from "@emotion/styled";
-import { HashRouter as Router, Routes, Route, Outlet } from "react-router-dom";
+import { ThemeProvider } from "@mui/material/styles";
+import { Box } from "@mui/material";
 import "./App.css";
 import Room from "./components/Room";
-import theme, {backgroundColor, primary} from "./theme";
+import theme from "./theme";
+import SoundCheck from "./components/SoundCheck";
 
-const Container = styled.div`
-  width: 100vw;
-  height: 100vh;
-  background-color: ${backgroundColor};
-  color: white;
-  a{
-    color: ${primary}
-  }
-  display: flex;
-`;
+const router = createBrowserRouter([
+  {
+    path: "/soundcheck",
+    element: <SoundCheck></SoundCheck>
+  },
+  {
+    path: "/rooms/:roomId",
+    element: <Room></Room>
+  },
+]);
 
 function App() {
   return (
-    <Router
-      // basename={import.meta.env.MODE === "development" ? "/" : `/BYODMCSE`}
-    >
-      <ThemeProvider theme={theme}>
-        <Container>
-          <Routes>
-            {/* <Route path="/" element={<Login></Login>}></Route> */}
-            <Route path="/" element={<Room></Room>}></Route>
-            <Route path="/rooms" element={<Rooms></Rooms>}></Route>
-            <Route path="/rooms/:roomId" element={<Room />} />
-            <Route
-              path="*"
-              element={
-                <main style={{ padding: "1rem" }}>
-                  <p>There's nothing here!</p>
-                </main>
-              }
-            />
-          </Routes>
-        </Container>
-      </ThemeProvider>
-    </Router>
+    <Box width={"100vw"} height={"100vh"} display={"flex"}>
+    <ThemeProvider theme={theme}>
+      <CssBaseline></CssBaseline>
+      <RouterProvider
+        router={router}
+      >
+      </RouterProvider>
+    </ThemeProvider>
+    </Box>
   );
 }
 

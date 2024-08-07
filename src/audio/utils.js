@@ -33,4 +33,10 @@ const map = function (n, start1, stop1, start2, stop2, withinBounds) {
   }
 };
 
-export { extractBaseFrequenciesEnergy, map };
+const loadSample = async (path, ctx) => {
+  const res = await fetch(path);
+  const sampleBuffer = await ctx.decodeAudioData(await res.arrayBuffer());
+  return sampleBuffer.getChannelData(0);
+};
+
+export { extractBaseFrequenciesEnergy, map, loadSample };
