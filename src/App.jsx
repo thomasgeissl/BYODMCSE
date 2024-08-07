@@ -5,7 +5,7 @@ import { Box } from "@mui/material";
 import "./App.css";
 import Room from "./components/Room";
 import theme from "./theme";
-import SoundCheck from "./components/SoundCheck";
+import SoundCheck from "./components/SoundCheck.tsx";
 
 const router = createBrowserRouter([
   {

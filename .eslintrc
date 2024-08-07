@@ -1,0 +1,27 @@
+{
+    "parser": "@typescript-eslint/parser",
+    "plugins": ["@typescript-eslint", "react"],
+    "extends": [
+      "eslint:recommended",
+      "plugin:react/recommended",
+      "plugin:@typescript-eslint/recommended"
+    ],
+    "overrides": [
+      {
+        "files": ["*.ts", "*.tsx"],
+        "rules": {
+          // specific TypeScript rules
+        }
+      },
+      {
+        "files": ["*.js", "*.jsx"],
+        "rules": {
+          // specific JavaScript rules
+        }
+      }
+    ],
+    "rules": {
+      // your custom rules
+    }
+  }
+  

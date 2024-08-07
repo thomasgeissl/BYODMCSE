@@ -46,6 +46,18 @@
       "effects": [],
       "midiEffects": []
     },
+    "2": {
+      "instrument": {
+        "id": "simpler",
+        "type": "simpler",
+        "config": {
+          "sample": { "path" : "/samples/texture_0.wav"}
+        }
+      },
+      "effects": [],
+      "midiEffects": []
+    },
+    
     "11": {
       "instrument": {
         "id": "trashes",
