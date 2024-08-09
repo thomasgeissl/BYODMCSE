@@ -1,5 +1,5 @@
-import React, { useEffect, useState} from "react";
-import { Box, Container, Typography } from "@mui/material";
+import React, { useEffect, useState } from "react";
+import { Box, Container, Slider } from "@mui/material";
 
 const keys = [
   { note: "C", color: "white", midi: 60, key: "a" },
@@ -21,19 +21,33 @@ const whiteKeyWidth = 40;
 const blackKeyWidth = 30;
 const blackKeyOffset = whiteKeyWidth - blackKeyWidth / 2;
 
-const MusicalKeyboard = ({ onKeyPressed, onKeyReleased }) => {
-    const [octave, setOctave] = useState(0)
+interface Props {
+  onKeyPressed: (note: number, velocity: number) => void;
+  onKeyReleased: (note: number, velocity: number) => void;
+}
+
+const MusicalKeyboard = ({ onKeyPressed, onKeyReleased }: Props) => {
+  const [octave, setOctave] = useState(0);
+  const [velocity, setVelocity] = useState(100);
+  const [pressedKeys, setPressedKeys] = useState<Set<string>>(new Set());
+
   useEffect(() => {
-    const handleKeyDown = (event) => {
+    const handleKeyDown = (event: any) => {
       const keyObj = keys.find((key) => key.key === event.key);
-      if (keyObj) {
+      if (keyObj && !pressedKeys.has(event.key)) {
+        setPressedKeys((prev) => new Set(prev).add(event.key));
         handleKeyPress(keyObj.midi);
       }
     };
 
-    const handleKeyUp = (event) => {
+    const handleKeyUp = (event: any) => {
       const keyObj = keys.find((key) => key.key === event.key);
       if (keyObj) {
+        setPressedKeys((prev) => {
+          const newSet = new Set(prev);
+          newSet.delete(event.key);
+          return newSet;
+        });
         handleKeyRelease(keyObj.midi);
       }
     };
@@ -45,29 +59,36 @@ const MusicalKeyboard = ({ onKeyPressed, onKeyReleased }) => {
       window.removeEventListener("keydown", handleKeyDown);
       window.removeEventListener("keyup", handleKeyUp);
     };
-  }, []);
+  }, [pressedKeys]);
 
-  const handleKeyPress = (midi) => {
+  const handleKeyPress = (note: number) => {
     if (onKeyPressed) {
-      onKeyPressed(midi + octave * 12);
+      onKeyPressed(note + octave * 12, velocity);
     }
   };
 
-  const handleKeyRelease = (midi) => {
+  const handleKeyRelease = (note: number) => {
     if (onKeyReleased) {
-      onKeyReleased(midi + octave*12);
+      onKeyReleased(note + octave * 12, velocity);
     }
   };
 
   return (
     <Container>
-        <Box display="flex" marginBottom={10}>
-          <Box display={"flex"} gap={1}>
-            <button onClick={() => setOctave(octave - 1)}>{"<"}</button>
-            <span>{octave}</span>
-            <button onClick={() => setOctave(octave + 1)}>{">"}</button>
-          </Box>
+      <Box display="flex" marginBottom={10}>
+        <Slider
+          value={velocity}
+          onChange={(event: any) => setVelocity(event.target.value)}
+          min={0}
+          max={127}
+          step={1}
+        />
+        <Box display={"flex"} gap={1}>
+          <button onClick={() => setOctave(octave - 1)}>{"<"}</button>
+          <span>{octave}</span>
+          <button onClick={() => setOctave(octave + 1)}>{">"}</button>
         </Box>
+      </Box>
       <Box display="flex" alignItems="center" position="relative" height={150}>
         {keys.map((key, index) => {
           const isBlackKey = key.color === "black";

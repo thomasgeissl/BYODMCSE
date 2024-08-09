@@ -5,7 +5,7 @@ import Orchestra from "../audio/Orchestra";
 import staticConfig from "../assets/config.json";
 import { useSearchParams } from "react-router-dom";
 import { loadSample } from "../audio/utils";
-import Keyboard from "./Keyboard";
+import Keyboard from "./Keyboard.tsx";
 import axios from "axios";
 import FiberManualRecordIcon from "@mui/icons-material/FiberManualRecord";
 
@@ -65,23 +65,23 @@ function SoundCheck() {
     node.connect(ctx.destination);
   };
 
-  const handleKeyPressed = (note: number) => {
+  const handleKeyPressed = (note: number, velocity: number) => {
     console.log(`Key Pressed: MIDI number ${note}`);
     if (orchestra) {
       armedInstruments.map(i => {
         console.log(i)
-        orchestra.noteOn(i.channel, note, 100);
+        orchestra.noteOn(i.channel, note, velocity);
       })
       const mainOut = orchestra?.render();
       core?.render(mainOut, mainOut);
     }
   };
 
-  const handleKeyReleased = (note: number) => {
+  const handleKeyReleased = (note: number, velocity: number) => {
     console.log(`Key Released: MIDI number ${note}`);
     if (orchestra) {
       armedInstruments.map(i => {
-        orchestra.noteOff(i.channel, note, 0);
+        orchestra.noteOff(i.channel, note, velocity);
       })
       const mainOut = orchestra?.render();
       core?.render(mainOut, mainOut);

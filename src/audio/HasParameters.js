@@ -2,7 +2,8 @@ class HasParameters {
   constructor() {
     this.parameters = {};
   }
-  setParameter(id, value) {
+  setParameter(id, value, options) {
+    // TODO: min, max, and options for select 
     this.parameters[id] = value;
     // console.log(this.parameters[id]);
   }
