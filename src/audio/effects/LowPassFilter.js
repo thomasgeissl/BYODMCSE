@@ -9,7 +9,7 @@ class LowPassFilter extends HasParameters {
   }
 
   render(signal) {
-    const out = el.lowpass(this.getParameter("cutOffFrequency"), 1.414, signal);
+    const out = el.lowpass(this.getParameterValue("cutOffFrequency"), 1.414, signal);
     return out;
   }
 }

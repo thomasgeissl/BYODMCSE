@@ -6,6 +6,8 @@ import "./App.css";
 import Room from "./components/Room";
 import theme from "./theme";
 import SoundCheck from "./components/SoundCheck.tsx";
+import useOrchestraStore from "./store/orchestra";
+import { useEffect } from "react";
 
 const router = createBrowserRouter([
   {

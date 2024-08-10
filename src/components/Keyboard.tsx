@@ -1,5 +1,14 @@
 import React, { useEffect, useState } from "react";
-import { Box, Container, Slider } from "@mui/material";
+import {
+  Box,
+  Container,
+  IconButton,
+  TextField,
+  Slider,
+  Paper,
+  Grid,
+} from "@mui/material";
+import { ChevronLeft, ChevronRight } from "@mui/icons-material";
 
 const keys = [
   { note: "C", color: "white", midi: 60, key: "a" },
@@ -74,19 +83,52 @@ const MusicalKeyboard = ({ onKeyPressed, onKeyReleased }: Props) => {
   };
 
   return (
-    <Container>
-      <Box display="flex" marginBottom={10}>
-        <Slider
-          value={velocity}
-          onChange={(event: any) => setVelocity(event.target.value)}
-          min={0}
-          max={127}
-          step={1}
-        />
-        <Box display={"flex"} gap={1}>
-          <button onClick={() => setOctave(octave - 1)}>{"<"}</button>
-          <span>{octave}</span>
-          <button onClick={() => setOctave(octave + 1)}>{">"}</button>
+    <Paper sx={{ padding: "24px" }}>
+      <Box display="flex" gap={3} marginBottom={"12px"}>
+        <Box>
+          <Grid container spacing={3}>
+            <Grid item xs={3}>
+              <IconButton onClick={() => setOctave(octave - 1)}>
+                <ChevronLeft></ChevronLeft>
+              </IconButton>
+            </Grid>
+            <Grid item xs={6}>
+              <TextField
+                type="number"
+                value={octave}
+                onChange={(event: any) => setOctave(Number(event.target.value))}
+                inputProps={{ min: -2, max: 4, step: 1 }}
+              />
+            </Grid>
+            <Grid item xs={3}>
+              <IconButton onClick={() => setOctave(octave + 1)}>
+                <ChevronRight></ChevronRight>
+              </IconButton>
+            </Grid>
+          </Grid>
+        </Box>
+        <Box flex={1}>
+          <Grid container spacing={3} width={"100%"}>
+            <Grid item xs={9}>
+              <Slider
+                value={velocity}
+                onChange={(event: any) => setVelocity(event.target.value)}
+                min={0}
+                max={127}
+                step={1}
+              />
+            </Grid>
+            <Grid item xs={3}>
+              <TextField
+                type="number"
+                value={velocity}
+                onChange={(event: any) =>
+                  setVelocity(Number(event.target.value))
+                }
+                inputProps={{ min: 0, max: 127, step: 1 }}
+              />
+            </Grid>
+          </Grid>
         </Box>
       </Box>
       <Box display="flex" alignItems="center" position="relative" height={150}>
@@ -129,7 +171,7 @@ const MusicalKeyboard = ({ onKeyPressed, onKeyReleased }: Props) => {
           );
         })}
       </Box>
-    </Container>
+    </Paper>
   );
 };
 

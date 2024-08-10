@@ -66,7 +66,7 @@ class Simpler extends HasParameters {
 
   render() {
     const out = el.add(...this.voices.map((v) => this.voice(v)));
-    return el.mul(this.getParameter("volume"), out);
+    return el.mul(this.getParameterValue("volume"), out);
   }
 }
 

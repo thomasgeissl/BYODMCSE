@@ -12,13 +12,13 @@ class Delay extends HasParameters {
   render(signal) {
     const dry = el.delay(
       { size: 44100 },
-      el.ms2samps(this.getParameter("time")),
+      el.ms2samps(this.getParameterValue("time")),
       0,
       signal
     );
     return el.add(
-      el.mul(1 - this.getParameter("dry"), signal),
-      el.mul(this.getParameter("dry"), dry)
+      el.mul(1 - this.getParameterValue("dry"), signal),
+      el.mul(this.getParameterValue("dry"), dry)
     );
   }
 }

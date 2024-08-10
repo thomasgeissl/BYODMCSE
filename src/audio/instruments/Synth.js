@@ -22,16 +22,20 @@ class Synth extends HasParameters {
       { gate: 0.0, note: 0, velocity: 0, key: `synth-v9-${v4()}` },
       { gate: 0.0, note: 0, velocity: 0, key: `synth-v10-${v4()}` },
     ];
+    const amplitudeOptions =  {min: 0, max: 1}
+    const detuneOptions =  {min: 0, max: 100}
+    const waveFormOptions =  {options: ["sine", "saw"]}
+    
     // Initialize parameters for each oscillator
-    this.setParameter("waveformA", "sine");
-    this.setParameter("amplitudeA", 0.4);
-    this.setParameter("detuneA", 1.03);
-    this.setParameter("waveformB", "saw");
-    this.setParameter("amplitudeB", 0.02);
-    this.setParameter("detuneB", 0.2);
-    this.setParameter("waveformC", "sine");
-    this.setParameter("amplitudeC", 0.2);
-    this.setParameter("detuneC", 0.1);
+    this.setParameter("waveformA", "sine", waveFormOptions);
+    this.setParameter("amplitudeA", 0.4, amplitudeOptions);
+    this.setParameter("detuneA", 1.03, detuneOptions);
+    this.setParameter("waveformB", "saw", waveFormOptions);
+    this.setParameter("amplitudeB", 0.02, amplitudeOptions);
+    this.setParameter("detuneB", 0.2, detuneOptions);
+    this.setParameter("waveformC", "sine", waveFormOptions);
+    this.setParameter("amplitudeC", 0.2, amplitudeOptions);
+    this.setParameter("detuneC", 0.1, detuneOptions);
   }
 
   nextVoice = 0;
@@ -59,36 +63,36 @@ class Synth extends HasParameters {
     const frequency = Midi.midiToFreq(voice.note);
     // Oscillator A
     const oscA = el.mul(
-      this.getParameter("amplitudeA"),
+      this.getParameterValue("amplitudeA"),
       this.getWaveform(
-        this.getParameter("waveformA"),
+        this.getParameterValue("waveformA"),
         el.const({
           key: `frequencyA-${voice.key}`,
-          value: frequency * this.getParameter("detuneA"),
+          value: frequency * this.getParameterValue("detuneA"),
         })
       )
     );
 
     // Oscillator B
     const oscB = el.mul(
-      this.getParameter("amplitudeB"),
+      this.getParameterValue("amplitudeB"),
       this.getWaveform(
-        this.getParameter("waveformB"),
+        this.getParameterValue("waveformB"),
         el.const({
           key: `frequencyB-${voice.key}`,
-          value: frequency * this.getParameter("detuneB"),
+          value: frequency * this.getParameterValue("detuneB"),
         })
       )
     );
 
     // Oscillator C
     const oscC = el.mul(
-      this.getParameter("amplitudeC"),
+      this.getParameterValue("amplitudeC"),
       this.getWaveform(
-        this.getParameter("waveformC"),
+        this.getParameterValue("waveformC"),
         el.const({
           key: `frequencyC-${voice.key}`,
-          value: frequency * this.getParameter("detuneC"),
+          value: frequency * this.getParameterValue("detuneC"),
         })
       )
     );

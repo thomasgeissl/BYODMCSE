@@ -3,7 +3,7 @@ import { create } from "zustand";
 import { devtools } from "zustand/middleware";
 import { union } from "lodash";
 
-const useStore = create(
+const useAppStore = create(
   devtools((set, get) => ({
     uuid: v4(),
     users: [],
@@ -21,4 +21,4 @@ const useStore = create(
   }))
 );
 
-export default useStore;
+export default useAppStore;

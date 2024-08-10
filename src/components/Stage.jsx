@@ -9,7 +9,7 @@ import { el } from "@elemaudio/core";
 import { WebMidi } from "webmidi";
 
 import config from "../assets/config.json";
-import useStore from "../store/store";
+import useAppStore from "../store/app";
 // import { WaveMaterial } from "./WaveMaterial.js";
 import { extractBaseFrequenciesEnergy, map } from "../audio/utils";
 import {
@@ -51,10 +51,10 @@ function Stage(props) {
   const { orchestra, mappings, core } = props;
   const topic = `byod/${roomId}`;
 
-  const uuid = useStore((state) => state.uuid);
-  const users = useStore((state) => state.user);
-  const addUser = useStore((state) => state.addUser);
-  const removeUser = useStore((state) => state.removeUser);
+  const uuid = useAppStore((state) => state.uuid);
+  const users = useAppStore((state) => state.user);
+  const addUser = useAppStore((state) => state.addUser);
+  const removeUser = useAppStore((state) => state.removeUser);
 
   useEffect(() => {
     if (navigator.requestMIDIAccess) {

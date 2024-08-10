@@ -3,6 +3,29 @@
     "broker": "wss://byodmcse:aFyYJo7b6rKnORki@byodmcse.cloud.shiftr.io:443",
     "broker.local": "ws://localhost:9001"
   },
+  "tracks": [
+    {
+      "instrument": {
+        "id": "tapeNoise",
+        "type": "tapeNoise"
+      },
+      "effects": [],
+      "midiEffects": [],
+      "midiChannel": 1
+    },
+    {
+      "instrument": {
+        "id": "simpler",
+        "type": "simpler",
+        "config": {
+          "sample": { "path": "/samples/texture_0.wav" }
+        }
+      },
+      "effects": [],
+      "midiEffects": [],
+      "midiChannel": 2
+    }
+  ],
   "orchestra": {
     "lobbyTextures": {
       "instrument": {
@@ -51,7 +74,7 @@
         "id": "simpler",
         "type": "simpler",
         "config": {
-          "sample": { "path" : "/samples/texture_0.wav"}
+          "sample": { "path": "/samples/texture_0.wav" }
         }
       },
       "effects": [],
@@ -118,7 +141,7 @@
     "/samples/number_8.wav": "/samples/999WavFiles/8.mp3",
     "/samples/number_9.wav": "/samples/999WavFiles/9.mp3",
     "/samples/number_10.wav": "/samples/999WavFiles/10.mp3"
-  }, 
+  },
   "mappings": {
     "20": {
       "device": "trashes",

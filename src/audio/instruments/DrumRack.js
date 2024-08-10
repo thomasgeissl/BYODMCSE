@@ -49,7 +49,7 @@ class DrumRack extends HasParameters {
         return this.voice(voice);
       })
     );
-    return el.mul(this.getParameter("volume"), out);
+    return el.mul(this.getParameterValue("volume"), out);
   }
 }
 
