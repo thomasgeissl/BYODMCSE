@@ -91,7 +91,7 @@ class Synth extends Base{
     );
 
     const signal = el.add(oscA, oscB, oscC);
-    return el.mul(env, signal, voice.velocity);
+    return el.mul(env, signal)//, voice.velocity);
   };
 
   noteOn(note: number, velocity: number) {

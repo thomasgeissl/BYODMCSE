@@ -63,7 +63,6 @@ function SoundCheck() {
 
       core.updateVirtualFileSystem(files);
       const orchestra = new Orchestra(config);
-      console.log(orchestra)
       setOrchestra(orchestra);
       setLoading(false);
       setInited(true);

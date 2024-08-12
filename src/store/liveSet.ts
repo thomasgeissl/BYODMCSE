@@ -61,7 +61,7 @@ const useLiveSetStore = create<State>()(
             .tracks.map((track) => track.instrument)
             .filter((instrument) => instrument.id === instrumentId);
           if (instruments.length > 0) {
-            return instruments[0].parameters[parameterKey];
+            return instruments[0].parameters[parameterKey].value;
           }
           return null;
         },

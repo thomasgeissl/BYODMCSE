@@ -86,7 +86,7 @@ class Orchestra {
   render() {
     const signals = Object.values(this.channels).map((channel: any) => {
       const instrumentSignals = channel.map((entry: any) => {
-        let signal = entry.instrument?.render();
+        let signal = entry.instrument.render();
         // Process effects if necessary
         // entry.effects.forEach((effect: any) => {
         //   signal = effect.render(signal);
@@ -96,7 +96,6 @@ class Orchestra {
       return el.add(...instrumentSignals);
     });
     const out = el.add(...signals);
-    // const out = el.cycle(440)//add(...signals);
     return out;
   }
 }
