@@ -1,15 +1,17 @@
 import { el } from "@elemaudio/core";
-import { Interval, Note, Scale, Midi } from "tonal";
+import { Midi } from "tonal";
 import { v4 } from "uuid";
-import HasParameters from "../HasParameters";
+import Base from "./Base";
+import useLiveSetStore from "../../store/liveSet";
+import { DO_NOT_USE_OR_YOU_WILL_BE_FIRED_EXPERIMENTAL_CREATE_ROOT_CONTAINERS } from "react-dom/client";
 
 // https://www.youtube.com/watch?v=0voWrxLDnSE
 
 
-class Synth extends HasParameters {
-  constructor(id) {
-    super();
-    this.id = id;
+class Synth extends Base{
+  voices: any[];
+  constructor(id: string) {
+    super(id)
     this.voices = [
       { gate: 0.0, note: 0, velocity: 0, key: `synth-v1-${v4()}` },
       { gate: 0.0, note: 0, velocity: 0, key: `synth-v2-${v4()}` },
@@ -22,25 +24,11 @@ class Synth extends HasParameters {
       { gate: 0.0, note: 0, velocity: 0, key: `synth-v9-${v4()}` },
       { gate: 0.0, note: 0, velocity: 0, key: `synth-v10-${v4()}` },
     ];
-    const amplitudeOptions =  {min: 0, max: 1}
-    const detuneOptions =  {min: 0, max: 100}
-    const waveFormOptions =  {options: ["sine", "saw"]}
-    
-    // Initialize parameters for each oscillator
-    this.setParameter("waveformA", "sine", waveFormOptions);
-    this.setParameter("amplitudeA", 0.4, amplitudeOptions);
-    this.setParameter("detuneA", 1.03, detuneOptions);
-    this.setParameter("waveformB", "saw", waveFormOptions);
-    this.setParameter("amplitudeB", 0.02, amplitudeOptions);
-    this.setParameter("detuneB", 0.2, detuneOptions);
-    this.setParameter("waveformC", "sine", waveFormOptions);
-    this.setParameter("amplitudeC", 0.2, amplitudeOptions);
-    this.setParameter("detuneC", 0.1, detuneOptions);
   }
 
   nextVoice = 0;
 
-  getWaveform = (waveform, frequency) => {
+  getWaveform = (waveform: string, frequency: any) => {
   switch (waveform) {
     case "sine":
       return el.cycle(frequency);
@@ -54,45 +42,50 @@ class Synth extends HasParameters {
       return el.cycle(frequency);
   }
 };
-  voice = (voice) => {
+  voice = (voice: any) => {
+    const getParameterValue = useLiveSetStore.getState().getParameterValue
     const gate = el.const({
       key: `gate-${voice.key}`,
       value: voice.gate,
     });
     const env = el.adsr(1.0, 1.0, 1.0, 2.0, gate);
-    const frequency = Midi.midiToFreq(voice.note);
+    const frequency: number = Midi.midiToFreq(voice.note);
+    const amplitudeA: number = getParameterValue(this.id, "amplitudeA")
+    const detuneA: number = getParameterValue(this.id, "detuneA")
     // Oscillator A
     const oscA = el.mul(
-      this.getParameterValue("amplitudeA"),
+      amplitudeA,
       this.getWaveform(
-        this.getParameterValue("waveformA"),
+        getParameterValue(this.id, "waveformA"),
         el.const({
           key: `frequencyA-${voice.key}`,
-          value: frequency * this.getParameterValue("detuneA"),
+          value: frequency * detuneA
         })
       )
     );
 
     // Oscillator B
     const oscB = el.mul(
-      this.getParameterValue("amplitudeB"),
+      getParameterValue(this.id, "amplitudeB"),
       this.getWaveform(
-        this.getParameterValue("waveformB"),
+        getParameterValue(this.id, "waveformB"),
         el.const({
           key: `frequencyB-${voice.key}`,
-          value: frequency * this.getParameterValue("detuneB"),
+          value: frequency * 
+          getParameterValue(this.id, "detuneB")
         })
       )
     );
 
     // Oscillator C
     const oscC = el.mul(
-      this.getParameterValue("amplitudeC"),
+      getParameterValue(this.id, "amplitudeC"),
       this.getWaveform(
-        this.getParameterValue("waveformC"),
+        getParameterValue(this.id, "waveformC"),
         el.const({
           key: `frequencyC-${voice.key}`,
-          value: frequency * this.getParameterValue("detuneC"),
+          value: frequency * 
+          getParameterValue(this.id, "detuneC")
         })
       )
     );
@@ -101,7 +94,7 @@ class Synth extends HasParameters {
     return el.mul(env, signal, voice.velocity);
   };
 
-  noteOn(note, velocity) {
+  noteOn(note: number, velocity: number) {
     const voiceIndex = this.voices.findIndex((v) => v.note === note);
     if (voiceIndex >= 0) {
       this.voices[voiceIndex].gate = 1.0;
@@ -117,7 +110,7 @@ class Synth extends HasParameters {
     this.nextVoice = this.nextVoice % this.voices.length;
   }
 
-  noteOff(note) {
+  noteOff(note: number, velocity: number = 0) {
     const voice = this.voices.find((v) => v.note === note);
     if (voice) {
       voice.gate = 0;

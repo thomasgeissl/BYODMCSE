@@ -11,6 +11,7 @@ interface State {
   toggleArmedTrack: (id: string) => void;
   setSelectedInstrumentId: (id: string | null) => void;
   setParameterValue: (id: string, value: any) => void;
+  getParameterValue: (instrumentId: string, parameterKey: string) => any | null;
 }
 
 const useLiveSetStore = create<State>()(
@@ -55,16 +56,25 @@ const useLiveSetStore = create<State>()(
           }
           set({ tracks });
         },
+        getParameterValue(instrumentId, parameterKey) {
+          const instruments = get()
+            .tracks.map((track) => track.instrument)
+            .filter((instrument) => instrument.id === instrumentId);
+          if (instruments.length > 0) {
+            return instruments[0].parameters[parameterKey];
+          }
+          return null;
+        },
       }),
       {
-        name: "orchestra",
+        name: "liveSet",
         storage: createJSONStorage(() => localStorage),
         partialize: (state) => {
           return {};
         },
       }
     ),
-    { name: "orchestra" }
+    { name: "liveSet" }
   )
 );
 

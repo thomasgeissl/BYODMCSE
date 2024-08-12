@@ -1,16 +1,14 @@
 import { el } from "@elemaudio/core";
-import HasParameters from "../HasParameters.ts";
 
-class HighPassFilter extends HasParameters {
+class HighPassFilter{
   constructor(id) {
-    super();
     this.id = id;
-    this.setParameter("cutOffFrequency", 500);
+    // this.setParameter("cutOffFrequency", 500);
   }
 
   render(signal) {
     const out = el.highpass(
-      this.getParameterValue("cutOffFrequency"),
+      500,
       1.414,
       signal
     );

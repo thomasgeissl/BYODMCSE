@@ -4,7 +4,7 @@ import styled from "@emotion/styled";
 import WebRenderer from "@elemaudio/web-renderer";
 import { el } from "@elemaudio/core";
 import NoSleep from "nosleep.js";
-import Orchestra from "../audio/Orchestra";
+import Orchestra from "../audio/Orchestra.ts";
 import Button from "@mui/material/Button";
 import Stage from "./Stage";
 import staticConfig from "../assets/config.json";

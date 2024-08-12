@@ -1,11 +1,13 @@
 import { el } from "@elemaudio/core";
 import { v4 } from "uuid";
-import HasParameters from "../HasParameters";
+import Base from "./Base";
 
-class Simpler extends HasParameters {
-  constructor(id, config) {
-    super();
-    this.id = id;
+class Simpler extends Base{
+  sample: any;
+  voices: any[]
+  nextVoice: number;
+  constructor(id:string, config:any) {
+    super(id)
     const {sample} = config;
     this.sample = sample;
 
@@ -22,11 +24,9 @@ class Simpler extends HasParameters {
       { gate: 0.0, note: 0, velocity: 0, key: `simpler-v10-${v4()}` },
     ];
     this.nextVoice = 0;
-
-    this.setParameter("volume", 1);
   }
 
-  voice = (voice) => {
+  voice = (voice: any) => {
     const gate = el.const({
       key: `gate-${voice.key}`,
       value: voice.gate,
@@ -41,7 +41,7 @@ class Simpler extends HasParameters {
     return out;
   };
 
-  noteOn(note, velocity) {
+  noteOn(note: number, velocity: number) {
     const voiceIndex = this.voices.findIndex((v) => v.note == note);
     if (voiceIndex >= 0) {
       this.voices[voiceIndex].gate = 1.0;
@@ -57,7 +57,7 @@ class Simpler extends HasParameters {
     this.nextVoice = this.nextVoice % this.voices.length;
   }
 
-  noteOff(note) {
+  noteOff(note: number, velocity: number = 0) {
     const voice = this.voices.find((v) => v.note == note);
     if (voice) {
       voice.gate = 0;
@@ -66,7 +66,7 @@ class Simpler extends HasParameters {
 
   render() {
     const out = el.add(...this.voices.map((v) => this.voice(v)));
-    return el.mul(this.getParameterValue("volume"), out);
+    return out
   }
 }
 

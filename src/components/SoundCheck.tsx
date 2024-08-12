@@ -62,7 +62,7 @@ function SoundCheck() {
       }
 
       core.updateVirtualFileSystem(files);
-      const orchestra = new Orchestra(config.tracks);
+      const orchestra = new Orchestra(config);
       console.log(orchestra)
       setOrchestra(orchestra);
       setLoading(false);
@@ -80,7 +80,7 @@ function SoundCheck() {
   const handleKeyPressed = (note: number, velocity: number) => {
     if (orchestra) {
       tracks.filter(track => armedTracks.includes(track.id))?.map((i) => {
-        orchestra.noteOn(i.channel, note, velocity);
+        orchestra.noteOn(i.midiChannel, note, velocity);
       });
       const mainOut = orchestra?.render();
       core?.render(mainOut, mainOut);
@@ -90,7 +90,7 @@ function SoundCheck() {
   const handleKeyReleased = (note: number, velocity: number) => {
     if (orchestra) {
       tracks.filter(track => armedTracks.includes(track.id))?.map((i) => {
-        orchestra.noteOff(i.channel, note, velocity);
+        orchestra.noteOff(i.midiChannel, note, velocity);
       });
       const mainOut = orchestra?.render();
       core?.render(mainOut, mainOut);

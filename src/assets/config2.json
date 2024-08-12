@@ -70,6 +70,56 @@
       "effects": [],
       "midiEffects": [],
       "midiChannel": 2
+    },
+    {
+      "id": "7e18a77a-ca75-4c17-a5a2-4d4c058fe402",
+      "name": "track 2",
+      "instrument": {
+        "id": "6cdba181-1ce5-4353-b3d8-d5b28537e32d",
+        "type": "simpler",
+        "parameters": {  
+        },
+        "config": {
+          "sample": { "path": "/samples/texture_0.wav" }
+        }
+      },
+      "effects": [],
+      "midiEffects": [],
+      "midiChannel": 3
+    },
+    {
+      "id": "539415fc-47ff-4a8d-bc16-88e8dd43ffbf",
+      "name": "track 3",
+      "instrument": {
+        "id": "2ab36934-0e56-4822-926b-2dd1cdc75398",
+        "type": "drumRack",
+        "parameters": {  
+        },
+        "config": {
+          "60": { "path": "/samples/texture_2.wav" },
+          "61": { "path": "/samples/texture_3.wav" },
+          "62": { "path": "/samples/texture_4.wav" },
+          "63": { "path": "/samples/texture_5.wav" },
+          "64": { "path": "/samples/vibraphone_0.wav" },
+          "65": { "path": "/samples/vibraphone_1.wav" }
+        }
+      },
+      "effects": [],
+      "midiEffects": [],
+      "midiChannel": 4
+    },
+    {
+      "id": "5a5735cc-444e-4a5c-8481-0f0c3f92d569",
+      "name": "track 16",
+      "instrument": {
+        "id": "8b7e0d50-682d-406d-bc4f-67565307883f",
+        "type": "tapeNoise",
+        "parameters": {  
+        }
+      },
+      "effects": [],
+      "midiEffects": [],
+      "midiChannel": 16
     }
   ],
   "files": {

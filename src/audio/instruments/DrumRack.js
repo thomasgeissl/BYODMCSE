@@ -1,10 +1,10 @@
 import { el } from "@elemaudio/core";
 import { v4 } from "uuid";
-import HasParameters from "../HasParameters";
+import Base from "./Base";
 
-class DrumRack extends HasParameters {
+class DrumRack extends Base{
   constructor(id, samples) {
-    super();
+    super(id)
     this.id = id;
     this.voices = samples;
 
@@ -13,9 +13,6 @@ class DrumRack extends HasParameters {
       voice.velocity = 0;
       voice.key = `drumrack-v${index}-${v4()}`;
     });
-
-    this.setParameter("testparam", 0);
-    this.setParameter("volume", 1);
   }
 
   voice = (voice) => {
@@ -49,7 +46,7 @@ class DrumRack extends HasParameters {
         return this.voice(voice);
       })
     );
-    return el.mul(this.getParameterValue("volume"), out);
+    return out
   }
 }
 
