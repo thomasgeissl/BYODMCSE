@@ -7,23 +7,32 @@ import {
   Slider,
   Paper,
   Grid,
+  List,
+  ListItem,
 } from "@mui/material";
-import { ChevronLeft, ChevronRight } from "@mui/icons-material";
 import Parameter from "./Parameter.";
 
 interface Props {
   instrument: any;
 }
 
-const Instrument = ({instrument}: Props) => {
-    if(!instrument){return <></>}
+const Instrument = ({ instrument }: Props) => {
+  if (!instrument) {
+    return <></>;
+  }
   return (
     <Paper sx={{ padding: "24px" }}>
-        <ul>
-            {Object.entries(instrument?.parameters)?.map(([id, parameter]: any[])=>{
-                return <li key={id}>{<Parameter parameter={parameter}></Parameter>}</li>
-            })}
-        </ul>
+      <List>
+        {Object.entries(instrument?.parameters)?.map(
+          ([id, parameter]: any[]) => {
+            return (
+              <ListItem key={id}>
+                {<Parameter parameter={parameter}></Parameter>}
+              </ListItem>
+            );
+          }
+        )}
+      </List>
     </Paper>
   );
 };

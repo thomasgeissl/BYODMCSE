@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Box, Button, Paper, ToggleButton, Typography } from "@mui/material";
+import { Box, Button } from "@mui/material";
 import WebRenderer from "@elemaudio/web-renderer";
 import Orchestra from "../audio/Orchestra";
 import staticConfig from "../assets/config.json";
@@ -7,25 +7,29 @@ import { useSearchParams } from "react-router-dom";
 import { loadSample } from "../audio/utils";
 import Keyboard from "./Keyboard";
 import axios from "axios";
-import FiberManualRecordIcon from "@mui/icons-material/FiberManualRecord";
 import Instrument from "./Instrument";
-import useOrchestraStore from "../store/orchestra";
+import useLiveSetStore from "../store/liveSet";
+import Tracks from "./Tracks";
 
 let ctx: AudioContext;
 const core = new WebRenderer();
 let config = staticConfig;
 
 function SoundCheck() {
-  const initOrchestra = useOrchestraStore(state => state.init)
+  const initOrchestra = useLiveSetStore(state => state.init)
+  const tracks = useLiveSetStore(state => state.tracks)
+  const armedTracks = useLiveSetStore(state => state.armedTracks)
+  const selectedInstrumentId = useLiveSetStore(state => state.selectedInstrument)
   useEffect(()=>{
-    initOrchestra()
+    initOrchestra(null)
   }, [])
   const [inited, setInited] = useState(false);
   const [loading, setLoading] = useState(false);
   const [orchestra, setOrchestra] = useState<any>(null);
   const [searchParams] = useSearchParams();
-  const [armedInstruments, setArmedInstruments] = useState<any[]>([]);
-  const [selectedInstrument, setSelectedInstrument] = useState<any>(null);
+
+  const instruments = tracks.map(track => track.instrument)
+  const selectedInstrument = instruments.find(instrument => instrument.id === selectedInstrumentId)
 
   useEffect(() => {
     if (searchParams.get("config")) {
@@ -58,7 +62,8 @@ function SoundCheck() {
       }
 
       core.updateVirtualFileSystem(files);
-      const orchestra = new Orchestra(config.orchestra);
+      const orchestra = new Orchestra(config.tracks);
+      console.log(orchestra)
       setOrchestra(orchestra);
       setLoading(false);
       setInited(true);
@@ -74,8 +79,7 @@ function SoundCheck() {
 
   const handleKeyPressed = (note: number, velocity: number) => {
     if (orchestra) {
-      armedInstruments.map((i) => {
-        console.log(i);
+      tracks.filter(track => armedTracks.includes(track.id))?.map((i) => {
         orchestra.noteOn(i.channel, note, velocity);
       });
       const mainOut = orchestra?.render();
@@ -85,27 +89,12 @@ function SoundCheck() {
 
   const handleKeyReleased = (note: number, velocity: number) => {
     if (orchestra) {
-      armedInstruments.map((i) => {
+      tracks.filter(track => armedTracks.includes(track.id))?.map((i) => {
         orchestra.noteOff(i.channel, note, velocity);
       });
       const mainOut = orchestra?.render();
       core?.render(mainOut, mainOut);
     }
-  };
-
-  const toggleInstrument = (instrument: any, channel: any) => {
-    setArmedInstruments((prevArmedInstruments) => {
-      const index = prevArmedInstruments.findIndex(
-        (armedInstrument) => armedInstrument.id === instrument.id
-      );
-      if (index > -1) {
-        return prevArmedInstruments.filter(
-          (armedInstrument) => armedInstrument.id !== instrument.id
-        );
-      } else {
-        return [...prevArmedInstruments, { ...instrument, channel }];
-      }
-    });
   };
 
   return (
@@ -123,43 +112,7 @@ function SoundCheck() {
         </Box>
       )}
 
-      <Box display={"flex"} gap={2} sx={{ marginBottom: "24px" }}>
-        {Object.entries(config?.orchestra)?.map(([channel, value], index) => {
-          const { instrument } = value;
-          return (
-            <Box
-              key={instrument?.id}
-              onClick={() => {
-                const instruments = Object.values(orchestra?.channels)?.map((channel: any) => {
-                  return (channel?.instrument)
-                })
-                const instrumentObject = instruments.find((i) => i.id === instrument.id)
-                console.log(instrumentObject)
-                setSelectedInstrument(instrumentObject);
-              }}
-            >
-              <Box display={"flex"} flexDirection={"column"} gap={1}>
-                <Box>id: {instrument.id}</Box>
-                <Box>
-                  type: {instrument.type} <br></br>
-                </Box>
-                <Box>ch: {channel}</Box>
-
-                <ToggleButton
-                  selected={
-                    armedInstruments.findIndex((i) => i.id === instrument.id) >
-                    -1
-                  }
-                  value={instrument.id}
-                  onClick={() => toggleInstrument(instrument, channel)}
-                >
-                  <FiberManualRecordIcon></FiberManualRecordIcon>
-                </ToggleButton>
-              </Box>
-            </Box>
-          );
-        })}
-      </Box>
+      <Tracks></Tracks>
 
       <Box>
         <Instrument instrument={selectedInstrument}></Instrument>

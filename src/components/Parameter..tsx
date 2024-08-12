@@ -1,36 +1,63 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import {
-  Box,
-  Container,
-  IconButton,
-  TextField,
   Slider,
-  Paper,
-  Grid,
-  MenuItem,
   Select,
+  MenuItem,
+  FormControl,
+  InputLabel,
+  Grid,
+  Typography,
 } from "@mui/material";
-import { ChevronLeft, ChevronRight } from "@mui/icons-material";
+import useLiveSetStore from "../store/liveSet";
 
 interface Props {
   parameter: any;
 }
 
-const Parameter = ({parameter}: Props) => {
-  const {value, options} = parameter
-  if(typeof value === "number"){
-    return <Slider value={value} min={options?.min || 0} max={options?.max || 1} />
-  }
-  if(typeof value === "string" && Array.isArray(options)){
-    return <Select value={value}>
-      {options?.map((option: any, index: number) => (
-        <MenuItem key={index} value={option}>{option}</MenuItem>
-      ))}
-    </Select>
-  }
-  return (
-        <pre>{JSON.stringify(parameter, null, 4)}</pre>
+const Parameter = ({ parameter }: Props) => {
+  const setParameterValue = useLiveSetStore(
+    (state) => state.setParameterValue
   );
+  const { value, options, name } = parameter;
+  return (
+    <Grid container>
+      <Grid item xs={3}>
+        <Typography>{name}</Typography>
+      </Grid>
+      <Grid item xs={9}>
+        {typeof value === "number" && (
+          <Slider
+            value={value}
+            min={options?.min || 0}
+            max={options?.max || 1}
+            step={0.001}
+            onChange={(event: any) => {
+              setParameterValue(parameter.id, event.target.value);
+            }}
+          />
+        )}
+        {typeof value === "string" && Array.isArray(options) && (
+          <Select
+            fullWidth
+            value={value}
+            label={name}
+            size="small"
+            onChange={(event) => {
+              setParameterValue(parameter.id, event.target.value);
+            }}
+          >
+            {options?.map((option: any, index: number) => (
+              <MenuItem key={index} value={option}>
+                {option}
+              </MenuItem>
+            ))}
+          </Select>
+        )}
+      </Grid>
+    </Grid>
+  );
+
+  return <pre>{JSON.stringify(parameter, null, 4)}</pre>;
 };
 
 export default Parameter;
