@@ -11,6 +11,30 @@
         "id": "w553ed413-27d0-4daa-b9a0-3d03f1c6d978",
         "type": "synth",
         "parameters": {  
+          "attack": {
+            "id": "254463ab-946c-4b78-85ad-a9f3aecc8a8f",
+            "name": "Attack",
+            "value": 0.1,
+            "options": {"min": 0, "max": 5}
+          },
+          "decay": {
+            "id": "0ea60cd1-78d3-4784-8014-a0d909cd882c",
+            "name": "Decay",
+            "value": 1,
+            "options": {"min": 0, "max": 5}
+          },
+          "sustain": {
+            "id": "8d4789bb-15da-45bc-a2db-1a1ae3a71bd0",
+            "name": "Sustain",
+            "value": 1,
+            "options": {"min": 0, "max": 5}
+          },
+          "release": {
+            "id": "761904ec-3a72-4607-98e8-420765f80c7c",
+            "name": "Release",
+            "value": 4,
+            "options": {"min": 0, "max": 10}
+          },
           "waveformA": {
             "id": "2e8affa0-159e-4a84-919b-6526b34b5e09", 
             "name": "Waveform A",

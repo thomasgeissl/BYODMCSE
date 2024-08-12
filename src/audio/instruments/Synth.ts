@@ -48,6 +48,10 @@ class Synth extends Base{
       key: `gate-${voice.key}`,
       value: voice.gate,
     });
+    const attack = getParameterValue(this.id, "attack")
+    const decay = getParameterValue(this.id, "decay")
+    const sustain = getParameterValue(this.id, "sustain")
+    const release = getParameterValue(this.id, "release")
     const env = el.adsr(1.0, 1.0, 1.0, 2.0, gate);
     const frequency: number = Midi.midiToFreq(voice.note);
     const amplitudeA: number = getParameterValue(this.id, "amplitudeA")
