@@ -1,12 +1,9 @@
 import { useEffect } from "react";
 import { Box, Button } from "@mui/material";
-import WebRenderer from "@elemaudio/web-renderer";
 import Keyboard from "./Keyboard";
 import Instrument from "./Instrument";
 import useLiveSetStore from "../store/liveSet";
 import Tracks from "./Tracks";
-
-const core = new WebRenderer();
 
 function SoundCheck() {
   const initOrchestra = useLiveSetStore(state => state.init)

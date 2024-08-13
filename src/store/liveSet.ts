@@ -12,7 +12,7 @@ interface State {
   armedTracks: string[];
   selectedInstrument: string | null;
   engine: any | null;
-  init: (configUrl: string | null | undefined) => void;
+  init: () => void;
   start: () => void;
   render: () => void;
   toggleArmedTrack: (id: string) => void;
@@ -33,7 +33,9 @@ const useLiveSetStore = create<State>()(
         armedTracks: [],
         selectedInstrument: null,
         engine: null,
-        init: async (configUrl: string | null | undefined) => {
+        init: async () => {
+          let params = new URLSearchParams(document.location.search);
+          let configUrl = params.get("config"); // is the string "Jonathan"
           if (configUrl) {
             const config = await axios.get(configUrl);
             const tracks = config.data.tracks;
