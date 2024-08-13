@@ -91,7 +91,16 @@
           }
         }
       },
-      "effects": [],
+      "effects": [
+        {
+          "id": "e0c1d854-9659-4544-ad1a-56d4cf3840ab",
+          "type": "delay",
+          "parameters":{
+            
+          }
+        }
+
+      ],
       "midiEffects": [],
       "midiChannel": 1
     },

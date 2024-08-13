@@ -5,6 +5,7 @@ import Keyboard from "./Keyboard";
 import Instrument from "./Instrument";
 import useLiveSetStore from "../store/liveSet";
 import Tracks from "./Tracks";
+import Effect from "./Effect";
 
 interface Props extends React.PropsWithChildren {
   // You can add additional props here if needed
@@ -20,6 +21,9 @@ function TrackDetails({children}:Props) {
     <Box sx={{height: "400px", overflowX: "auto", overflowY: "hidden"}} display={"flex"} gap={3}>
       {children}
       {instrument && <Instrument instrument={instrument}></Instrument>}
+      {selectedTrack?.effects.map((effect: any) =>{
+        return <Effect key={effect.id} effect={effect}></Effect>
+      })}
     </Box>
   );
 }

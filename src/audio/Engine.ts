@@ -21,6 +21,23 @@ class Engine {
     this.channels = {};
     config.tracks.forEach((track: any) => {
       const {midiChannel, instrument, effects, midiEffects} = track
+      const effectsRack = effects.map((effect: any) => {
+        switch(effect.type){
+          case "lowPassFilter": {
+            return new LowPassFilter(effect.id)
+          }
+          case "highPassFilter": {
+            return new HighPassFilter(effect.id)
+          }
+          case "delay": {
+            return new Delay(effect.id)
+          }
+          default: {
+            console.error(`Effect ${effect.type} not supported`)
+            return null
+          }
+        }
+      })
       if(!this.channels[midiChannel]){
         this.channels[midiChannel] = [];
       }
@@ -28,7 +45,7 @@ class Engine {
         case "synth": {
           this.channels[midiChannel].push({
             instrument: new Synth(instrument.id),
-            effects: [],
+            effects: effectsRack,
           });
           break;
         }
@@ -38,7 +55,7 @@ class Engine {
               instrument.id,
               instrument.config
             ),
-            effects: [],
+            effects: effectsRack,
           })
           break;
         }
@@ -48,28 +65,28 @@ class Engine {
               instrument.id,
               instrument.config
             ),
-            effects: [],
+            effects: effectsRack,
           })
           break;
         }
         case "noise": {
           this.channels[midiChannel].push({
             instrument: new Noise(instrument.id),
-            effects: [],
+            effects: effectsRack,
         })
           break;
         }
         case "grainTrain": {
           this.channels[midiChannel].push({
             instrument: new GrainTrain(instrument.id),
-            effects: [],
+            effects: effectsRack,
           });
           break;
         }
         case "tapeNoise": {
           this.channels[midiChannel].push({
             instrument: new TapeNoise(instrument.id),
-            effects: [],
+            effects: effectsRack,
           });
           break;
         }
@@ -87,10 +104,9 @@ class Engine {
     const signals = Object.values(this.channels).map((channel: any) => {
       const instrumentSignals = channel.map((entry: any) => {
         let signal = entry.instrument.render();
-        // Process effects if necessary
-        // entry.effects.forEach((effect: any) => {
-        //   signal = effect.render(signal);
-        // });
+        entry.effects.forEach((effect: any) => {
+          signal = effect.render(signal);
+        });
         return signal;
       });
       return el.add(...instrumentSignals);
