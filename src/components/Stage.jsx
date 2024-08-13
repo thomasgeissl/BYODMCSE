@@ -1,7 +1,6 @@
 import { useEffect, useState, useRef, useMemo } from "react";
 import { useParams } from "react-router-dom";
 import styled from "@emotion/styled";
-import * as mqtt from "mqtt/dist/mqtt.min";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { OrbitControls } from "@react-three/drei";
 import * as THREE from "three";
@@ -22,6 +21,7 @@ import {
 import Particles from "./3d/Particles";
 import { quarternary, tertiary } from "../theme";
 import Spheres from "./3d/Spheres";
+import useLiveSetStore, { core } from "../store/liveSet";
 
 const Container = styled.div`
   width: 100%;
@@ -37,7 +37,6 @@ const StyledCanvas = styled(Canvas)`
 `;
 
 const sessionPrefix = "";
-let mqttClient;
 
 let baseEnergy = 0;
 let midEnergy = 0;
@@ -45,16 +44,22 @@ let highEnergy = 0;
 
 let playingTimeoutId;
 
-function Stage(props) {
+function Stage() {
+  const engine = useLiveSetStore(state => state.engine)
+  const render = useLiveSetStore(state => state.render)
+  const subscribeToMqtt = useLiveSetStore(state => state.subscribeToMqtt)
   const roomId = useParams().roomId ?? "taxi";
   const [playing, setPlaying] = useState(false);
-  const { orchestra, mappings, core } = props;
   const topic = `byod/${roomId}`;
 
   const uuid = useAppStore((state) => state.uuid);
   const users = useAppStore((state) => state.user);
   const addUser = useAppStore((state) => state.addUser);
   const removeUser = useAppStore((state) => state.removeUser);
+
+  useEffect(()=>{
+    subscribeToMqtt(roomId)
+  }, [roomId, subscribeToMqtt])
 
   useEffect(() => {
     if (navigator.requestMIDIAccess) {
@@ -79,16 +84,15 @@ function Stage(props) {
             }, 3 * 60 * 1000);
           }
           channel.addListener("noteon", (e) => {
-            orchestra.noteOn(channel.number, e.note.number, e.data[2]);
-            if (orchestra) {
-              const mainOut = orchestra?.render();
-              core?.render(el.fft({ size: 1024 }, mainOut), mainOut);
+            engine.noteOn(channel.number, e.note.number, e.data[2]);
+            if (engine) {
+              render()
             }
           });
           channel.addListener("noteoff", (e) => {
-            orchestra.noteOff(channel.number, e.note.number);
-            if (orchestra) {
-              const mainOut = orchestra?.render();
+            engine.noteOff(channel.number, e.note.number);
+            if (engine) {
+              const mainOut = engine?.render();
               core?.render(el.fft({ size: 1024 }, mainOut), mainOut);
             }
           });
@@ -98,12 +102,12 @@ function Stage(props) {
             const destination = mappings[control];
             if (destination) {
               const matchedInstruments = [
-                ...Object.values(orchestra.channels).filter(
+                ...Object.values(engine.channels).filter(
                   (channel) => channel?.instrument?.id === destination.device
                 ),
               ].map((channel) => channel.instrument);
               let effects = [];
-              Object.values(orchestra.channels).forEach((channel) => {
+              Object.values(engine.channels).forEach((channel) => {
                 effects = effects.concat(channel.effects);
               });
               const matchedEffects = effects.filter(
@@ -119,9 +123,8 @@ function Stage(props) {
                 }
               });
             }
-            if (orchestra) {
-              const mainOut = orchestra?.render();
-              core?.render(el.fft({ size: 1024 }, mainOut), mainOut);
+            if (engine) {
+              render()
             }
           });
         });
@@ -133,7 +136,7 @@ function Stage(props) {
     return () => {
       console.log("TODO: remove all midi listeners");
     };
-  }, [orchestra, setPlaying]);
+  }, [engine, setPlaying]);
 
   useEffect(() => {
     core.on("fft", function (e) {
@@ -158,119 +161,7 @@ function Stage(props) {
     });
   }, [core]);
 
-  useEffect(
-    () => {
-      mqttClient = mqtt.connect(config.connection.broker);
-      mqttClient.on("connect", function () {
-        mqttClient.subscribe(topic, function (err) {
-          if (err) {
-            console.error(err);
-          }
-        });
-        mqttClient.subscribe(`${topic}/user`, function (err) {
-          if (err) {
-            console.error(err);
-          }
-        });
-        mqttClient.subscribe(`${topic}/joined`, function (err) {
-          if (err) {
-            console.error(err);
-            return;
-          }
-          mqttClient.publish(`${topic}/joined`, JSON.stringify({ uuid }));
-        });
-        mqttClient.subscribe(`${topic}/left`, function (err) {
-          if (err) {
-            console.error(err);
-          }
-        });
-      });
-
-      mqttClient.on("message", function (topic, message) {
-        // message is Buffer
-        try {
-          const payload = JSON.parse(message.toString());
-          switch (topic) {
-            case `${sessionPrefix}byod/${roomId}`: {
-              clearTimeout(playingTimeoutId);
-              if (!playing) {
-                setPlaying(true);
-                playingTimeoutId = setTimeout(() => {
-                  setPlaying(false);
-                }, 3 * 60 * 1000);
-              }
-              if (payload.status === 176) {
-                //CC
-                const { channel, control, value } = payload;
-                const destination = mappings[control];
-                if (destination) {
-                  // TODO: get device from orchestra, get parameter from device and map value and finally set
-                  // console.log(destination.device, destination.parameter);
-                }
-              }
-              if (payload.status === 144) {
-                orchestra?.noteOn(
-                  payload.channel,
-                  payload.note,
-                  payload.velocity
-                );
-              } else if (payload.status === 128) {
-                orchestra?.noteOff(payload.channel, payload.note);
-              }
-              break;
-            }
-            case `${sessionPrefix}byod/${roomId}/user`: {
-              // TODO: get mapping from config file
-              // let velocity = map(payload.y, 0, 1, 0, 127, true)
-              const velocity = 127;
-              const channel =
-                payload.y > 0.5 ? "lobbyTextures" : "lobbyNumbers";
-              const note =
-                60 +
-                Math.floor(
-                  map(
-                    payload.x,
-                    0,
-                    1,
-                    0,
-                    channel === "lobbyTextures" ? 6 : 7,
-                    true
-                  )
-                );
-              // console.log(channel, note, velocity);
-              orchestra?.noteOn(channel, note, velocity);
-              setTimeout(() => {
-                if (orchestra) {
-                  orchestra?.noteOff(channel, note);
-                  const mainOut = orchestra?.render();
-                  core?.render(el.fft({ size: 1024 }, mainOut), mainOut);
-                }
-              }, 300);
-              break;
-            }
-            case `${sessionPrefix}byod/${roomId}/joined`: {
-              addUser(payload.uuid);
-              break;
-            }
-            case `${sessionPrefix}byod/${roomId}/left`: {
-              removeUser(payload.uuid);
-              break;
-            }
-          }
-        } catch (error) {
-          console.log("error", error);
-        }
-        if (orchestra) {
-          const mainOut = orchestra?.render();
-          core?.render(el.fft({ size: 1024 }, mainOut), mainOut);
-        }
-      });
-    },
-    [],
-    () => {
-      mqttClient.unsubscribe(topic);
-    }
-  );
+ 
   return (
     <Container
       onClick={(event) => {
@@ -282,10 +173,10 @@ function Stage(props) {
           const normalizedX = x / rect.width;
           const normalizedY = y / rect.height;
           const message = { uuid, x: normalizedX, y: normalizedY };
-          mqttClient.publish(
-            `${sessionPrefix}byod/${roomId}/user`,
-            JSON.stringify(message)
-          );
+          // mqttClient.publish(
+          //   `${sessionPrefix}byod/${roomId}/user`,
+          //   JSON.stringify(message)
+          // );
         }
       }}
     >

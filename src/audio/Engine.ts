@@ -78,10 +78,10 @@ class Engine {
   }
 
   noteOn(channel: number, note: number, velocity: number) {
-    this.channels[channel].forEach((instrument: any) => instrument?.instrument?.noteOn(note, velocity))
+    this.channels[channel]?.forEach((instrument: any) => instrument?.instrument?.noteOn(note, velocity))
   }
   noteOff(channel: number, note: number, velocity: number = 0) {
-    this.channels[channel].forEach((instrument: any) => instrument?.instrument?.noteOff(note, velocity))
+    this.channels[channel]?.forEach((instrument: any) => instrument?.instrument?.noteOff(note, velocity))
   }
   render() {
     const signals = Object.values(this.channels).map((channel: any) => {

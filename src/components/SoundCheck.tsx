@@ -14,7 +14,7 @@ function SoundCheck() {
   const armedTracks = useLiveSetStore(state => state.armedTracks)
   const selectedInstrumentId = useLiveSetStore(state => state.selectedInstrument)
   useEffect(()=>{
-    initOrchestra(null)
+    initOrchestra()
   }, [])
 
   const instruments = tracks.map(track => track.instrument)
