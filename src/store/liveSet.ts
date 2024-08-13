@@ -15,6 +15,7 @@ interface State {
   selectedInstrument: string | null;
   engine: any | null;
   loading: boolean;
+  selectedTrackId: string | null;
   init: () => void;
   start: () => void;
   render: () => void;
@@ -23,6 +24,8 @@ interface State {
   setParameterValue: (id: string, value: any) => void;
   getParameterValue: (instrumentId: string, parameterKey: string) => any;
   subscribeToMqtt: (roomId: string) => void;
+  setSelectedTrackId: (trackId: string|null) => void;
+  listenToMidi: () => void;
 }
 
 let ctx: AudioContext;
@@ -39,6 +42,7 @@ const useLiveSetStore = create<State>()(
         selectedInstrument: null,
         engine: null,
         loading: false,
+        selectedTrackId: null,
         init: async () => {
           set({ loading: true });
           let params = new URLSearchParams(document.location.search);
@@ -145,7 +149,7 @@ const useLiveSetStore = create<State>()(
                     // }
                   }
                   if (payload.status === 144) {
-                    console.log("got note on")
+                    console.log("got note on");
                     engine?.noteOn(
                       payload.channel,
                       payload.note,
@@ -157,11 +161,84 @@ const useLiveSetStore = create<State>()(
                   break;
                 }
               }
-              render()
+              render();
             } catch (error) {
               console.log("error", error);
             }
           });
+        },
+        setSelectedTrackId: (selectedTrackId: string|null) => {
+          set({ selectedTrackId });
+        },
+        listenToMidi: async () => {
+          if (await navigator.requestMIDIAccess()) {
+            WebMidi.enable()
+              .then(() => {
+                console.log("WebMidi enabled!");
+                onEnabled();
+              })
+              .catch((err) => alert(err));
+          }
+
+          function onEnabled() {
+            // Inputs
+            WebMidi.inputs.forEach((input) => {
+              console.log(input.name);
+              input.channels.forEach((channel, index) => {
+                channel.addListener("noteon", (e) => {
+                  const engine = get().engine;
+                  const render = get().render;
+                  engine.noteOn(channel.number, e.note.number, e.data[2]);
+                  if (engine) {
+                    render();
+                  }
+                });
+                channel.addListener("noteoff", (e) => {
+                  const engine = get().engine;
+                  const render = get().render;
+                  engine.noteOff(channel.number, e.note.number);
+                  if (engine) {
+                    render();
+                  }
+                });
+                channel.addListener("controlchange", (e) => {
+                  const engine = get().engine
+                  const render = get().render
+                  // const control = e.controller.number;
+                  // const value = e.value;
+                  // const destination = mappings[control];
+                  // if (destination) {
+                  //   const matchedInstruments = [
+                  //     ...Object.values(engine.channels).filter(
+                  //       (channel) => channel?.instrument?.id === destination.device
+                  //     ),
+                  //   ].map((channel) => channel.instrument);
+                  //   let effects = [];
+                  //   Object.values(engine.channels).forEach((channel) => {
+                  //     effects = effects.concat(channel.effects);
+                  //   });
+                  //   const matchedEffects = effects.filter(
+                  //     (effect) => effect.id === destination.device
+                  //   );
+                  //   [...matchedInstruments, ...matchedEffects].forEach((device) => {
+                  //     if (device.setParameter) {
+                  //       device.setParameter(
+                  //         destination.parameter,
+                  //         map(value, 0, 1, destination.min, destination.max)
+                  //       );
+                  //     }
+                  //   });
+                  // }
+                  // if (engine) {
+                  //   render();
+                  // }
+                });
+              });
+            });
+
+            // Outputs
+            // WebMidi.outputs.forEach((output) => console.log(output.name));
+          }
         },
       }),
       {

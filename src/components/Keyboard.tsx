@@ -9,6 +9,7 @@ import {
   Grid,
 } from "@mui/material";
 import { ChevronLeft, ChevronRight } from "@mui/icons-material";
+import Widget from "./Widget";
 
 const keys = [
   { note: "C", color: "white", midi: 60, key: "a" },
@@ -83,95 +84,104 @@ const MusicalKeyboard = ({ onKeyPressed, onKeyReleased }: Props) => {
   };
 
   return (
-    <Paper sx={{ padding: "24px" }}>
-      <Box display="flex" gap={3} marginBottom={"12px"}>
-        <Box>
-          <Grid container spacing={3}>
-            <Grid item xs={3}>
-              <IconButton onClick={() => setOctave(octave - 1)}>
-                <ChevronLeft></ChevronLeft>
-              </IconButton>
+    <Widget>
+      <Box display="flex" flexDirection={"column"} gap={3}>
+        <Box display="flex" gap={3} marginBottom={"12px"}>
+          <Box>
+            <Grid container spacing={3}>
+              <Grid item xs={3}>
+                <IconButton onClick={() => setOctave(octave - 1)}>
+                  <ChevronLeft></ChevronLeft>
+                </IconButton>
+              </Grid>
+              <Grid item xs={6}>
+                <TextField
+                  type="number"
+                  value={octave}
+                  onChange={(event: any) =>
+                    setOctave(Number(event.target.value))
+                  }
+                  inputProps={{ min: -2, max: 4, step: 1 }}
+                />
+              </Grid>
+              <Grid item xs={3}>
+                <IconButton onClick={() => setOctave(octave + 1)}>
+                  <ChevronRight></ChevronRight>
+                </IconButton>
+              </Grid>
             </Grid>
-            <Grid item xs={6}>
-              <TextField
-                type="number"
-                value={octave}
-                onChange={(event: any) => setOctave(Number(event.target.value))}
-                inputProps={{ min: -2, max: 4, step: 1 }}
-              />
+          </Box>
+          <Box flex={1}>
+            <Grid container spacing={3} width={"100%"}>
+              <Grid item xs={9}>
+                <Slider
+                  value={velocity}
+                  onChange={(event: any) => setVelocity(event.target.value)}
+                  min={0}
+                  max={127}
+                  step={1}
+                />
+              </Grid>
+              <Grid item xs={3}>
+                <TextField
+                  type="number"
+                  value={velocity}
+                  onChange={(event: any) =>
+                    setVelocity(Number(event.target.value))
+                  }
+                  inputProps={{ min: 0, max: 127, step: 1 }}
+                />
+              </Grid>
             </Grid>
-            <Grid item xs={3}>
-              <IconButton onClick={() => setOctave(octave + 1)}>
-                <ChevronRight></ChevronRight>
-              </IconButton>
-            </Grid>
-          </Grid>
+          </Box>
         </Box>
-        <Box flex={1}>
-          <Grid container spacing={3} width={"100%"}>
-            <Grid item xs={9}>
-              <Slider
-                value={velocity}
-                onChange={(event: any) => setVelocity(event.target.value)}
-                min={0}
-                max={127}
-                step={1}
-              />
-            </Grid>
-            <Grid item xs={3}>
-              <TextField
-                type="number"
-                value={velocity}
-                onChange={(event: any) =>
-                  setVelocity(Number(event.target.value))
-                }
-                inputProps={{ min: 0, max: 127, step: 1 }}
-              />
-            </Grid>
-          </Grid>
+        <Box
+          display="flex"
+          alignItems="center"
+          position="relative"
+          height={150}
+        >
+          {keys.map((key, index) => {
+            const isBlackKey = key.color === "black";
+            const whiteKeyOffset =
+              keys.slice(0, index).filter((k) => k.color === "white").length *
+              whiteKeyWidth;
+
+            const offset = isBlackKey
+              ? whiteKeyOffset - blackKeyOffset
+              : whiteKeyOffset;
+
+            return (
+              <Box
+                key={index}
+                sx={{
+                  width: isBlackKey ? blackKeyWidth : whiteKeyWidth,
+                  height: isBlackKey ? 100 : 150,
+                  backgroundColor: key.color,
+                  margin: "2px",
+                  zIndex: isBlackKey ? 2 : 1,
+                  position: "absolute",
+                  left: offset,
+                  top: 0,
+                  cursor: "pointer",
+                  border: "1px solid #000",
+                  boxSizing: "border-box",
+                  display: "flex",
+                  alignItems: "flex-end",
+                  justifyContent: "center",
+                  color: isBlackKey ? "white" : "black",
+                  fontSize: "12px",
+                }}
+                onMouseDown={() => handleKeyPress(key.midi)}
+                onMouseUp={() => handleKeyRelease(key.midi)}
+              >
+                {key.note}
+              </Box>
+            );
+          })}
         </Box>
       </Box>
-      <Box display="flex" alignItems="center" position="relative" height={150}>
-        {keys.map((key, index) => {
-          const isBlackKey = key.color === "black";
-          const whiteKeyOffset =
-            keys.slice(0, index).filter((k) => k.color === "white").length *
-            whiteKeyWidth;
-
-          const offset = isBlackKey
-            ? whiteKeyOffset - blackKeyOffset
-            : whiteKeyOffset;
-
-          return (
-            <Box
-              key={index}
-              sx={{
-                width: isBlackKey ? blackKeyWidth : whiteKeyWidth,
-                height: isBlackKey ? 100 : 150,
-                backgroundColor: key.color,
-                margin: "2px",
-                zIndex: isBlackKey ? 2 : 1,
-                position: "absolute",
-                left: offset,
-                top: 0,
-                cursor: "pointer",
-                border: "1px solid #000",
-                boxSizing: "border-box",
-                display: "flex",
-                alignItems: "flex-end",
-                justifyContent: "center",
-                color: isBlackKey ? "white" : "black",
-                fontSize: "12px",
-              }}
-              onMouseDown={() => handleKeyPress(key.midi)}
-              onMouseUp={() => handleKeyRelease(key.midi)}
-            >
-              {key.note}
-            </Box>
-          );
-        })}
-      </Box>
-    </Paper>
+    </Widget>
   );
 };
 

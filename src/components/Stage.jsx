@@ -1,15 +1,10 @@
-import { useEffect, useState, useRef, useMemo } from "react";
+import { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import styled from "@emotion/styled";
-import { Canvas, useFrame } from "@react-three/fiber";
-import { OrbitControls } from "@react-three/drei";
-import * as THREE from "three";
+import { Canvas } from "@react-three/fiber";
 import { el } from "@elemaudio/core";
 import { WebMidi } from "webmidi";
 
-import config from "../assets/config.json";
-import useAppStore from "../store/app";
-// import { WaveMaterial } from "./WaveMaterial.js";
 import { extractBaseFrequenciesEnergy, map } from "../audio/utils";
 import {
   Bloom,
@@ -19,47 +14,31 @@ import {
   Vignette,
 } from "@react-three/postprocessing";
 import Particles from "./3d/Particles";
-import { quarternary, tertiary } from "../theme";
-import Spheres from "./3d/Spheres";
+import { tertiary } from "../theme";
 import useLiveSetStore, { core } from "../store/liveSet";
 
 const Container = styled.div`
   width: 100%;
   height: 100%;
 `;
-const Overlay = styled.div`
-  position: absolute;
-  font-size: 24px;
-`;
 const StyledCanvas = styled(Canvas)`
   width: 100%;
   height: 100%;
 `;
 
-const sessionPrefix = "";
-
 let baseEnergy = 0;
 let midEnergy = 0;
 let highEnergy = 0;
 
-let playingTimeoutId;
-
 function Stage() {
-  const engine = useLiveSetStore(state => state.engine)
-  const render = useLiveSetStore(state => state.render)
-  const subscribeToMqtt = useLiveSetStore(state => state.subscribeToMqtt)
-  const roomId = useParams().roomId ?? "taxi";
-  const [playing, setPlaying] = useState(false);
-  const topic = `byod/${roomId}`;
+  const engine = useLiveSetStore((state) => state.engine);
+  const render = useLiveSetStore((state) => state.render);
+  const subscribeToMqtt = useLiveSetStore((state) => state.subscribeToMqtt);
+  const roomId = useParams().roomId ?? "demo";
 
-  const uuid = useAppStore((state) => state.uuid);
-  const users = useAppStore((state) => state.user);
-  const addUser = useAppStore((state) => state.addUser);
-  const removeUser = useAppStore((state) => state.removeUser);
-
-  useEffect(()=>{
-    subscribeToMqtt(roomId)
-  }, [roomId, subscribeToMqtt])
+  useEffect(() => {
+    subscribeToMqtt(roomId);
+  }, [roomId, subscribeToMqtt]);
 
   useEffect(() => {
     if (navigator.requestMIDIAccess) {
@@ -76,17 +55,10 @@ function Stage() {
       WebMidi.inputs.forEach((input) => {
         console.log(input.name);
         input.channels.forEach((channel, index) => {
-          clearTimeout(playingTimeoutId);
-          if (!playing) {
-            setPlaying(true);
-            playingTimeoutId = setTimeout(() => {
-              setPlaying(false);
-            }, 3 * 60 * 1000);
-          }
           channel.addListener("noteon", (e) => {
             engine.noteOn(channel.number, e.note.number, e.data[2]);
             if (engine) {
-              render()
+              render();
             }
           });
           channel.addListener("noteoff", (e) => {
@@ -124,7 +96,7 @@ function Stage() {
               });
             }
             if (engine) {
-              render()
+              render();
             }
           });
         });
@@ -136,7 +108,7 @@ function Stage() {
     return () => {
       console.log("TODO: remove all midi listeners");
     };
-  }, [engine, setPlaying]);
+  }, [engine]);
 
   useEffect(() => {
     core.on("fft", function (e) {
@@ -161,40 +133,10 @@ function Stage() {
     });
   }, [core]);
 
- 
   return (
-    <Container
-      onClick={(event) => {
-        if (!playing) {
-          const rect = event.target.getBoundingClientRect();
-          const x = event.clientX - rect.left;
-          const y = event.clientY - rect.top;
-
-          const normalizedX = x / rect.width;
-          const normalizedY = y / rect.height;
-          const message = { uuid, x: normalizedX, y: normalizedY };
-          // mqttClient.publish(
-          //   `${sessionPrefix}byod/${roomId}/user`,
-          //   JSON.stringify(message)
-          // );
-        }
-      }}
-    >
-      {!playing && (
-        <Overlay>
-          tap on the screen to trigger sounds.<br></br>if it does not work,
-          refresh and pray - sorry, it is an early stage prototype.
-        </Overlay>
-      )}
+    <Container>
       <StyledCanvas>
-        {playing && (
-          <Particles
-            count={2000}
-            core={core}
-            color={playing ? quarternary : tertiary}
-          />
-        )}
-        {!playing && <Spheres />}
+        <Particles count={2000} core={core} color={tertiary} />
         <ambientLight intensity={0.5} />
         <EffectComposer>
           <DepthOfField

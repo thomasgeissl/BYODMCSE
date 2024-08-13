@@ -11,6 +11,7 @@ import {
   ListItem,
 } from "@mui/material";
 import Parameter from "./Parameter.";
+import Widget from "./Widget";
 
 interface Props {
   instrument: any;
@@ -21,8 +22,8 @@ const Instrument = ({ instrument }: Props) => {
     return <></>;
   }
   return (
-    <Paper sx={{ padding: "24px" }}>
-      <List>
+    <Widget>
+      <List sx={{width: "100%"}}>
         {Object.entries(instrument?.parameters)?.map(
           ([id, parameter]: any[]) => {
             return (
@@ -33,7 +34,7 @@ const Instrument = ({ instrument }: Props) => {
           }
         )}
       </List>
-    </Paper>
+    </Widget>
   );
 };
 

@@ -9,8 +9,8 @@ interface Props {
 function Track({ track }: Props) {
   const armedTracks = useLiveSetStore((state) => state.armedTracks);
   const toggleArmedTrack = useLiveSetStore((state) => state.toggleArmedTrack);
-  const setSelectedInstrument = useLiveSetStore(
-    (state) => state.setSelectedInstrumentId
+  const setSelectedTrackId = useLiveSetStore(
+    (state) => state.setSelectedTrackId
   );
   return (
     <Box
@@ -18,7 +18,7 @@ function Track({ track }: Props) {
       flexDirection={"column"}
       sx={{ width: "200px" }}
       onClick={() => {
-        setSelectedInstrument(track.instrument.id);
+        setSelectedTrackId(track.id);
       }}
     >
       <Box>{track.name}</Box>
