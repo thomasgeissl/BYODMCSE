@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Box, Button, Paper, ToggleButton, Typography } from "@mui/material";
 import WebRenderer from "@elemaudio/web-renderer";
-import Orchestra from "../audio/Orchestra";
+import Engine from "../audio/Engine";
 import staticConfig from "../assets/config.json";
 import { useSearchParams } from "react-router-dom";
 import { loadSample } from "../audio/utils";

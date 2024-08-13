@@ -2,9 +2,8 @@ import { useEffect, useMemo, useState } from "react";
 import { useParams, useLocation, useSearchParams } from "react-router-dom";
 import styled from "@emotion/styled";
 import WebRenderer from "@elemaudio/web-renderer";
-import { el } from "@elemaudio/core";
 import NoSleep from "nosleep.js";
-import Orchestra from "../audio/Orchestra.ts";
+import Engine from "../audio/Engine";
 import Button from "@mui/material/Button";
 import Stage from "./Stage";
 import staticConfig from "../assets/config.json";
@@ -81,7 +80,7 @@ function Room() {
       }
 
       core.updateVirtualFileSystem(files);
-      const orchestra = new Orchestra(config.orchestra);
+      const orchestra = new Engine(config.orchestra);
       setOrchestra(orchestra);
       setLoading(false);
       setInited(true);

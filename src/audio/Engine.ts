@@ -15,7 +15,7 @@ interface Config {
   tracks: any[]
 }
 
-class Orchestra {
+class Engine {
   channels: any
   constructor(config: Config) {
     this.channels = {};
@@ -100,4 +100,4 @@ class Orchestra {
   }
 }
 
-export default Orchestra;
+export default Engine;
