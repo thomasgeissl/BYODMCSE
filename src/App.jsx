@@ -1,4 +1,4 @@
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { createBrowserRouter, createHashRouter, RouterProvider } from "react-router-dom";
 import CssBaseline from "@mui/material/CssBaseline";
 import { ThemeProvider } from "@mui/material/styles";
 import { Box } from "@mui/material";
@@ -9,7 +9,7 @@ import SoundCheck from "./components/SoundCheck.tsx";
 import useLiveSetStore from "./store/liveSet";
 import { useEffect } from "react";
 
-const router = createBrowserRouter([
+const router = createHashRouter([
   {
     path: "/",
     element: <SoundCheck></SoundCheck>
