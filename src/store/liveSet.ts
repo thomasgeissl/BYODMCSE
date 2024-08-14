@@ -59,7 +59,7 @@ const useLiveSetStore = create<State>()(
           set({ loading: false });
         },
         start: async () => {
-          set({ loading: false });
+          set({ loading: true });
           const config = get().config;
           ctx = new window.AudioContext();
           if (ctx.state === "suspended") {
