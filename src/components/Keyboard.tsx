@@ -84,7 +84,7 @@ const MusicalKeyboard = ({ onKeyPressed, onKeyReleased }: Props) => {
   };
 
   return (
-    <Widget>
+    <Widget title="VKeyboard">
       <Box display="flex" flexDirection={"column"} gap={3}>
         <Box display="flex" gap={3} marginBottom={"12px"}>
           <Box>

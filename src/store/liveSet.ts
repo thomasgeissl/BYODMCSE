@@ -22,9 +22,9 @@ interface State {
   toggleArmedTrack: (id: string) => void;
   setSelectedInstrumentId: (id: string | null) => void;
   setParameterValue: (id: string, value: any) => void;
-  getParameterValue: (instrumentId: string, parameterKey: string) => any;
+  getParameterValue: (deviceId: string, parameterKey: string) => any;
   subscribeToMqtt: (roomId: string) => void;
-  setSelectedTrackId: (trackId: string|null) => void;
+  setSelectedTrackId: (trackId: string | null) => void;
   listenToMidi: () => void;
 }
 
@@ -110,16 +110,33 @@ const useLiveSetStore = create<State>()(
                 track.instrument.parameters[key].value = value;
               }
             });
+            for (const effect of track.effects) {
+              const keys = Object.keys(effect.parameters);
+              keys.forEach((key) => {
+                if (effect.parameters[key]?.id === id) {
+                  effect.parameters[key].value = value;
+                }
+              });
+            }
           }
           set({ tracks });
         },
-        getParameterValue(instrumentId: string, parameterKey: string) {
-          const instruments = get()
-            .tracks.map((track: any) => track.instrument)
-            .filter((instrument: any) => instrument.id === instrumentId);
-          if (instruments.length > 0) {
-            return instruments[0].parameters[parameterKey].value;
+        getParameterValue(deviceId: string, parameterKey: string) {
+          const instruments = get().tracks.map(
+            (track: any) => track.instrument
+          );
+
+          const effects = get()
+            .tracks.map((track: any) => track.effects)
+            .flat();
+
+          const devices = [...instruments, ...effects].filter(
+            (device: any) => device.id === deviceId
+          );
+          if (devices.length > 0) {
+            return devices[0].parameters[parameterKey].value;
           }
+
           return null;
         },
         subscribeToMqtt(roomId: string) {
@@ -167,7 +184,7 @@ const useLiveSetStore = create<State>()(
             }
           });
         },
-        setSelectedTrackId: (selectedTrackId: string|null) => {
+        setSelectedTrackId: (selectedTrackId: string | null) => {
           set({ selectedTrackId });
         },
         listenToMidi: async () => {
@@ -202,8 +219,8 @@ const useLiveSetStore = create<State>()(
                   }
                 });
                 channel.addListener("controlchange", (e) => {
-                  const engine = get().engine
-                  const render = get().render
+                  const engine = get().engine;
+                  const render = get().render;
                   // const control = e.controller.number;
                   // const value = e.value;
                   // const destination = mappings[control];

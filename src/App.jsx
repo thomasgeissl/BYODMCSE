@@ -11,7 +11,7 @@ import { useEffect } from "react";
 
 const router = createBrowserRouter([
   {
-    path: "/soundcheck",
+    path: "/",
     element: <SoundCheck></SoundCheck>
   },
   {

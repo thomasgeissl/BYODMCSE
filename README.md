@@ -16,12 +16,7 @@ js console: encodeURIComponent("https://raw.githubusercontent.com/thomasgeissl/B
 http://localhost:3000/#/?config=https%3A%2F%2Fraw.githubusercontent.com%2Fthomasgeissl%2FBYODMCSE%2Fmaster%2Fsrc%2Fassets%2Fconfig.json
 ```
 
-### node renderer
-`yarn node-dev`
 
-### web renderer
-`yarn dev`
+./bin/ofMIDI2MQTT -d -h byodmcse.cloud.shiftr.io -p 1883 -u byodmcse -r aFyYJo7b6rKnORki -t byod/demo
 
 
-##
-` ofMIDI2MQTT -h public.cloud.shiftr.io -p 1883 -u public -r public -t byod/roomId`

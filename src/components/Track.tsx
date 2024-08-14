@@ -32,7 +32,7 @@ function Track({ track }: Props) {
             toggleArmedTrack(track.id);
           }}
         >
-          <FiberManualRecord></FiberManualRecord>
+          <FiberManualRecord color={armedTracks.includes(track.id) ? "primary" : "default"}></FiberManualRecord>
         </ToggleButton>
       </Box>
       {/* <Instrument instrument={track.instrument}></Instrument> */}
