@@ -22,7 +22,7 @@ const Effect = ({ effect }: Props) => {
     return <></>;
   }
   return (
-    <Widget title={effect.name}>
+    <Widget title={effect.name || effect.type}>
       <List sx={{width: "100%"}}>
         {Object.entries(effect?.parameters)?.map(
           ([id, parameter]: any[]) => {

@@ -23,7 +23,7 @@ const Instrument = ({ instrument }: Props) => {
     return <></>;
   }
   return (
-    <Widget title={instrument.name}>
+    <Widget title={instrument.name || instrument.type}>
       <List sx={{width: "100%"}}>
         {Object.entries(instrument?.parameters)?.map(
           ([id, parameter]: any[]) => {

@@ -7,11 +7,10 @@ import { DO_NOT_USE_OR_YOU_WILL_BE_FIRED_EXPERIMENTAL_CREATE_ROOT_CONTAINERS } f
 
 // https://www.youtube.com/watch?v=0voWrxLDnSE
 
-
-class Synth extends Base{
+class Synth extends Base {
   voices: any[];
   constructor(id: string) {
-    super(id)
+    super(id);
     this.voices = [
       { gate: 0.0, note: 0, velocity: 0, key: `synth-v1-${v4()}` },
       { gate: 0.0, note: 0, velocity: 0, key: `synth-v2-${v4()}` },
@@ -29,73 +28,84 @@ class Synth extends Base{
   nextVoice = 0;
 
   getWaveform = (waveform: string, frequency: any) => {
-  switch (waveform) {
-    case "sine":
-      return el.cycle(frequency);
-    case "saw":
-      return el.saw(frequency);
-    case "square":
-      return el.square(frequency);
-    case "triangle":
-      return el.triangle(frequency);
-    default:
-      return el.cycle(frequency);
-  }
-};
+    switch (waveform) {
+      case "sine":
+        return el.cycle(frequency);
+      case "saw":
+        return el.saw(frequency);
+      case "square":
+        return el.square(frequency);
+      case "triangle":
+        return el.triangle(frequency);
+      default:
+        return el.cycle(frequency);
+    }
+  };
   voice = (voice: any) => {
-    const getParameterValue = useLiveSetStore.getState().getParameterValue
+    const getParameterValue = useLiveSetStore.getState().getParameterValue;
     const gate = el.const({
       key: `gate-${voice.key}`,
       value: voice.gate,
     });
-    const attack = getParameterValue(this.id, "attack")
-    const decay = getParameterValue(this.id, "decay")
-    const sustain = getParameterValue(this.id, "sustain")
-    const release = getParameterValue(this.id, "release")
-    const env = el.adsr(1.0, 1.0, 1.0, 2.0, gate);
+    const attack = getParameterValue(this.id, "attack");
+    const decay = getParameterValue(this.id, "decay");
+    const sustain = getParameterValue(this.id, "sustain");
+    const release = getParameterValue(this.id, "release");
+    const env = el.adsr(attack, decay, sustain, release, gate);
+    
     const frequency: number = Midi.midiToFreq(voice.note);
-    const amplitudeA: number = getParameterValue(this.id, "amplitudeA")
-    const detuneA: number = getParameterValue(this.id, "detuneA")
+    const amplitudeA: number = getParameterValue(this.id, "amplitudeA");
+    const detuneA: number = getParameterValue(this.id, "detuneA");
+
     // Oscillator A
     const oscA = el.mul(
-      amplitudeA,
+      el.const({
+        key: `amplitudeA-${voice.key}`,
+        value: amplitudeA,
+      }),
       this.getWaveform(
         getParameterValue(this.id, "waveformA"),
         el.const({
           key: `frequencyA-${voice.key}`,
-          value: frequency * detuneA
+          value: frequency * detuneA,
         })
       )
     );
 
     // Oscillator B
+    const amplitudeB = getParameterValue(this.id, "amplitudeB");
     const oscB = el.mul(
-      getParameterValue(this.id, "amplitudeB"),
+      el.const({
+        key: `amplitudeB-${voice.key}`,
+        value: amplitudeB,
+      }),
       this.getWaveform(
         getParameterValue(this.id, "waveformB"),
         el.const({
           key: `frequencyB-${voice.key}`,
-          value: frequency * 
-          getParameterValue(this.id, "detuneB")
+          value: frequency * getParameterValue(this.id, "detuneB"),
         })
       )
     );
 
     // Oscillator C
+    const amplitudeC = getParameterValue(this.id, "amplitudeC");
     const oscC = el.mul(
-      getParameterValue(this.id, "amplitudeC"),
+      el.const({
+        key: `amplitudeC-${voice.key}`,
+        value: amplitudeC,
+      }),
       this.getWaveform(
         getParameterValue(this.id, "waveformC"),
         el.const({
           key: `frequencyC-${voice.key}`,
-          value: frequency * 
-          getParameterValue(this.id, "detuneC")
+          value: frequency * getParameterValue(this.id, "detuneC"),
         })
       )
     );
 
     const signal = el.add(oscA, oscB, oscC);
-    return el.mul(env, signal)//, voice.velocity);
+    return el.mul(env, signal); //, voice.velocity);
   };
 
   noteOn(note: number, velocity: number) {

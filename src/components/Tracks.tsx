@@ -15,7 +15,7 @@ import Track from "./Track";
 function Tracks() {
   const tracks = useLiveSetStore((state) => state.tracks);
   return (
-    <Box display={"flex"} flexDirection={"row"}>
+    <Box display={"flex"} flexDirection={"row"} sx={{marginBottom: "24px"}} gap={2}>
       {tracks.map((track, index) => {
         return <Track key={`track-${index}`} track={track}></Track>;
       })}

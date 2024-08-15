@@ -8,6 +8,7 @@ class Reverb extends Base{
   }
 
   render(signal: any) {
+    const wetParam = useLiveSetStore.getState().getParameterValue(this.id, "wet")
     return signal
     
   }

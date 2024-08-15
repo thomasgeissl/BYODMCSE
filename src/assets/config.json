@@ -139,6 +139,7 @@
       "instrument": {
         "id": "2ab36934-0e56-4822-926b-2dd1cdc75398",
         "type": "drumRack",
+        "name": "Drumrack",
         "parameters": {  
         },
         "config": {
