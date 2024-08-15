@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
-import { Box, Button } from "@mui/material";
+import { Box, Button, CircularProgress } from "@mui/material";
 import Keyboard from "./Keyboard";
-import Instrument from "./Instrument";
 import useLiveSetStore from "../store/liveSet";
 import Tracks from "./Tracks";
 import TrackDetails from "./TrackDetails";
@@ -17,6 +16,7 @@ function SoundCheck() {
   const selectedInstrumentId = useLiveSetStore(
     (state) => state.selectedInstrument
   );
+  const loading = useLiveSetStore((state) => state.loading);
   const [selectedTrack, setSelectedTrack] = useState<any>(null);
   useEffect(() => {
     initOrchestra();
@@ -63,21 +63,26 @@ function SoundCheck() {
             variant={"contained"}
             size="large"
             width={"100%"}
+            disabled={loading}
           >
-            dsp
+            {loading && <CircularProgress size={"12px"}></CircularProgress>} turn on the engine
           </Button>
         </Box>
       )}
 
-      <Box flex={1}>
-        <Tracks></Tracks>
-      </Box>
-      <TrackDetails>
-        <Keyboard
-          onKeyPressed={handleKeyPressed}
-          onKeyReleased={handleKeyReleased}
-        />
-      </TrackDetails>
+      {engine && (
+        <>
+          <Box flex={1}>
+            <Tracks></Tracks>
+          </Box>
+          <TrackDetails>
+            <Keyboard
+              onKeyPressed={handleKeyPressed}
+              onKeyReleased={handleKeyReleased}
+            />
+          </TrackDetails>
+        </>
+      )}
     </Box>
   );
 }
