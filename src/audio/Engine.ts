@@ -11,6 +11,7 @@ import Reverb from "./effects/Reverb";
 import Velocity from "./midiEffects/Velocity.js";
 import DrumRack from "./instruments/DrumRack.js";
 import Simpler from "./instruments/Simpler";
+import Distortion from "./effects/Distortion";
 
 interface Config {
   tracks: any[]
@@ -32,6 +33,9 @@ class Engine {
           }
           case "delay": {
             return new Delay(effect.id)
+          }
+          case "distortion": {
+            return new Distortion(effect.id)
           }
           default: {
             console.error(`Effect ${effect.type} not supported`)

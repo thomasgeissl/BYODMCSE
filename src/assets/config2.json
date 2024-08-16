@@ -94,6 +94,30 @@
       },
       "effects": [
         {
+          "id": "e0c1d854-9659-4544-ad1a-56d4cf3840ab",
+          "type": "delay",
+          "name": "Delay",
+          "parameters":{
+            "active": {
+            "id": "9bae0517-7338-46d8-a340-f99a7486953b",
+            "name": "Active",
+            "value": true
+            },
+            "time": {
+            "id": "c8aef6aa-24dc-446f-8e5d-d80dabbeffb7",
+            "name": "Time",
+            "value": 2000,
+            "options": {"min": 0, "max": 10000}
+            },
+            "mix": {
+              "id": "bfabcd37-8e6b-44ee-9ea9-5544e14a9788",
+              "name": "Mix",
+              "value": 0.5,
+              "options": {"min": 0, "max": 1}
+            }
+          }
+        },
+        {
           "id": "22e981a9-85eb-421b-b3c5-e7f4902ccd4f",
           "type": "distortion",
           "name": "Distortion",
@@ -117,6 +141,7 @@
             }
           }
         }
+
       ],
       "midiEffects": [],
       "midiChannel": 1

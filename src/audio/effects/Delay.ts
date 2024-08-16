@@ -11,9 +11,9 @@ class Delay extends Base {
     const active = useLiveSetStore
       .getState()
       .getParameterValue(this.id, "active");
-    const wetParam = useLiveSetStore
+    const mixParam = useLiveSetStore
       .getState()
-      .getParameterValue(this.id, "wet");
+      .getParameterValue(this.id, "mix");
     const timeParam = useLiveSetStore
       .getState()
       .getParameterValue(this.id, "time");
@@ -33,14 +33,14 @@ class Delay extends Base {
       el.mul(
         el.const({
           key: `delay-${this.id}-dry`,
-          value: 1 - wetParam,
+          value: 1 - mixParam,
         }),
         signal
       ),
       el.mul(
         el.const({
           key: `delay-${this.id}-wet`,
-          value: wetParam,
+          value: mixParam,
         }),
         wet
       )
