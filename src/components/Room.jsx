@@ -6,7 +6,7 @@ import Button from "@mui/material/Button";
 import Stage from "./Stage";
 
 import LoopIcon from "@mui/icons-material/Loop";
-import { Box } from "@mui/material";
+import { Box, CircularProgress } from "@mui/material";
 import useLiveSetStore from "../store/liveSet";
 
 const noSleep = new NoSleep();
@@ -60,23 +60,8 @@ function Room() {
               margin: "auto",
             }}
             disabled={loading}
+            startIcon={loading ? <CircularProgress></CircularProgress> : null}
           >
-            {loading && (
-              <LoopIcon
-                sx={{
-                  marginRight: "16px",
-                  animation: "spin 2s linear infinite",
-                  "@keyframes spin": {
-                    "0%": {
-                      transform: "rotate(360deg)",
-                    },
-                    "100%": {
-                      transform: "rotate(0deg)",
-                    },
-                  },
-                }}
-              />
-            )}
             Enter
           </Button>
         </>

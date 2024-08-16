@@ -8,13 +8,11 @@
     "dev": "vite --host",
     "tauri": "tauri",
     "build": "vite build && cp CNAME dist/CNAME",
-    "preview": "vite preview",
-    "node-dev": "nodemon --exec '/Users/thomasgeissl_1/.elementary/bin/elementary -i 0 -o 2' index.js"
+    "preview": "vite preview"
   },
   "dependencies": {
-    "@elemaudio/core": "^3.0.0-alpha.0",
-    "@elemaudio/node-renderer": "^1.0.5",
-    "@elemaudio/web-renderer": "^3.0.0-alpha.0",
+    "@elemaudio/core": "^3.2.1",
+    "@elemaudio/web-renderer": "^3.2.3",
     "@emotion/react": "^11.9.0",
     "@emotion/styled": "^11.8.1",
     "@mui/icons-material": "^5.11.16",
@@ -37,7 +35,6 @@
     "zustand": "^4.3.8"
   },
   "devDependencies": {
-    "@tauri-apps/cli": "^1.4.0",
     "@types/lodash": "^4.17.7",
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",
