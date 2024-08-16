@@ -1,12 +1,10 @@
-import React from "react";
 import {
   Slider,
   Select,
   MenuItem,
-  FormControl,
-  InputLabel,
   Grid,
   Typography,
+  Checkbox,
 } from "@mui/material";
 import useLiveSetStore from "../store/liveSet";
 
@@ -15,9 +13,7 @@ interface Props {
 }
 
 const Parameter = ({ parameter }: Props) => {
-  const setParameterValue = useLiveSetStore(
-    (state) => state.setParameterValue
-  );
+  const setParameterValue = useLiveSetStore((state) => state.setParameterValue);
   const { value, options, name } = parameter;
   return (
     <Grid container>
@@ -25,6 +21,14 @@ const Parameter = ({ parameter }: Props) => {
         <Typography>{name}</Typography>
       </Grid>
       <Grid item xs={9}>
+        {typeof value === "boolean" && (
+          <Checkbox
+            checked={value}
+            onChange={(event: any) => {
+              setParameterValue(parameter.id, !value);
+            }}
+          ></Checkbox>
+        )}
         {typeof value === "number" && (
           <Slider
             value={value}

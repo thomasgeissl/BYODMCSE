@@ -4,6 +4,7 @@ import Keyboard from "./Keyboard";
 import useLiveSetStore from "../store/liveSet";
 import Tracks from "./Tracks";
 import TrackDetails from "./TrackDetails";
+import DrumPad from "./DrumPad";
 
 function SoundCheck() {
   const initOrchestra = useLiveSetStore((state) => state.init);
@@ -12,12 +13,12 @@ function SoundCheck() {
   const render = useLiveSetStore((state) => state.render);
   const engine = useLiveSetStore((state) => state.engine);
   const tracks = useLiveSetStore((state) => state.tracks);
+  const selectedTrackId = useLiveSetStore((state) => state.selectedTrackId);
   const armedTracks = useLiveSetStore((state) => state.armedTracks);
   const selectedInstrumentId = useLiveSetStore(
     (state) => state.selectedInstrument
   );
   const loading = useLiveSetStore((state) => state.loading);
-  const [selectedTrack, setSelectedTrack] = useState<any>(null);
   useEffect(() => {
     initOrchestra();
     listenToMidi();
@@ -27,6 +28,8 @@ function SoundCheck() {
   const selectedInstrument = instruments.find(
     (instrument) => instrument.id === selectedInstrumentId
   );
+
+  const selectedTrack = tracks.find((track) => track.id === selectedTrackId);
 
   const handleKeyPressed = (note: number, velocity: number) => {
     if (engine) {
@@ -64,8 +67,13 @@ function SoundCheck() {
             size="large"
             width={"100%"}
             disabled={loading}
+            startIcon={
+              loading ? (
+                <CircularProgress size={"12px"}></CircularProgress>
+              ) : null
+            }
           >
-            {loading && <CircularProgress size={"12px"}></CircularProgress>} turn on the engine
+            turn on the engine
           </Button>
         </Box>
       )}
@@ -76,10 +84,19 @@ function SoundCheck() {
             <Tracks></Tracks>
           </Box>
           <TrackDetails>
-            <Keyboard
-              onKeyPressed={handleKeyPressed}
-              onKeyReleased={handleKeyReleased}
-            />
+            {selectedTrack?.instrument.type === "drumRack" && (
+              <DrumPad
+                config={{}}
+                onKeyPressed={handleKeyPressed}
+                onKeyReleased={handleKeyReleased}
+              ></DrumPad>
+            )}
+            {selectedTrack?.instrument.type !== "drumRack" && (
+              <Keyboard
+                onKeyPressed={handleKeyPressed}
+                onKeyReleased={handleKeyReleased}
+              />
+            )}
           </TrackDetails>
         </>
       )}
