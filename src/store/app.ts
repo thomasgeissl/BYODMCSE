@@ -6,8 +6,10 @@ import { union } from "lodash";
 interface State {
   uuid: string;
   users: any[];
+  showFileBrowser: boolean;
   addUser: (uuid: string) => void;
   removeUser: (uuid: string) => void;
+  toggleShowFileBrowser: () => void;
 }
 
 const useAppStore = create<State>()(
@@ -16,6 +18,7 @@ const useAppStore = create<State>()(
       (set, get) => ({
         uuid: v4(),
         users: [],
+        showFileBrowser: false,
         // Add a new user to the list of users
         addUser: (uuid: string) => {
           const users = get().users
@@ -31,6 +34,9 @@ const useAppStore = create<State>()(
             users: users.filter((item:any) => item.uuid !== uuid),
           });
         },
+        toggleShowFileBrowser: ()=>{
+          set({showFileBrowser: !get().showFileBrowser})
+        }
       }),
       {
         name: "app",

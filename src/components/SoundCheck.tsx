@@ -5,8 +5,12 @@ import useLiveSetStore from "../store/liveSet";
 import Tracks from "./Tracks";
 import TrackDetails from "./TrackDetails";
 import DrumPad from "./DrumPad";
+import SideBar from "./SideBar";
+import FileBrowser from "./FileBrowser";
+import useAppStore from "../store/app";
 
 function SoundCheck() {
+  const showFileBrowser = useAppStore((state) => state.showFileBrowser);
   const initOrchestra = useLiveSetStore((state) => state.init);
   const listenToMidi = useLiveSetStore((state) => state.listenToMidi);
   const start = useLiveSetStore((state) => state.start);
@@ -54,52 +58,58 @@ function SoundCheck() {
   };
 
   return (
-    <Box
-      display={"flex"}
-      flexDirection={"column"}
-      sx={{ padding: "24px", width: "100%", height: "100%" }}
-    >
-      {!engine && (
-        <Box sx={{ margin: "24px" }} display={"flex"}>
-          <Button
-            onClick={start}
-            variant={"contained"}
-            size="large"
-            width={"100%"}
-            disabled={loading}
-            startIcon={
-              loading ? (
-                <CircularProgress size={"12px"}></CircularProgress>
-              ) : null
-            }
-          >
-            turn on the engine
-          </Button>
-        </Box>
-      )}
-
-      {engine && (
-        <>
-          <Box flex={1}>
-            <Tracks></Tracks>
+    <Box display={"flex"} flexDirection={"row"} width="100%" height="100%">
+      <SideBar></SideBar>
+      <Box
+        display={"flex"}
+        flexDirection={"column"}
+        sx={{ padding: "24px", width: "100%", height: "100%" }}
+      >
+        {!engine && (
+          <Box sx={{ margin: "24px" }} display={"flex"}>
+            <Button
+              onClick={start}
+              variant={"contained"}
+              size="large"
+              width={"100%"}
+              disabled={loading}
+              startIcon={
+                loading ? (
+                  <CircularProgress size={"12px"}></CircularProgress>
+                ) : null
+              }
+            >
+              turn on the engine
+            </Button>
           </Box>
-          <TrackDetails>
-            {selectedTrack?.instrument.type === "drumRack" && (
-              <DrumPad
-                config={{}}
-                onKeyPressed={handleKeyPressed}
-                onKeyReleased={handleKeyReleased}
-              ></DrumPad>
+        )}
+
+        {engine && (
+          <>
+            <Box flex={1}>
+              <Tracks></Tracks>
+            </Box>
+            {showFileBrowser && <FileBrowser></FileBrowser>}
+            {!showFileBrowser && (
+              <TrackDetails>
+                {selectedTrack?.instrument.type === "drumRack" && (
+                  <DrumPad
+                    config={{}}
+                    onKeyPressed={handleKeyPressed}
+                    onKeyReleased={handleKeyReleased}
+                  ></DrumPad>
+                )}
+                {selectedTrack?.instrument.type !== "drumRack" && (
+                  <Keyboard
+                    onKeyPressed={handleKeyPressed}
+                    onKeyReleased={handleKeyReleased}
+                  />
+                )}
+              </TrackDetails>
             )}
-            {selectedTrack?.instrument.type !== "drumRack" && (
-              <Keyboard
-                onKeyPressed={handleKeyPressed}
-                onKeyReleased={handleKeyReleased}
-              />
-            )}
-          </TrackDetails>
-        </>
-      )}
+          </>
+        )}
+      </Box>
     </Box>
   );
 }
