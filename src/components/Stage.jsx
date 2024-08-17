@@ -66,9 +66,9 @@ function Stage() {
   return (
     <Container>
       <StyledCanvas>
-        <Particles count={2000} core={core} color={tertiary} />
+        {/* <Particles count={2000} core={core} color={tertiary} /> */}
         <ambientLight intensity={0.5} />
-        <EffectComposer>
+        {/* <EffectComposer>
           <DepthOfField
             focusDistance={0}
             focalLength={0.02}
@@ -78,7 +78,7 @@ function Stage() {
           <Bloom luminanceThreshold={0} luminanceSmoothing={0.9} height={300} />
           <Noise opacity={0.02} />
           <Vignette eskil={false} offset={0.1} darkness={1.1} />
-        </EffectComposer>
+        </EffectComposer> */}
       </StyledCanvas>
     </Container>
   );

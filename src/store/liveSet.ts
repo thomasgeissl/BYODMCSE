@@ -5,12 +5,14 @@ import { WebMidi } from "webmidi";
 import mqtt from "mqtt";
 import config from "../assets/config.json";
 import axios from "axios";
-import { loadSample } from "../audio/utils";
+import { loadSample, map } from "../audio/utils";
 import Engine from "../audio/Engine";
+import useAppStore from "./app";
 
 interface State {
   config: any;
   tracks: any[];
+  mappings: any;
   armedTracks: string[];
   selectedInstrument: string | null;
   engine: any | null;
@@ -38,6 +40,7 @@ const useLiveSetStore = create<State>()(
       (set, get) => ({
         config: null,
         tracks: [],
+        mappings: {},
         armedTracks: [],
         selectedInstrument: null,
         engine: null,
@@ -46,15 +49,15 @@ const useLiveSetStore = create<State>()(
         init: async () => {
           set({ loading: true });
           let params = new URLSearchParams(document.location.search);
-          let configUrl = params.get("config"); // is the string "Jonathan"
+          let configUrl = params.get("config"); 
           if (configUrl) {
-            const config = await axios.get(configUrl);
-            const tracks = config.data.tracks;
+            const config = (await axios.get(configUrl)).data;
+            const tracks = config.tracks;
             console.log("loading config from external url");
-            set({ config, tracks });
+            set({ config, tracks, mappings: config.mappings });
           } else {
             console.log("loading config from internal json");
-            set({ config, tracks: config.tracks });
+            set({ config, tracks: config.tracks, mappings: config.mappings });
           }
           set({ loading: false });
         },
@@ -98,7 +101,7 @@ const useLiveSetStore = create<State>()(
             set({ armedTracks: [...armedTracks, id] });
           }
         },
-        setSelectedInstrumentId(id: string) {
+        setSelectedInstrumentId(id: string | null) {
           set({ selectedInstrument: id });
         },
         setParameterValue(id: string, value: any) {
@@ -152,18 +155,32 @@ const useLiveSetStore = create<State>()(
           mqttClient.on("message", function (topic: string, message: any) {
             const engine = get().engine;
             const render = get().render;
+            const mappings = get().mappings
             try {
               const payload = JSON.parse(message.toString());
               switch (topic) {
                 case `byod/${roomId}`: {
                   if (payload.status === 176) {
                     //CC
+                    console.log("got cc")
                     const { channel, control, value } = payload;
-                    // const destination = mappings[control];
-                    // if (destination) {
-                    // TODO: get device from orchestra, get parameter from device and map value and finally set
-                    // console.log(destination.device, destination.parameter);
-                    // }
+                    const destination = mappings[`${channel}, ${control}`];
+                    if (destination) {
+                      const parameter = get().getParameter(destination.parameter)
+                      if(parameter){
+                        console.log(parameter)
+                        switch(typeof parameter.value){
+                          case "number": {
+                            get().setParameterValue(destination.parameter, map(value, 0, 127, parameter.options?.min, parameter.options?.max))
+                            break;
+                          }
+                          case "boolean": {
+                            get().setParameterValue(destination.parameter, value > 0)
+                            break;
+                          }
+                        }
+                      }
+                    }
                   }
                   if (payload.status === 144) {
                     console.log("got note on");
@@ -186,6 +203,9 @@ const useLiveSetStore = create<State>()(
         },
         setSelectedTrackId: (selectedTrackId: string | null) => {
           set({ selectedTrackId });
+          if(useAppStore.getState().showFileBrowser){
+            useAppStore.getState().toggleShowFileBrowser();
+          }
         },
         listenToMidi: async () => {
           if (await navigator.requestMIDIAccess()) {

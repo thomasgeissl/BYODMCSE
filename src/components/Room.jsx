@@ -60,7 +60,7 @@ function Room() {
               margin: "auto",
             }}
             disabled={loading}
-            startIcon={loading ? <CircularProgress></CircularProgress> : null}
+            startIcon={loading ? <CircularProgress size={"14px"}></CircularProgress> : null}
           >
             Enter
           </Button>

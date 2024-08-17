@@ -157,7 +157,32 @@
           "67": { "path": "/samples/vibraphone_1.wav" }
         }
       },
-      "effects": [],
+      "effects": [
+        {
+          "id": "eb7ac55f-88c3-407d-893c-516c589ccd14",
+          "type": "delay",
+          "name": "Delay",
+          "parameters":{
+            "active": {
+            "id": "7663a817-b204-4cbf-9d62-f8910e88ba5c",
+            "name": "Active",
+            "value": true
+            },
+            "time": {
+            "id": "b2c2b00f-90b2-4b58-8bdb-9aa2007f70e1",
+            "name": "Time",
+            "value": 2000,
+            "options": {"min": 0, "max": 10000}
+            },
+            "mix": {
+              "id": "5076c291-01f4-443c-be15-ea359e36038c",
+              "name": "Mix",
+              "value": 0.5,
+              "options": {"min": 0, "max": 1}
+            }
+          }
+        }
+      ],
       "midiEffects": [],
       "midiChannel": 4
     },
@@ -201,17 +226,8 @@
     "/samples/number_10.wav": "/samples/999WavFiles/10.mp3"
   },
   "mappings": {
-    "20": {
-      "device": "trashes",
-      "parameter": "volume",
-      "min": 0,
-      "max": 1
-    },
-    "21": {
-      "device": "trashesLowPassFilter",
-      "parameter": "cutOffFrequency",
-      "min": 0,
-      "max": 5000
+    "1,64": {
+      "parameter": "b2c2b00f-90b2-4b58-8bdb-9aa2007f70e1"
     }
   },
   "useMidi": false
