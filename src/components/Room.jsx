@@ -43,12 +43,13 @@ function Room() {
   };
 
   return (
-    <Box flex={1}>
+    <Box flex={1} display="flex" flexDirection="column">
       {!engine && (
         <>
           <Instructions>
             Please increase your volume to the max and enter the room
           </Instructions>
+          <Box flex={1}></Box>
           <Button
             onClick={init}
             variant={"outlined"}
@@ -59,6 +60,8 @@ function Room() {
               width: "75%",
               margin: "auto",
             }}
+            position="absolute"
+            bottom={"100px"}
             disabled={loading}
             startIcon={loading ? <CircularProgress size={"14px"}></CircularProgress> : null}
           >

@@ -13,6 +13,7 @@ function SoundCheck() {
   const showFileBrowser = useAppStore((state) => state.showFileBrowser);
   const initOrchestra = useLiveSetStore((state) => state.init);
   const listenToMidi = useLiveSetStore((state) => state.listenToMidi);
+  const subscribeToMqtt = useLiveSetStore((state) => state.subscribeToMqtt);
   const start = useLiveSetStore((state) => state.start);
   const render = useLiveSetStore((state) => state.render);
   const engine = useLiveSetStore((state) => state.engine);
@@ -26,7 +27,8 @@ function SoundCheck() {
   useEffect(() => {
     initOrchestra();
     listenToMidi();
-  }, [initOrchestra, listenToMidi]);
+    subscribeToMqtt("soundcheck")
+  }, [initOrchestra, listenToMidi, subscribeToMqtt]);
 
   const instruments = tracks.map((track) => track.instrument);
   const selectedInstrument = instruments.find(
